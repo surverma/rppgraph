@@ -107,9 +107,14 @@ function UsageGraphOption() {
 			padding : 0
 		},
 		formatter : function() {
-			return "<b>Time : </b>" + Highcharts.dateFormat('%H:%M:%S', this.x) + "<br> <b>" + this.series.name
-					+ " : </b> " + Math.floor(this.y);
-		}
+			var text = "<b>Time : </b>" + Highcharts.dateFormat('%H:%M:%S', this.x) + "<br>";
+			 $.each(this.points, function(i, point) {
+				 text = text + "<b>" + point.series.name
+					+ " : </b> " + point.y.toFixed(2) + "<br>";
+			 });
+			return text;
+		},
+		shared : true
 	};
 	this.exporting = {
 		enabled : false
@@ -210,6 +215,11 @@ var hasPlotLine = false;
 var chart = null;
 
 function drawCurrentTimeline() {
+	var position = null;
+	if(new Date().getHours() > 20)
+		position = -80;
+	else
+		position = 10;
 	if (chart == null)
 		return;
 	if (!hasPlotLine) {
@@ -221,6 +231,7 @@ function drawCurrentTimeline() {
 			id : 'current-timeline',
 			label : {
 				rotation : 0,
+				x : position,
 				text : "<div><b>(" + Highcharts.dateFormat('%H:%M:%S', new Date().getTime()) + ")</b></div>",
 				style : {
 					color : '#8c8888',
@@ -395,7 +406,6 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			$scope.energyData = res.data;
 			$scope.usageEndTime.addSeconds(10);
 			$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
-
 			$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData);
 
 		});
@@ -414,8 +424,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$interval(function() {
 		console.log('fetch data');
 		$scope.realtimeUsageData();
-	}, 1000);
+	}, 10000);
 	window.setInterval(function() {
 		drawCurrentTimeline();
-	}, 1000);
+	}, 500);
 });
