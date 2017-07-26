@@ -108,10 +108,9 @@ function UsageGraphOption() {
 		},
 		formatter : function() {
 			var text = "<b>Time : </b>" + Highcharts.dateFormat('%H:%M:%S', this.x) + "<br>";
-			 $.each(this.points, function(i, point) {
-				 text = text + "<b>" + point.series.name
-					+ " : </b> " + point.y.toFixed(2) + "<br>";
-			 });
+			$.each(this.points, function(i, point) {
+				text = text + "<b>" + point.series.name + " : </b> " + point.y.toFixed(0) + "<br>";
+			});
 			return text;
 		},
 		shared : true
@@ -139,18 +138,14 @@ function EnergyUsageGraphOption() {
 	this.title.text = "Today's Energy Usage and Cost";
 	this.subtitle.text = Date.today().toString('MMM dd, yyyy');
 
-	this.yAxis = [ {
+	this.yAxis =  {
 		title : {
 			text : 'Energy Usage/Cost'
 		},
 		labels : {
 			enabled : true
 		}
-	}, {
-		title : {
-			text : '$'
-		}
-	} ];
+	};
 	this.xAxis = {
 		min : Date.today().set({
 			hour : 0,
@@ -216,7 +211,7 @@ var chart = null;
 
 function drawCurrentTimeline() {
 	var position = null;
-	if(new Date().getHours() > 20)
+	if (new Date().getHours() > 20)
 		position = -80;
 	else
 		position = 10;
@@ -296,28 +291,29 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		var date = new Date(time);
 		var hour = date.getHours();
 		if ((hour >= 7 && hour < 11) || (hour >= 17 && hour < 19)) {
-			return 13.2;
+			return (13.2 / 8.7);
 		} else if ((hour >= 11 && hour < 17)) {
-			return 18;
+			return (18 / 8.7);
 		} else {
-			return 8.7;
+			return (8.7 / 8.7);
 		}
 	};
 
 	$scope.dataTillNow = function(_nowsec) {
-		var _starttime = Date.today().getTime();
-		var _endtime = Date.today().set({
-			hour : 23,
-			minute : 59,
-			second : 59,
-			millisecond : 0
+		var _today = Date.today().getTime();
+		var _datadate = Date.today().clearTime().set({
+			year : 2017,
+			month : 6,
+			day : 12
 		}).getTime();
+		var delta = _today - _datadate + 4*3600*1000;
 		var energyData = [], costData = [], i = 0;
-		while (_starttime <= _nowsec) {
-			energyData.push([ _starttime, $scope.energyData[i] ]);
-			costData.push([ _starttime, ($scope.energyData[i] / (60 * 1000) * $scope.getPrice(_starttime)) ]);
-			i++;
-			_starttime += 60 * 1000;
+		for (i = 0; i < $scope.energyData.length; i++) {
+			var utime = delta+$scope.energyData[i][0] * 1000;
+			energyData.push([utime, $scope.energyData[i][1] ]);
+			costData.push([ utime, ($scope.energyData[i][1] * $scope.getPrice(utime)) ]);
+			// i++;
+			// _starttime += 60 * 1000;
 		}
 		return {
 			energyData : energyData,
@@ -377,7 +373,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		_series.push({
 			name : 'Cost',
 			data : pdata,
-			yAxis : 1,
+			yAxis : 0,
 			fillColor : {
 				linearGradient : {
 					x1 : 0,
