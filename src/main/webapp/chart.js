@@ -166,11 +166,11 @@ function EnergyUsageGraphOption() {
 				 $.each(this.points, function(i, point) {
 					 text = text + "<b>" + point.series.name;
 					 if(point.series.name == "Energy")
-						 text = text + " : </b> " + point.y*1000 + " Wh<br>";
+						 text = text + " : </b> " + point.y + " Wh<br>";
 					 if(point.series.name == "Cost")
-						 text = text + " : </b> " + (point.y * 6.5).toFixed(2) + " C<br>";
+						 text = text + " : </b> " + ((point.y/1000) * 6.5).toFixed(2) + " C<br>";
 					 if(point.series.name == "Cumulative cost")
-						 text = text + " : </b> " + (point.y* 6.5 *100 ).toFixed(2) + " C<br>";
+						 text = text + " : </b> " + (point.y).toFixed(2) + " C<br>";
 				 });
 				return text;
 			},
@@ -518,7 +518,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		var energyData = [], costData = [], cumCostData = [], i = 0;
 		for (i = 0; i < $scope.energyData.length; i++) {
 			var utime = delta+$scope.energyData[i][0] * 1000;
-			_cumCost += ($scope.energyData[i][1] * $scope.getEnergyCost(utime))/100;
+			_cumCost += (($scope.energyData[i][1]/1000) * $scope.getEnergyCost(utime));
 			energyData.push([utime, $scope.energyData[i][1] ]);
 			costData.push([ utime, $scope.energyData[i][1] * $scope.getEnergyCost(utime) ]);
 			cumCostData.push([utime,_cumCost]);
