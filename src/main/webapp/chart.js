@@ -127,7 +127,6 @@ function EnergyUsageGraphOption() {
 	this.chart.renderTo = 'container';
 
 	this.title.text = "Today's Energy Usage and Cost";
-	this.subtitle.text = Date.today().toString('MMM dd, yyyy');
 
 	this.yAxis = [{
 		title : {
@@ -142,7 +141,7 @@ function EnergyUsageGraphOption() {
 			text : 'Cost'
 		},
 		labels: {
-			format: '{value} cent',
+			format: '{value} ¢',
 			style: {
 				color: '#a05403'
 			}
@@ -176,8 +175,8 @@ function EnergyUsageGraphOption() {
 			},
 			formatter : function() {
 				var interval = this.points[0].point.z.timeInterval;
-				var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M:%S %p', this.x) +
-				"( " + interval + (interval>1? " minutes": " minute")+ " )<br>";
+				var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) +
+				" (" + interval + (interval>1? " minutes": " minute")+ ")<br>";
 				$.each(this.points, function(i, point) {
 					text = text + "<b>" + point.series.name;
 					if(point.series.name == "Energy")
@@ -583,6 +582,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 	$scope.createGraph = function(edata, pdata, cdata) {
 		var chartOption = new EnergyUsageGraphOption();
+		chartOption.subtitle.text = Date.today().toString('MMM dd, yyyy') + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
 		var gradientSpace = {
 				x1 : 1,
 				y1 : 0,
@@ -764,6 +764,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		console.log("Updating pulse graph",pie_chart);
 	};
 	$scope.fetchInitialUsageData = function() {
+		$scope.totalCost = 0;
 		$scope.createGraph([], [], []);
 		$http.get('data/energyDataRandomInterval.json').then(function(res) {
 			$http({
@@ -774,7 +775,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					function successCallback(res1) {
 						$http({
 							method: 'GET',
-							url: 'https://api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017'
+							url: 'https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017'
 						})
 						.then(
 								function successCallback(res2) {
@@ -792,11 +793,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 									$scope.offPeakFactor = peakFilter[0].price;
 
 									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+									$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData);
-
-									$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
-										return memo + num[1]
-									}, 0);
 								},
 								function errorCallback(response) {
 
@@ -814,9 +812,9 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime.addMinutes(5);
 		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
-		$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
+		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]
-		}, 0);
+		}, 0);*/
 		//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
 		$scope.updateGraph($scope.seriesData.energyData[$scope.seriesData.energyData.length - 1],
 				$scope.seriesData.costData[$scope.seriesData.costData.length - 1],
