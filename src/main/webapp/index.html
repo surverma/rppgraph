@@ -12,12 +12,22 @@
 <script src="//code.highcharts.com/stock/highstock.js"></script>
 <script src="//code.highcharts.com/stock/modules/exporting.js"></script>
 <script src="chart.js"></script>
+
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css">
 </head>
 <body ng-app="myApp" ng-controller="myCtrl" style="background-color: #000">
 	<div class="row">
 		<div class="col-xs-12">
 			<div id="container" style="height: 400px; min-width: 310px"></div>
-			<div><button ng-click="redraw()"><img src="img/icon-play.png">Replay</button></div>
+			<div style="position: relative;top: -41px;float: right;left: -90px;">
+				<a href="#" ng-click="redraw()" style="top: -3px;position: relative;">
+					<img src="img/icon-play.png">
+				</a>
+				<a href="#"><i class="fa fa-circle-o faa-burst animated fa-bold faa-fast" style="color:#2eb82e;font-size: 18px;"></i>
+					
+				</a>
+			</div>
 			<!-- <div id="pie_container" style="width: 400px; height: 400px; margin: 0 auto"> -->
 		</div>
 	</div>

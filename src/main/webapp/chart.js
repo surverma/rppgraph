@@ -1,113 +1,113 @@
 Highcharts.setOptions(
-{
-colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263','#6AF9C4','#088DA5', '#DC143C']
-});
+		{
+			colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263','#6AF9C4','#088DA5', '#DC143C']
+		});
 
 function UsageGraphOption() {
 	this.enableCost = false;
 	this.credits = {
-		enabled : false
+			enabled : false
 	};
 	this.chart = {
-		type : 'column',
-		reflow : true,
+			type : 'column',
+			reflow : true,
 	};
 	this.title = {
-		text : null
+			text : null
 	};
 	this.subtitle = {
-		text : null
+			text : null
 	};
 	this.xAxis = {
-		type : 'datetime',
-		dateTimeLabelFormats : {
-			millisecond : '%b %d, %Y',
-			second : '%b %d, %Y',
-			minute : '%b %d, %Y',
-			hour : '%b %d, %Y',
-			day : '%b %d, %Y',
-			week : '%b %d, %Y',
-			month : '%b %d, %Y',
-			year : '%b %d, %Y'
-		},
-		labels : {
-			rotation : -45,
-			formatter : function() {
-				return Highcharts.dateFormat('%b %d, %Y', this.value);
-			}
-		},
-		tickPositioner : function(min, max) {
-			var positions = [];
-			if (this.series) {
-				var data = this.series[0].data;
-				for (i = 0; i < data.length; i++) {
-					positions.push(data[i].x);
+			type : 'datetime',
+			dateTimeLabelFormats : {
+				millisecond : '%b %d, %Y',
+				second : '%b %d, %Y',
+				minute : '%b %d, %Y',
+				hour : '%b %d, %Y',
+				day : '%b %d, %Y',
+				week : '%b %d, %Y',
+				month : '%b %d, %Y',
+				year : '%b %d, %Y'
+			},
+			labels : {
+				rotation : -45,
+				formatter : function() {
+					return Highcharts.dateFormat('%b %d, %Y', this.value);
 				}
+			},
+			tickPositioner : function(min, max) {
+				var positions = [];
+				if (this.series) {
+					var data = this.series[0].data;
+					for (i = 0; i < data.length; i++) {
+						positions.push(data[i].x);
+					}
+				}
+				return positions;
 			}
-			return positions;
-		}
 	};
 	this.yAxis = {
-		unit : 'UNIT',
-		title : {
-			text : 'UNIT',
-			color : "#00B0F4"
-		},
-		stackLabels : {
-			enabled : true,
-			style : {
-				fontWeight : 'bold',
-				color : (Highcharts.theme && Highcharts.theme.textColor) || '#525252',
-				align : 'center'
-
+			unit : 'UNIT',
+			title : {
+				text : 'UNIT',
+				color : "#00B0F4"
 			},
-			formatter : function() {
-				var userOptions = this.axis.chart.userOptions;
-				console.log("userOptions.axis chart..", userOptions);
-				if (userOptions.enableCost) {
-					var data = this.axis.series[0].data;
-					var _point = _.findWhere(data, {
-						x : this.x
-					});
-					if (_point == null) {
-						return "";
-					}
-					return '$' + Highcharts.numberFormat(_point.z, 0);
-				}
-			}
-		}
-	};
-	this.legend = {
-		enabled : true
-	};
-	this.plotOptions = {
-		column : {
-			stacking : 'normal',
-			dataLabels : {
+			stackLabels : {
 				enabled : true,
-				color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-				rotation : 270,
-				useHTML : true,
 				style : {
-					fontWeight : "normal",
-					textShadow : false,
-					textOutline : false
+					fontWeight : 'bold',
+					color : (Highcharts.theme && Highcharts.theme.textColor) || '#525252',
+					align : 'center'
+
 				},
 				formatter : function() {
-					// var _unit = this.series.chart.yAxis[0].options.unit;
-					return Highcharts.numberFormat(this.total, 0); // + _unit;
+					var userOptions = this.axis.chart.userOptions;
+					console.log("userOptions.axis chart..", userOptions);
+					if (userOptions.enableCost) {
+						var data = this.axis.series[0].data;
+						var _point = _.findWhere(data, {
+							x : this.x
+						});
+						if (_point == null) {
+							return "";
+						}
+						return '$' + Highcharts.numberFormat(_point.z, 0);
+					}
 				}
 			}
-		},
-		series : {
-			color : '#0080ff',
-			lineWidth : 1
-
-		}
 	};
-	
+	this.legend = {
+			enabled : true
+	};
+	this.plotOptions = {
+			column : {
+				stacking : 'normal',
+				dataLabels : {
+					enabled : true,
+					color : (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+					rotation : 270,
+					useHTML : true,
+					style : {
+						fontWeight : "normal",
+						textShadow : false,
+						textOutline : false
+					},
+					formatter : function() {
+						// var _unit = this.series.chart.yAxis[0].options.unit;
+						return Highcharts.numberFormat(this.total, 0); // + _unit;
+					}
+				}
+			},
+			series : {
+				color : '#0080ff',
+				lineWidth : 1
+
+			}
+	};
+
 	this.exporting = {
-		enabled : false
+			enabled : false
 	};
 	this.series = [];
 }
@@ -130,43 +130,43 @@ function EnergyUsageGraphOption() {
 	this.subtitle.text = Date.today().toString('MMM dd, yyyy');
 
 	this.yAxis = [{
-			title : {
-				text : 'Energy Usage/Cost'
-			},
-			labels : {
-				enabled : true
-			}
+		title : {
+			text : 'Energy Usage/Cost'
+		},
+		labels : {
+			enabled : false
+		}
 	},
 	{
 		title : {
-			text : 'Cumulative Cost'
+			text : 'Cost'
 		},
-        labels: {
-            format: '{value} cent',
-            style: {
-                color: '#a05403'
-            }
-	}
+		labels: {
+			format: '{value} cent',
+			style: {
+				color: '#a05403'
+			}
+		},
+		opposite : true
 	}
 	];
-	
+
 	this.xAxis = {
-		min : Date.today().set({
-			hour : 0,
-			minute : 0
-		}),
-		max : Date.today().set({
-			hour : 23,
-			minute : 59
-		}),
-		labels : {
-			formatter : timeSlabFormatter
-		},
-		endOnTick : true,
-		tickInterval : 5 * 60 * 60 * 1000,
-		tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
-				Date.today().addHours(12).getTime(), Date.today().addHours(18).getTime(),
-				Date.today().addHours(24).getTime() ]
+			min : Date.today().set({
+				hour : 0,
+				minute : 0
+			}),
+			max : Date.today().set({
+				hour : 23,
+				minute : 59
+			}),
+			labels : {
+				formatter : timeSlabFormatter
+			},
+			tickInterval : 5 * 60 * 60 * 1000,
+			tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
+				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
+				Date.today().addHours(20).getTime()]
 	};
 	this.tooltip = {
 			borderWidth : 0,
@@ -175,27 +175,29 @@ function EnergyUsageGraphOption() {
 				padding : 0,
 			},
 			formatter : function() {
-				var text = "<b>Time : </b>" + Highcharts.dateFormat('%H:%M:%S', this.x) +
-				"( " + this.points[0].point.z.timeInterval + " minute )<br>";
-				 $.each(this.points, function(i, point) {
-					 text = text + "<b>" + point.series.name;
-					 if(point.series.name == "Energy")
-						 text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
-					 if(point.series.name == "Cost")
-						 text = text + " : </b> " + (point.y * point.point.z.offPeakFactor).toFixed(2) + " C<br>";
-					 if(point.series.name == "Cumulative cost")
-						 text = text + " : </b> " + (point.y).toFixed(2) + " C<br>";
-				 });
+				var interval = this.points[0].point.z.timeInterval;
+				var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M:%S %p', this.x) +
+				"( " + interval + (interval>1? " minutes": " minute")+ " )<br>";
+				$.each(this.points, function(i, point) {
+					text = text + "<b>" + point.series.name;
+					if(point.series.name == "Energy")
+						text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
+					if(point.series.name == "Cost")
+						text = text + " : </b> " + (point.y * point.point.z.offPeakFactor).toFixed(2) + "&cent;<br>";
+					if(point.series.name == "Cumulative cost")
+						text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
+				});
 				return text;
 			},
 			shared : true
-		};
+	};
+		
 	this.plotOptions = {
-		series : {
-			//color : '#0080ff',
-			lineWidth : 0
+			series : {
+				//color : '#0080ff',
+				lineWidth : 0
 
-		}
+			}
 	}
 
 }
@@ -233,34 +235,34 @@ function EnergyPulseMonitorOption() {
 				Date.today().addHours(24).getTime() ]
 	};*/
 	this.tooltip = {
-	        borderWidth: 0,
-	        backgroundColor: 'none',
-	        shadow: false,
-	        style: {
-	            fontSize: '16px'
-	        },
-	        /*pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">' + this.y.toFixed(2) + '%</span>',*/
-	        formatter : function() {
+			borderWidth: 0,
+			backgroundColor: 'none',
+			shadow: false,
+			style: {
+				fontSize: '16px'
+			},
+			/*pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">' + this.y.toFixed(2) + '%</span>',*/
+			formatter : function() {
 				var text = this.series.name + "<br><span style='font-size:2em; color: {point.color}; font-weight: bold'>" + this.y.toFixed(2) + "%</span>";
 				return text;
 			},
-	        positioner: function (labelWidth) {
-	            return {
-	                x: 200 - labelWidth / 2,
-	                y: 180
-	            };
-	        }
-	    };
+			positioner: function (labelWidth) {
+				return {
+					x: 200 - labelWidth / 2,
+					y: 180
+				};
+			}
+	};
 	this.plotOptions = {
-	        solidgauge: {
-	            dataLabels: {
-	                enabled: false
-	            },
-	            linecap: 'round',
-	            stickyTracking: false,
-	            rounded: true
-	        }
-	    };
+			solidgauge: {
+				dataLabels: {
+					enabled: false
+				},
+				linecap: 'round',
+				stickyTracking: false,
+				rounded: true
+			}
+	};
 	this.pane = {
 			startAngle: 0,
 			endAngle: 360,
@@ -356,7 +358,7 @@ function drawCurrentTimeline() {
 			label : {
 				rotation : 0,
 				x : position,
-				text : "<div><b>(" + Highcharts.dateFormat('%H:%M:%S', new Date().getTime()) + ")</b></div>",
+				text : "<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>",
 				style : {
 					color : '#8c8888',
 					fontWeight : 'bold',
@@ -432,13 +434,13 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		container.highcharts().destroy();
 		$scope.createGraph(data.energyData,data.costData,data.cumCostData);
 	};
-	
+
 	$scope.breakTotalCost = function(costData)
 	{
 		var off_peak = null;
 		var on_peak = null;
 		var mid_peak = null;
-		
+
 		$.each(costData, function( index, value ) {
 			if(getCostZone(value[0]) == "off")
 			{
@@ -453,43 +455,31 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				on_peak += value[1];
 			}
 		});
-		
+
 		return {
 			offCost : off_peak,
 			midCost : mid_peak,
 			onCost : on_peak
 		};
-		
+
 	};
-	
-	/*$scope.getPrice = function(time) {
-		var date = new Date(time);
-		var hour = date.getHours();
-		if ((hour >= 7 && hour < 11) || (hour >= 17 && hour < 19)) {
-			return (13.2 / 8.7);
-		} else if ((hour >= 11 && hour < 17)) {
-			return (18 / 8.7);
-		} else {
-			return (8.7 / 8.7);
-		}
-	};*/
-	
+
 	$scope.findHoliday = function(time)
 	{
 		var isHoliday = false;
 		$.each($scope.holidayList, function(key,holiday) {
-			  var gmtDate = new Date(holiday.holidayDate);
-			  var estDate = gmtDate.addHours(gmtDate.getTimezoneOffset()/60);
-			  if(Date.compare(new Date(time),estDate) == 0)
-			  {
-				  isHoliday = true;
-				  return true;
-			  }
-			});
+			var gmtDate = new Date(holiday.holidayDate);
+			var estDate = gmtDate.addHours(gmtDate.getTimezoneOffset()/60);
+			if(Date.compare(new Date(time),estDate) == 0)
+			{
+				isHoliday = true;
+				return true;
+			}
+		});
 		return isHoliday;
 	};
-	
-	
+
+
 	$scope.getEnergyCost = function(time) {
 		var inputDay = new Date(time).getDay();
 		var inputHour = new Date(time).getHours();
@@ -538,8 +528,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		}
 		return costZone[0].price;
 	};
-	
-	
+
+
 
 	$scope.dataTillNow = function(_nowsec) {
 		var _today = Date.today().getTime();
@@ -565,19 +555,19 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				_zObject.timeInterval = 0;
 			}
 			_cumCost += (($scope.energyData[i][1]/1000) * $scope.getEnergyCost(utime) * (_zObject.timeInterval/60)); // (kwh * c/kwh * hour)
-			
+
 			energyData.push({
 				x : utime,
 				y : ($scope.energyData[i][1]/1000),
 				z : _zObject
 			}); //kwh
-			
+
 			costData.push({
 				x : utime,
 				y : ($scope.energyData[i][1]/1000) * ($scope.getEnergyCost(utime)/$scope.offPeakFactor), // ()
 				z : _zObject
 			});//cent/kwh
-			
+
 			cumCostData.push({
 				x : utime,
 				y : _cumCost,
@@ -590,60 +580,80 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			cumCostData : cumCostData
 		};
 	};
-	
+
 	$scope.createGraph = function(edata, pdata, cdata) {
 		var chartOption = new EnergyUsageGraphOption();
 		var gradientSpace = {
-			x1 : 1,
-			y1 : 0,
-			x2 : 1,
-			y2 : 1
+				x1 : 1,
+				y1 : 0,
+				x2 : 1,
+				y2 : 1
 		};
+		
+		var _zonesWithColorGrad = [ {
+			value : Date.today().addHours(7),
+			fillColor : {
+				linearGradient : gradientSpace,
+				stops : [ [ 0, 'rgb(135, 181, 76)' ], [ 1, 'rgb(135, 181, 76)' ] ]
+			}
+		}, {
+			value : Date.today().addHours(11),
+			color : {
+				linearGradient : gradientSpace,
+				stops : [ [ 0, 'rgb(246, 208, 35)' ], [ 1, 'rgb(246, 208, 35)' ] ]
+			}
+		}, {
+			value : Date.today().addHours(17),
+			color : {
+				linearGradient : gradientSpace,
+				stops : [ [ 0, 'rgb(196, 84, 75)' ], [ 1, 'rgb(224, 163, 159)' ] ]
+			}
+		}, {
+			value : Date.today().addHours(19),
+			color : {
+				linearGradient : gradientSpace,
+				stops : [ [ 0, 'rgb(221, 183, 10)' ], [ 1, 'rgb(250, 233, 158)' ] ]
+			}
+		}, {
+			value : Date.today().addHours(24),
+			color : {
+				linearGradient : gradientSpace,
+				stops : [ [ 0, 'rgb(135, 180, 81)' ], [ 1, 'rgb(194, 217, 166)' ] ]
+			}
+		} ];
+		
+		var _zonesWithSolidColor = [ {
+			value : Date.today().addHours(7),
+			color : 'rgb(135, 181, 76)'
+		}, {
+			value : Date.today().addHours(11),
+			color : 'rgb(246, 208, 35)'
+		}, {
+			value : Date.today().addHours(17),
+			color : 'rgb(196, 84, 75)'
+		}, {
+			value : Date.today().addHours(19),
+			color : 'rgb(221, 183, 10)'
+		}, {
+			value : Date.today().addHours(24),
+			color : 'rgb(135, 180, 81)'
+		} ];
+		
 		var _series = [];
 		_series.push({
 			name : 'Energy',
 			data : edata,
 			zoneAxis : 'x',
-			zones : [ {
-				value : Date.today().addHours(7),
-				fillColor : {
-					linearGradient : gradientSpace,
-					stops : [ [ 0, 'rgb(135, 181, 76)' ], [ 1, 'rgb(135, 181, 76)' ] ]
-				}
-			}, {
-				value : Date.today().addHours(11),
-				color : {
-					linearGradient : gradientSpace,
-					stops : [ [ 0, 'rgb(246, 208, 35)' ], [ 1, 'rgb(246, 208, 35)' ] ]
-				}
-			}, {
-				value : Date.today().addHours(17),
-				color : {
-					linearGradient : gradientSpace,
-					stops : [ [ 0, 'rgb(196, 84, 75)' ], [ 1, 'rgb(224, 163, 159)' ] ]
-				}
-			}, {
-				value : Date.today().addHours(19),
-				color : {
-					linearGradient : gradientSpace,
-					stops : [ [ 0, 'rgb(221, 183, 10)' ], [ 1, 'rgb(250, 233, 158)' ] ]
-				}
-			}, {
-				value : Date.today().addHours(24),
-				color : {
-					linearGradient : gradientSpace,
-					stops : [ [ 0, 'rgb(135, 180, 81)' ], [ 1, 'rgb(194, 217, 166)' ] ]
-				}
-			} ],
+			zones : _zonesWithSolidColor,
+			fillOpacity: 0.7
+			
 		});
 
 		_series.push({
 			name : 'Cost',
 			data : pdata,
 			yAxis : 0,
-			color : '#0080ff',
-			lineWidth : 1,
-			fillColor : {
+			/*fillColor : {
 				linearGradient : {
 					x1 : 0,
 					y1 : 0,
@@ -651,10 +661,13 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					y2 : 1
 				},
 				stops : [ [ 0, Highcharts.getOptions().colors[0] ],
-						[ 1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba') ] ]
-			}
+					[ 1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba') ] ]
+			}*/
+			zoneAxis : 'x',
+			zones : _zonesWithSolidColor,
+			fillOpacity: 0.5
 		});
-		
+
 		_series.push({
 			name : 'Cumulative cost',
 			data : cdata,
@@ -671,7 +684,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$scope.createPieGraph = function(breakUpCost,totalCost) {
 		var chartOption = new EnergyPulseMonitorOption();
 		var _series = [
-		    /*{
+			/*{
 		        name: 'Critical',
 		        data: [{
 		            color: Highcharts.getOptions().colors[5],
@@ -681,34 +694,34 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		        }]
 		    },*/ 
 			{
-		        name: 'On-Peak',
-		        data: [{
-		            color: Highcharts.getOptions().colors[1],
-		            radius: '112%',
-		            innerRadius: '88%',
-		            y: ((breakUpCost.onCost + breakUpCost.midCost + breakUpCost.offCost)*100/totalCost)
-		        }]
-		    },
-		    {
-		        name: 'Mid-Peak',
-		        data: [{
-		            color: Highcharts.getOptions().colors[2],
-		            radius: '112%',
-		            innerRadius: '88%',
-		            y: ((breakUpCost.midCost + breakUpCost.offCost)*100/totalCost)
-		        }]
-		    }, 
-		    {
-		        name: 'Off-Peak',
-		        data: [{
-		            color: Highcharts.getOptions().colors[0],
-		            radius: '112%',
-		            innerRadius: '88%',
-		            y: (breakUpCost.offCost*100/totalCost)
-		        }]
-		    }
-		    /*,
-		    
+				name: 'On-Peak',
+				data: [{
+					color: Highcharts.getOptions().colors[1],
+					radius: '112%',
+					innerRadius: '88%',
+					y: ((breakUpCost.onCost + breakUpCost.midCost + breakUpCost.offCost)*100/totalCost)
+				}]
+			},
+			{
+				name: 'Mid-Peak',
+				data: [{
+					color: Highcharts.getOptions().colors[2],
+					radius: '112%',
+					innerRadius: '88%',
+					y: ((breakUpCost.midCost + breakUpCost.offCost)*100/totalCost)
+				}]
+			}, 
+			{
+				name: 'Off-Peak',
+				data: [{
+					color: Highcharts.getOptions().colors[0],
+					radius: '112%',
+					innerRadius: '88%',
+					y: (breakUpCost.offCost*100/totalCost)
+				}]
+			}
+			/*,
+
 		    {
 		        name: 'Goal',
 		        data: [{
@@ -737,7 +750,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 		var pseries = chart.series[1];
 		pseries.addPoint(pdata, true);
-		
+
 		var cseries = chart.series[2];
 		cseries.addPoint(cdata, true);
 	};
@@ -758,40 +771,43 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				url: 'https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/public/touSchedules'
 			})
 			.then(
-			function successCallback(res1) {
-				$http({
-					method: 'GET',
-					url: 'https://api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017'
-				})
-				.then(
-				function (res2) {
-					$scope.costBreakup = res1.data;
-					$scope.energyData = res.data;
-					$scope.usageEndTime.addSeconds(10);
-					$scope.holidayList = res2.data;
-					$scope.isHoliday = $scope.findHoliday($scope.usageEndTime.clearTime().getTime());
-					var peakFilter = _.filter($scope.costBreakup, function(singleRow){ 
-						if(singleRow.peak == "TOU_OP")
-						{
-							return singleRow;
-						}
+					function successCallback(res1) {
+						$http({
+							method: 'GET',
+							url: 'https://api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017'
+						})
+						.then(
+								function successCallback(res2) {
+									$scope.costBreakup = res1.data;
+									$scope.energyData = res.data;
+									$scope.usageEndTime.addSeconds(10);
+									$scope.holidayList = res2.data;
+									$scope.isHoliday = $scope.findHoliday($scope.usageEndTime.clearTime().getTime());
+									var peakFilter = _.filter($scope.costBreakup, function(singleRow){ 
+										if(singleRow.peak == "TOU_OP")
+										{
+											return singleRow;
+										}
+									});
+									$scope.offPeakFactor = peakFilter[0].price;
+
+									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData);
+
+									$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
+										return memo + num[1]
+									}, 0);
+								},
+								function errorCallback(response) {
+
+								});
+					},
+					function errorCallback(response) {
+
 					});
-					$scope.offPeakFactor = peakFilter[0].price;
 
-					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
-					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData);
-
-					$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
-						return memo + num[1]
-					}, 0);
-				});
-				},
-			function errorCallback(response) {
-				
-			});
-
-		//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
-		//$scope.createPieGraph(breakUpCost,$scope.totalCost);
+			//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
+			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
 
 		});
 	}
