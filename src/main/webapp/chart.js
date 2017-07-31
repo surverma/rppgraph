@@ -174,19 +174,27 @@ function EnergyUsageGraphOption() {
 				padding : 0,
 			},
 			formatter : function() {
-				var interval = this.points[0].point.z.timeInterval;
-				var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) +
-				" (" + interval + (interval>1? " minutes": " minute")+ ")<br>";
-				$.each(this.points, function(i, point) {
-					text = text + "<b>" + point.series.name;
-					if(point.series.name == "Energy")
-						text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
-					if(point.series.name == "Cost")
-						text = text + " : </b> " + (point.y * point.point.z.offPeakFactor).toFixed(2) + "&cent;<br>";
-					if(point.series.name == "Cumulative cost")
-						text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
-				});
-				return text;
+				if(this.series != undefined && this.series.name == 'Total cost')
+				{
+					var text = "<b>" + this.key + " Consumption</b><br>" + this.y.toFixed(2) + "&cent; (" + this.percentage.toFixed(2) + "%)";
+					return text;
+				}
+				else
+				{
+					var interval = this.points[0].point.z.timeInterval;
+					var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) +
+					" (" + interval + (interval>1? " minutes": " minute")+ ")<br>";
+					$.each(this.points, function(i, point) {
+						text = text + "<b>" + point.series.name;
+						if(point.series.name == "Energy")
+							text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
+						if(point.series.name == "Cost")
+							text = text + " : </b> " + (point.y * point.point.z.offPeakFactor / point.point.z.peakFactor).toFixed(2) + "&cent;<br>";
+						if(point.series.name == "Cumulative cost")
+							text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
+					});
+					return text;
+				}
 			},
 			shared : true
 	};
@@ -431,7 +439,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$scope.redraw = function() {
 		var data = $scope.dataTillNow();
 		container.highcharts().destroy();
-		$scope.createGraph(data.energyData,data.costData,data.cumCostData);
+		$scope.createGraph(data.energyData,data.costData,data.cumCostData,data.breakedUpCost);
 	};
 
 	$scope.breakTotalCost = function(costData)
@@ -441,11 +449,12 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		var mid_peak = null;
 
 		$.each(costData, function( index, value ) {
-			if(getCostZone(value[0]) == "off")
+			var costZone = $scope.getEnergyCost(value[0]);
+			if(costZone == "off")
 			{
 				off_peak += value[1];
 			}
-			else if(getCostZone(value[0]) == "mid")
+			else if(costZone == "mid")
 			{
 				mid_peak += value[1];
 			}
@@ -477,30 +486,51 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		});
 		return isHoliday;
 	};
+	
+	$scope.findWeekend = function(time)
+	{
+		var inputDay = new Date(time).getDay();
+		var isWeekend = (inputDay == 6) || (inputDay == 0); 
+		return isWeekend;
+	};
+	
+	$scope.peakFactorCalculator = function(costZone)
+	{
+		if($scope.isWeekend || $scope.isHoliday || costZone.peak == "TOU_OP")
+			costZone.peakFactor = 1;
+		else if(costZone.peak == "TOU_MP")
+			costZone.peakFactor = 2;
+		else
+			costZone.peakFactor = 3;
+	}
 
 
 	$scope.getEnergyCost = function(time) {
-		var inputDay = new Date(time).getDay();
 		var inputHour = new Date(time).getHours();
-		var isWeekend = (inputDay == 6) || (inputDay == 0); 
 		var costZone = null;
 		var dateFilter = _.filter($scope.costBreakup, function(singleRow){ 
 			if(time >=singleRow.effDate && time<=singleRow.endDate)
-			{
 				return singleRow;
-			}
 		});
 
-		if(isWeekend)
+		if($scope.isWeekend)
 		{
 			costZone = _.filter(dateFilter, function(singleRow){
-				if(singleRow.season == "Weekend") return singleRow;
+				if(singleRow.season == "Weekend")
+				{
+					$scope.peakFactorCalculator(singleRow);
+					return singleRow;
+				}
 			});
 		}
 		else if($scope.isHoliday)
 		{
 			costZone = _.filter(dateFilter, function(singleRow){
-				if(singleRow.season == "Holiday") return singleRow;
+				if(singleRow.season == "Holiday")
+				{
+					$scope.peakFactorCalculator(singleRow);
+					return singleRow;
+				}
 			});
 		}
 		else
@@ -514,18 +544,24 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					if(splitedEffHour < splitedEndHour)
 					{
 						if(inputHour >= splitedEffHour && inputHour < splitedEndHour)
+						{
+							$scope.peakFactorCalculator(singleRow);
 							return singleRow;
+						}
 					}
 					else
 					{
 						if((inputHour >= splitedEffHour &&  inputHour <= 23) ||  (inputHour >= 0 &&  inputHour < splitedEndHour))
+						{
+							$scope.peakFactorCalculator(singleRow);
 							return singleRow;
+						}
 					}
 				}
 
 			});
 		}
-		return costZone[0].price;
+		return costZone[0];
 	};
 
 
@@ -533,6 +569,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$scope.dataTillNow = function(_nowsec) {
 		var _today = Date.today().getTime();
 		var _cumCost = 0;
+		var _intervalCost = 0;
 		var _zObject = {};
 		var _datadate = Date.today().clearTime().set({
 			year : 2017,
@@ -540,10 +577,15 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			day : 12
 		}).getTime();
 		var delta = _today - _datadate + 4*3600*1000;
-		var energyData = [], costData = [], cumCostData = [], i = 0;
+		var energyData = [], costData = [], cumCostData = [], breakedUpCost = {}, i = 0;
+		breakedUpCost.offPeak = 0;
+		breakedUpCost.midPeak = 0;
+		breakedUpCost.onPeak = 0;
 		_zObject.offPeakFactor = $scope.offPeakFactor;
 		for (i = 0; i < $scope.energyData.length; i++) {
 			var utime = delta+$scope.energyData[i][0] * 1000;
+			var costZone = $scope.getEnergyCost(utime);
+			_zObject.peakFactor = costZone.peakFactor;
 			if(i>0)
 			{
 				var prevUtime = delta+$scope.energyData[i-1][0] * 1000;
@@ -553,7 +595,16 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			{
 				_zObject.timeInterval = 0;
 			}
-			_cumCost += (($scope.energyData[i][1]/1000) * $scope.getEnergyCost(utime) * (_zObject.timeInterval/60)); // (kwh * c/kwh * hour)
+			
+			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price * (_zObject.timeInterval/60));
+			_cumCost += _intervalCost; // (kwh * c/kwh * hour)
+			
+			if(costZone.peak == "TOU_OP")
+				breakedUpCost.offPeak += _intervalCost;
+			else if(costZone.peak == "TOU_MP")
+				breakedUpCost.midPeak += _intervalCost;
+			else
+				breakedUpCost.onPeak += _intervalCost;
 
 			energyData.push({
 				x : utime,
@@ -563,7 +614,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 			costData.push({
 				x : utime,
-				y : ($scope.energyData[i][1]/1000) * ($scope.getEnergyCost(utime)/$scope.offPeakFactor), // ()
+				y : ($scope.energyData[i][1]/1000) * (costZone.price * costZone.peakFactor/$scope.offPeakFactor), // ()
 				z : _zObject
 			});//cent/kwh
 
@@ -576,13 +627,16 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		return {
 			energyData : energyData,
 			costData : costData,
-			cumCostData : cumCostData
+			cumCostData : cumCostData,
+			breakedUpCost : breakedUpCost
 		};
 	};
 
-	$scope.createGraph = function(edata, pdata, cdata) {
+	$scope.createGraph = function(edata, pdata, cdata, pieData) {
 		var chartOption = new EnergyUsageGraphOption();
-		chartOption.subtitle.text = Date.today().toString('MMM dd, yyyy') + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
+		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
+		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
+		
 		var gradientSpace = {
 				x1 : 1,
 				y1 : 0,
@@ -644,7 +698,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			name : 'Energy',
 			data : edata,
 			zoneAxis : 'x',
-			zones : _zonesWithSolidColor,
+			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
 			fillOpacity: 0.7
 			
 		});
@@ -664,7 +718,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					[ 1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba') ] ]
 			}*/
 			zoneAxis : 'x',
-			zones : _zonesWithSolidColor,
+			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
 			fillOpacity: 0.5
 		});
 
@@ -676,6 +730,40 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			color : '#a05403',
 			lineWidth : 1
 		});
+		
+		_series.push({
+			type: 'pie',
+	        name: 'Total cost',
+	        tooltip : {
+	    			borderWidth : 0,
+	    			useHTML : true,
+	    			style : {
+	    				padding : 0,
+	    			},
+	    			pointFormat: '{series.name}: <b>{point.y}</b><br/>',
+	    			shared : true
+	    	},
+	        data: [{
+	            name: 'Offpeak',
+	            y: pieData.offPeak,
+	            color: 'rgb(135, 181, 76)'
+	        }, {
+	            name: 'Midpeak',
+	            y: pieData.midPeak,
+	            color: 'rgb(246, 208, 35)'
+	        }, {
+	            name: 'Onpeak',
+	            y: pieData.onPeak,
+	            color: 'rgb(196, 84, 75)'
+	        }],
+	        center: [180, 10],
+	        size: 150,
+	        showInLegend: false,
+	        dataLabels: {
+	            enabled: false
+	        }
+		});
+		
 		chartOption.series = _series;
 		chart = new Highcharts.chart(chartOption);
 
@@ -765,7 +853,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	};
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
-		$scope.createGraph([], [], []);
+		$scope.createGraph([], [], [], []);
 		$http.get('data/energyDataRandomInterval.json').then(function(res) {
 			$http({
 				method: 'GET',
@@ -784,6 +872,9 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 									$scope.usageEndTime.addSeconds(10);
 									$scope.holidayList = res2.data;
 									$scope.isHoliday = $scope.findHoliday($scope.usageEndTime.clearTime().getTime());
+									$scope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
+									console.log("isHoliday  ", $scope.isHoliday);
+									console.log("isWeekend  ", $scope.isWeekend);
 									var peakFilter = _.filter($scope.costBreakup, function(singleRow){ 
 										if(singleRow.peak == "TOU_OP")
 										{
@@ -794,7 +885,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 									$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
-									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData);
+									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
 								},
 								function errorCallback(response) {
 
@@ -804,7 +895,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 					});
 
-			//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
+			
 			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
 
 		});
