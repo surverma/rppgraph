@@ -127,7 +127,7 @@ function EnergyUsageGraphOption() {
 	this.chart.renderTo = 'container';
 
 	this.title.text = "Today's Energy Usage and Cost";
-
+	
 	this.yAxis = [{
 		title : {
 			text : 'Energy Usage/Cost'
@@ -167,6 +167,49 @@ function EnergyUsageGraphOption() {
 				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
 				Date.today().addHours(20).getTime()]
 	};
+	
+	this.chart.events = { load: function() {
+		var position = null,
+		plotLine,
+		newx,
+		d,
+		xAxis = this.xAxis[0];
+		if(new Date().getHours() > 20)
+			position = -80;
+		else
+			position = 10;
+		xAxis.addPlotLine({
+			value : new Date().getTime(),
+			color : 'black',
+			width : 2,
+			dashStyle : 'solid',
+			id : 'current-timeline',
+			label : {
+				rotation : 0,
+				x : position,
+				text : "<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>",
+				style : {
+					color : '#8c8888',
+					fontWeight : 'bold',
+					fontSize : '18'
+				}
+			}
+		});
+		setInterval(function() {
+			if(xAxis.plotLinesAndBands != undefined)
+			{
+			 plotLine = xAxis.plotLinesAndBands[0].svgElem;
+			 d = plotLine.d.split(' ');
+			 newx = xAxis.toPixels(new Date().getTime()) - d[4];
+			 xAxis.plotLinesAndBands[0].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
+			 plotLine.animate({
+	              translateX : newx
+	            }, 300);
+			}
+		  }, 1000);
+		}
+	};
+	
 	this.tooltip = {
 			borderWidth : 0,
 			useHTML : true,
@@ -347,7 +390,7 @@ var hasPlotLine = false;
 var chart = null;
 var pie_chart = null;
 
-function drawCurrentTimeline() {
+/*function drawCurrentTimeline() {
 	var position = null;
 	if(new Date().getHours() > 20)
 		position = -80;
@@ -377,7 +420,7 @@ function drawCurrentTimeline() {
 		chart.xAxis[0].removePlotLine('current-timeline');
 	}
 	hasPlotLine = !hasPlotLine;
-};
+};*/
 
 function getTimeSlab(date) {
 	var myDate = new Date(date);
@@ -421,6 +464,25 @@ function getCostZone(time)
 	{
 		return 'off';
 	}
+}
+
+function createPieChartdata(pieData)
+{
+	var data =  [{
+        name: 'Offpeak',
+        y: pieData.offPeak,
+        color: 'rgb(135, 181, 76)'
+    }, {
+        name: 'Midpeak',
+        y: pieData.midPeak,
+        color: 'rgb(246, 208, 35)'
+    }, {
+        name: 'Onpeak',
+        y: pieData.onPeak,
+        color: 'rgb(196, 84, 75)'
+    }];
+	
+	return data;
 }
 
 Highcharts.setOptions({
@@ -471,7 +533,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		};
 
 	};
-
+	
 	$scope.findHoliday = function(time)
 	{
 		var isHoliday = false;
@@ -743,21 +805,9 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	    			pointFormat: '{series.name}: <b>{point.y}</b><br/>',
 	    			shared : true
 	    	},
-	        data: [{
-	            name: 'Offpeak',
-	            y: pieData.offPeak,
-	            color: 'rgb(135, 181, 76)'
-	        }, {
-	            name: 'Midpeak',
-	            y: pieData.midPeak,
-	            color: 'rgb(246, 208, 35)'
-	        }, {
-	            name: 'Onpeak',
-	            y: pieData.onPeak,
-	            color: 'rgb(196, 84, 75)'
-	        }],
-	        center: [180, 10],
-	        size: 150,
+	        data: createPieChartdata(pieData),
+	        center: [30, -30],
+	        size: 100,
 	        showInLegend: false,
 	        dataLabels: {
 	            enabled: false
@@ -832,7 +882,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		pie_chart = new Highcharts.chart(chartOption);
 
 	};
-	$scope.updateGraph = function(edata, pdata, cdata) {
+	$scope.updateGraph = function(edata, pdata, cdata, pieData) {
 		var eseries = chart.series[0];
 		eseries.addPoint(edata, true);
 
@@ -841,6 +891,9 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 		var cseries = chart.series[2];
 		cseries.addPoint(cdata, true);
+		
+		var pieseries = chart.series[3];
+		pieseries.setData(createPieChartdata(pieData));
 	};
 	$scope.updatePulseMeter= function(breakUpCost,totalCost) {
 		if(pie_chart)
@@ -909,7 +962,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
 		$scope.updateGraph($scope.seriesData.energyData[$scope.seriesData.energyData.length - 1],
 				$scope.seriesData.costData[$scope.seriesData.costData.length - 1],
-				$scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length - 1]);
+				$scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length - 1],
+				$scope.seriesData.breakedUpCost);
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$scope.usageEndTime = Date.today().setTimeToNow();
@@ -918,7 +972,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		console.log('fetch data');
 		$scope.realtimeUsageData();
 	}, 1000);
-	window.setInterval(function() {
+	/*window.setInterval(function() {
 		drawCurrentTimeline();
-	}, 500);
+	}, 500);*/
 });
