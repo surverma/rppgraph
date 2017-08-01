@@ -127,7 +127,7 @@ function EnergyUsageGraphOption() {
 	this.chart.renderTo = 'container';
 
 	this.title.text = "Today's Energy Usage and Cost";
-	
+
 	this.yAxis = [{
 		title : {
 			text : 'Energy Usage/Cost'
@@ -165,7 +165,16 @@ function EnergyUsageGraphOption() {
 			tickInterval : 5 * 60 * 60 * 1000,
 			tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
 				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
-				Date.today().addHours(20).getTime()]
+				Date.today().addHours(20).getTime()],
+			plotBands : [{
+				color: 'orange', // Color value
+			from: Date.today().addHours(15).getTime(), // Start of the plot band
+			to: Date.today().addHours(16).getTime(),
+			label: { 
+			    text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+			    align: 'left' // Positioning of the label. 
+			  }// End of the plot band
+			}]
 	};
 	
 	this.chart.events = { load: function() {
@@ -173,7 +182,14 @@ function EnergyUsageGraphOption() {
 		plotLine,
 		newx,
 		d,
-		xAxis = this.xAxis[0];
+		xAxis = this.xAxis[0],
+		rend = this.renderer,
+		pie = this.series[3],
+		left = this.plotLeft + pie.center[0],
+        top = this.plotTop + pie.center[1],
+        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
+        text = rend.text("Total Cost <br><b> ¢" + totalCost.toFixed(2) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+		
 		if(new Date().getHours() > 20)
 			position = -80;
 		else
@@ -198,10 +214,10 @@ function EnergyUsageGraphOption() {
 		setInterval(function() {
 			if(xAxis.plotLinesAndBands != undefined)
 			{
-			 plotLine = xAxis.plotLinesAndBands[0].svgElem;
+			 plotLine = xAxis.plotLinesAndBands[1].svgElem;
 			 d = plotLine.d.split(' ');
 			 newx = xAxis.toPixels(new Date().getTime()) - d[4];
-			 xAxis.plotLinesAndBands[0].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
+			 xAxis.plotLinesAndBands[1].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
 			 plotLine.animate({
 	              translateX : newx
 	            }, 300);
@@ -226,13 +242,13 @@ function EnergyUsageGraphOption() {
 				{
 					var interval = this.points[0].point.z.timeInterval;
 					var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) +
-					" (" + interval + (interval>1? " minutes": " minute")+ ")<br>";
+					" (" + Math.round(interval) + (interval>1? " minutes": " minute")+ ")<br>";
 					$.each(this.points, function(i, point) {
 						text = text + "<b>" + point.series.name;
 						if(point.series.name == "Energy")
 							text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
 						if(point.series.name == "Cost")
-							text = text + " : </b> " + (point.y * point.point.z.offPeakFactor / point.point.z.peakFactor).toFixed(2) + "&cent;<br>";
+							text = text + " : </b> " + (((point.y * point.point.z.offPeakFactor)/ point.point.z.peakFactor)* (point.point.z.timeInterval/60)).toFixed(2) + "&cent;<br>";
 						if(point.series.name == "Cumulative cost")
 							text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
 					});
@@ -632,7 +648,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		var _today = Date.today().getTime();
 		var _cumCost = 0;
 		var _intervalCost = 0;
-		var _zObject = {};
+		
 		var _datadate = Date.today().clearTime().set({
 			year : 2017,
 			month : 6,
@@ -643,11 +659,18 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		breakedUpCost.offPeak = 0;
 		breakedUpCost.midPeak = 0;
 		breakedUpCost.onPeak = 0;
-		_zObject.offPeakFactor = $scope.offPeakFactor;
+		
 		for (i = 0; i < $scope.energyData.length; i++) {
+			var _zObject = {};
+			_zObject.offPeakFactor = $scope.offPeakFactor;
 			var utime = delta+$scope.energyData[i][0] * 1000;
+			if(utime == 1501593600000)
+			{
+				console.log();
+			}
 			var costZone = $scope.getEnergyCost(utime);
 			_zObject.peakFactor = costZone.peakFactor;
+			_zObject.price = costZone.price;
 			if(i>0)
 			{
 				var prevUtime = delta+$scope.energyData[i-1][0] * 1000;
@@ -658,8 +681,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				_zObject.timeInterval = 0;
 			}
 			
-			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price * (_zObject.timeInterval/60));
-			_cumCost += _intervalCost; // (kwh * c/kwh * hour)
+			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price * (_zObject.timeInterval/60));// (kwh * c/kwh * hour)
+			_cumCost += _intervalCost; 
 			
 			if(costZone.peak == "TOU_OP")
 				breakedUpCost.offPeak += _intervalCost;
@@ -676,7 +699,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 
 			costData.push({
 				x : utime,
-				y : ($scope.energyData[i][1]/1000) * (costZone.price * costZone.peakFactor/$scope.offPeakFactor), // ()
+				y : ($scope.energyData[i][1]/1000) * (costZone.price / _zObject.offPeakFactor * costZone.peakFactor), // ()
 				z : _zObject
 			});//cent/kwh
 
@@ -686,6 +709,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				z : _zObject
 			}); //cent
 		}
+		console.log(costData);
 		return {
 			energyData : energyData,
 			costData : costData,
@@ -806,6 +830,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	    			shared : true
 	    	},
 	        data: createPieChartdata(pieData),
+	        innerSize: '60%',
 	        center: [30, -30],
 	        size: 100,
 	        showInLegend: false,
@@ -935,7 +960,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 										}
 									});
 									$scope.offPeakFactor = peakFilter[0].price;
-
+									console.log("****************",$scope.getEnergyCost(1501593600000));
 									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 									$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
@@ -972,7 +997,5 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 		console.log('fetch data');
 		$scope.realtimeUsageData();
 	}, 1000);
-	/*window.setInterval(function() {
-		drawCurrentTimeline();
-	}, 500);*/
+	
 });
