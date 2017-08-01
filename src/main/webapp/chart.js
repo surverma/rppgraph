@@ -172,7 +172,7 @@ function EnergyUsageGraphOption() {
 			to: Date.today().addHours(16).getTime(),
 			label: { 
 			    text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
-			    align: 'left' // Positioning of the label. 
+			    align: 'center' // Positioning of the label. 
 			  }// End of the plot band
 			}]
 	};
@@ -578,6 +578,8 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			costZone.peakFactor = 1;
 		else if(costZone.peak == "TOU_MP")
 			costZone.peakFactor = 2;
+		else if(costZone.peak == "TOU_CE")
+			costZone.peakFactor = 10;
 		else
 			costZone.peakFactor = 3;
 	}
@@ -586,6 +588,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 	$scope.getEnergyCost = function(time) {
 		var inputHour = new Date(time).getHours();
 		var costZone = null;
+		var finalZone = null;
 		var dateFilter = _.filter($scope.costBreakup, function(singleRow){ 
 			if(time >=singleRow.effDate && time<=singleRow.endDate)
 				return singleRow;
@@ -629,7 +632,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					}
 					else
 					{
-						if((inputHour >= splitedEffHour &&  inputHour <= 23) ||  (inputHour >= 0 &&  inputHour < splitedEndHour))
+						if((inputHour >= splitedEffHour &&  inputHour <= 23) ||  (inputHour >= 0 &&  inputHour <= splitedEndHour))
 						{
 							$scope.peakFactorCalculator(singleRow);
 							return singleRow;
@@ -638,8 +641,15 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				}
 
 			});
+			finalZone = Object.create(costZone[0]);
+			if(inputHour == 15)	
+			{
+				finalZone.peak = "TOU_CE";
+			}
+			$scope.peakFactorCalculator(finalZone);
 		}
-		return costZone[0];
+		
+		return finalZone;
 	};
 
 
@@ -709,7 +719,6 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				z : _zObject
 			}); //cent
 		}
-		console.log(costData);
 		return {
 			energyData : energyData,
 			costData : costData,
@@ -960,7 +969,6 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 										}
 									});
 									$scope.offPeakFactor = peakFilter[0].price;
-									console.log("****************",$scope.getEnergyCost(1501593600000));
 									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 									$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
