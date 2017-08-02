@@ -188,10 +188,10 @@ function EnergyUsageGraphOption() {
 		left = this.plotLeft + pie.center[0],
         top = this.plotTop + pie.center[1],
         totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
-        text = rend.text("Total Cost <br><b> ¢" + totalCost.toFixed(2) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+        text = rend.text("¢<b>" + totalCost.toFixed(2) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 		
-		if(new Date().getHours() > 20)
-			position = -80;
+		if((new Date().getHours() > 12 && new Date().getHours() < 15) || new Date().getHours() > 20)
+			position = -140;
 		else
 			position = 10;
 		xAxis.addPlotLine({
@@ -235,7 +235,7 @@ function EnergyUsageGraphOption() {
 			formatter : function() {
 				if(this.series != undefined && this.series.name == 'Total cost')
 				{
-					var text = "<b>" + this.key + " Consumption</b><br>" + this.y.toFixed(2) + "&cent; (" + this.percentage.toFixed(2) + "%)";
+					var text = "<b>" + this.key + " Cost</b><br>" + this.y.toFixed(2) + "&cent; (" + Math.round(this.percentage) + "%)";
 					return text;
 				}
 				else
@@ -485,15 +485,15 @@ function getCostZone(time)
 function createPieChartdata(pieData)
 {
 	var data =  [{
-        name: 'Offpeak',
+        name: 'Off Peak',
         y: pieData.offPeak,
         color: 'rgb(135, 181, 76)'
     }, {
-        name: 'Midpeak',
+        name: 'Mid Peak',
         y: pieData.midPeak,
         color: 'rgb(246, 208, 35)'
     }, {
-        name: 'Onpeak',
+        name: 'On Peak',
         y: pieData.onPeak,
         color: 'rgb(196, 84, 75)'
     }];
@@ -603,6 +603,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					return singleRow;
 				}
 			});
+			finalZone = Object.create(costZone[0]);
 		}
 		else if($scope.isHoliday)
 		{
@@ -613,6 +614,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 					return singleRow;
 				}
 			});
+			finalZone = Object.create(costZone[0]);
 		}
 		else
 		{
@@ -794,6 +796,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			data : edata,
 			zoneAxis : 'x',
 			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
+			fillColor : (($scope.isHoliday || $scope.isWeekend)? 'rgb(135, 181, 76)':null),
 			fillOpacity: 0.7
 			
 		});
@@ -802,18 +805,9 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			name : 'Cost',
 			data : pdata,
 			yAxis : 0,
-			/*fillColor : {
-				linearGradient : {
-					x1 : 0,
-					y1 : 0,
-					x2 : 0,
-					y2 : 1
-				},
-				stops : [ [ 0, Highcharts.getOptions().colors[0] ],
-					[ 1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba') ] ]
-			}*/
 			zoneAxis : 'x',
 			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
+			fillColor : (($scope.isHoliday || $scope.isWeekend)? 'rgb(135, 181, 76)':null),
 			fillOpacity: 0.5
 		});
 
