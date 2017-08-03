@@ -248,7 +248,7 @@ function EnergyUsageGraphOption() {
 						if(point.series.name == "Energy")
 							text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
 						if(point.series.name == "Cost")
-							text = text + " : </b> " + (((point.y * point.point.z.offPeakFactor)/ point.point.z.peakFactor)* (point.point.z.timeInterval/60)).toFixed(2) + "&cent;<br>";
+							text = text + " : </b> " + (((point.y * point.point.z.offPeakFactor)/ point.point.z.peakFactor)).toFixed(2) + "&cent;<br>";
 						if(point.series.name == "Cumulative cost")
 							text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
 					});
@@ -676,10 +676,6 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 			var _zObject = {};
 			_zObject.offPeakFactor = $scope.offPeakFactor;
 			var utime = delta+$scope.energyData[i][0] * 1000;
-			if(utime == 1501593600000)
-			{
-				console.log();
-			}
 			var costZone = $scope.getEnergyCost(utime);
 			_zObject.peakFactor = costZone.peakFactor;
 			_zObject.price = costZone.price;
@@ -693,7 +689,7 @@ app.controller('myCtrl', function($scope, $interval, $http) {
 				_zObject.timeInterval = 0;
 			}
 			
-			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price * (_zObject.timeInterval/60));// (kwh * c/kwh * hour)
+			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price);// (kwh * c/kwh * hour)
 			_cumCost += _intervalCost; 
 			
 			if(costZone.peak == "TOU_OP")

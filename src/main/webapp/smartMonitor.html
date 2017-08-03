@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
+<script src="//code.highcharts.com/stock/highstock.js"></script>
+<script src="//code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="smartMonitor.js"></script>
+
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css">
+<style>
+a {
+    text-decoration: none !important;
+}
+</style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<div class="row">
+		<div class="col-xs-12">
+			<div id="container" style="height: 400px; min-width: 310px"></div>
+			<div style="position: relative;top: -41px;float: right;left: -90px;">
+				<a title="Replay" href="javascript:void(0)" ng-click="redraw()" style="position: relative;left: -19px;top: 1px;" >
+					<i class="fa fa-play-circle-o" aria-hidden="true"
+					style="font-size: 18px; color: #9f8383;"></i>
+				</a> 
+				<a title="Online" href="javascript:void(0)"
+					style="position: relative; left: -10px;"> <span
+					style="font-weight: 600; color: #2eb82e;">Online</span> <i
+					class="fa fa-circle-o faa-burst animated fa-bold faa-fast"
+					style="color: #2eb82e; font-size: 18px;"></i>
+				</a> 
+				<a title="Online" href="javascript:void(0)"> <span
+					style="font-weight: 600; color: #ba0808;">Offline</span> <i
+					class="fa fa-stop-circle-o"
+					style="color: #ba0808; font-size: 18px;"></i>
+
+				</a>
+			</div>
+			<div class="col-md-offset-2 col-md-8 col-xs-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th></th>
+							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet One</th>
+							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet Two</th>
+							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet
+								Three</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Current Demand</th>
+							<td>{{ currentDemand.outlet1.y*1000 | number:2}} watts <i
+								ng-class="currentDemand.outlet1.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
+								class="fa" aria-hidden="true"></i></td>
+							<td>{{ currentDemand.outlet2.y*1000 | number:2}} watts <i
+								ng-class="currentDemand.outlet2.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
+								class="fa" aria-hidden="true"></i></td>
+							<td>{{ currentDemand.outlet3.y*1000 | number:2}} watts <i
+								ng-class="currentDemand.outlet3.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
+								class="fa" aria-hidden="true"></i></td>
+						</tr>
+						<tr>
+							<th>Today's Cost up to now</th>
+							<td>&cent; {{ currentDemand.outlet1.z.cost | number:2}}</td>
+							<td>&cent; {{ currentDemand.outlet2.z.cost | number:2}}</td>
+							<td>&cent; {{ currentDemand.outlet3.z.cost | number:2}}</td>
+						</tr>
+						<tr>
+							<th>Yesterday's Cost</th>
+							<td>&cent; 82.42</td>
+							<td>&cent; 65.55</td>
+							<td>&cent; 40.66</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>
