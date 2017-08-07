@@ -7,8 +7,9 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script> -->
+<script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script> -->
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
@@ -19,6 +20,10 @@
 
 <script src="js/rpp-route.js"></script>
 <script src="js/chart.js"></script>
+<script src="js/environment.js"></script>
+
+<script src="js/service/data.service.js"></script>
+
 <script src="js/controller/main.controller.js"></script>
 <script src="js/controller/energyPulse.controller.js"></script>
 <script src="js/controller/smartMonitor.controller.js"></script>
@@ -33,20 +38,6 @@ a {
 </style>
 </head>
 <body ng-app="myapp">
-	<div class="container">
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#home">ENERGY
-					PULSE</a></li>
-			<li><a data-toggle="tab" href="#menu1">SMART MONITOR</a></li>
-		</ul>
-		<div class="tab-content">
-			<div id="home" class="tab-pane fade in active">
-				<div ui-view="energyPulse"></div>
-			</div>
-			<div id="menu1" class="tab-pane fade">
-				<div ui-view="smartMonitor"></div>
-			</div>
-		</div>
-	</div>
+	<div ui-view></div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-myapp.controller('SmartMonitorController', function($scope, $interval, $http,$q) {
+myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataService', function($scope, $interval, $http,DataService) {
 
 	$scope.container = $('#smartMonitor_container');
 	$scope.redraw = function() {
@@ -17,59 +17,81 @@ myapp.controller('SmartMonitorController', function($scope, $interval, $http,$q)
 		
 		var delta = _today - _datadate + 4*3600*1000;
 		var outlet1 = [], outlet2 = [], outlet3 = [],i = 0;
-		
-		for (i = 0; i < $scope.outlet1.length; i++) {
+		var max = _.max([$scope.outlet1.length,$scope.outlet2.length,$scope.outlet3.length]);
+		for (i = 0; i < max; i++) {
 			var _zOutlet1 = {};
 			var _zOutlet2 = {};
 			var _zOutlet3 = {};
-			var utime = delta+$scope.outlet1[i][0] * 1000;
-			var costZone = $scope.getEnergyCost(utime);
+			var utime = 0;
+			if($scope.outlet1[i] != undefined)
+				utime = delta+$scope.outlet1[i][0] * 1000;
+			else if($scope.outlet2[i] != undefined)
+				utime = delta+$scope.outlet2[i][0] * 1000;
+			else if($scope.outlet3[i] != undefined)
+				utime = delta+$scope.outlet3[i][0] * 1000;
 			
-			if(i>0)
+			if(utime != 0)
 			{
-				var prevUtime = delta+$scope.outlet1[i-1][0] * 1000;
-				_zOutlet1.timeInterval =  (utime - prevUtime)/(1000*60); //minute
-				_zOutlet1.cost =  outlet1[i-1].z.cost + (($scope.outlet1[i][1]/1000) * costZone.price); //cent
-				_zOutlet1.increasedDemand =  (outlet1[i-1].y > ($scope.outlet1[i][1]/1000))? false:true ; 
-				
-				_zOutlet2.timeInterval =  (utime - prevUtime)/(1000*60); //minute
-				_zOutlet2.cost =  outlet2[i-1].z.cost + (($scope.outlet2[i][1]/1000) * costZone.price); //cent
-				_zOutlet2.increasedDemand =  (outlet2[i-1].y > ($scope.outlet2[i][1]/1000))? false:true ; 
-				
-				_zOutlet3.timeInterval =  (utime - prevUtime)/(1000*60); //minute
-				_zOutlet3.cost =  outlet3[i-1].z.cost + (($scope.outlet3[i][1]/1000) * costZone.price); //cent
-				_zOutlet3.increasedDemand =  (outlet3[i-1].y > ($scope.outlet3[i][1]/1000))? false:true ; 
-			}
-			else
-			{
-				_zOutlet1.timeInterval = 0;
-				_zOutlet1.cost = 0;
-				
-				_zOutlet2.timeInterval = 0;
-				_zOutlet2.cost = 0;
-				
-				_zOutlet3.timeInterval = 0;
-				_zOutlet3.cost = 0;
-			}
-			
-			
-			outlet1.push({
-				x : utime,
-				y : ($scope.outlet1[i][1]/1000),
-				z : _zOutlet1
-			}); //kwh
+				var costZone = $scope.getEnergyCost(utime);
+				if(i>0)
+				{
+					var prevUtime = 0;
+					if($scope.outlet1[i-1] != undefined)
+						prevUtime = delta+$scope.outlet1[i-1][0] * 1000;
+					else if($scope.outlet2[i-1] != undefined)
+						prevUtime = delta+$scope.outlet2[i-1][0] * 1000;
+					else if($scope.outlet3[i-1] != undefined)
+						prevUtime = delta+$scope.outlet3[i-1][0] * 1000;
+					
+					if($scope.outlet1[i] != undefined){
+						_zOutlet1.timeInterval =  (utime - prevUtime)/(1000*60); //minute
+						_zOutlet1.cost =  outlet1[i-1].z.cost + (($scope.outlet1[i][1]/1000) * costZone.price); //cent
+						_zOutlet1.increasedDemand =  (outlet1[i-1].y > ($scope.outlet1[i][1]/1000))? false:true ;
+					}
 
-			outlet2.push({
-				x : utime,
-				y : ($scope.outlet2[i][1]/1000), 
-				z : _zOutlet2
-			});//kwh
+					if($scope.outlet2[i] != undefined){
+						_zOutlet2.timeInterval =  (utime - prevUtime)/(1000*60); //minute
+						_zOutlet2.cost =  outlet2[i-1].z.cost + (($scope.outlet2[i][1]/1000) * costZone.price); //cent
+						_zOutlet2.increasedDemand =  (outlet2[i-1].y > ($scope.outlet2[i][1]/1000))? false:true ;
+					}
 
-			outlet3.push({
-				x : utime,
-				y : ($scope.outlet3[i][1]/1000), 
-				z : _zOutlet3
-			}); //kwh
+					if($scope.outlet3[i] != undefined){
+						_zOutlet3.timeInterval =  (utime - prevUtime)/(1000*60); //minute
+						_zOutlet3.cost =  outlet3[i-1].z.cost + (($scope.outlet3[i][1]/1000) * costZone.price); //cent
+						_zOutlet3.increasedDemand =  (outlet3[i-1].y > ($scope.outlet3[i][1]/1000))? false:true ;
+					}
+				}
+				else
+				{
+					_zOutlet1.timeInterval = 0;
+					_zOutlet1.cost = 0;
+
+					_zOutlet2.timeInterval = 0;
+					_zOutlet2.cost = 0;
+
+					_zOutlet3.timeInterval = 0;
+					_zOutlet3.cost = 0;
+				}
+
+
+				outlet1.push({
+					x : utime,
+					y : ($scope.outlet1[i]!= undefined)?($scope.outlet1[i][1]/1000):0,
+					z : _zOutlet1
+				}); //kwh
+
+				outlet2.push({
+					x : utime,
+					y : ($scope.outlet2[i]!= undefined)?($scope.outlet2[i][1]/1000):0, 
+					z : _zOutlet2
+				});//kwh
+
+				outlet3.push({
+					x : utime,
+					y : ($scope.outlet3[i]!= undefined)?($scope.outlet3[i][1]/1000):0, 
+					z : _zOutlet3
+				}); //kwh
+			}
 		}
 		return {
 			outlet1 : outlet1,
@@ -78,28 +100,6 @@ myapp.controller('SmartMonitorController', function($scope, $interval, $http,$q)
 		};
 	};
 	
-	$scope.findHoliday = function(time)
-	{
-		var isHoliday = false;
-		$.each($scope.holidayList, function(key,holiday) {
-			var gmtDate = new Date(holiday.holidayDate);
-			var estDate = gmtDate.addHours(gmtDate.getTimezoneOffset()/60);
-			if(Date.compare(new Date(time),estDate) == 0)
-			{
-				isHoliday = true;
-				return true;
-			}
-		});
-		return isHoliday;
-	};
-	
-	$scope.findWeekend = function(time)
-	{
-		var inputDay = new Date(time).getDay();
-		var isWeekend = (inputDay == 6) || (inputDay == 0); 
-		return isWeekend;
-	};
-
 	$scope.createGraph = function(energyData) {
 		var chartOption = new SmartMonitorGraphOption();
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
@@ -214,47 +214,30 @@ myapp.controller('SmartMonitorController', function($scope, $interval, $http,$q)
 	};
 	
 	$scope.fetchInitialUsageData = function() {
-		$scope.usageEndTime = Date.today().setTimeToNow();
 		$scope.totalCost = 0;
 		$scope.currentDemand = {};
 		$scope.createGraph([]);
-		var one = $http.get('data/outlet1.json');
-		var two = $http.get('data/outlet2.json');
-		var three = $http.get('data/outlet3.json');
-		var costBreakup = $http.get('https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/public/touSchedules');
-		var holiDay = $http.get('https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017');
 		
-		$q.all([one, two, three,costBreakup,holiDay]).then(function (res) {
-			$scope.outlet1 = res[0].data;
-			$scope.outlet2 = res[1].data;
-			$scope.outlet3 = res[2].data;
-			$scope.costBreakup = res[3].data;
-			$scope.holidayList = res[4].data;
-			
-			$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
-			$scope.currentDemand.outlet1 = $scope.seriesData.outlet1[$scope.seriesData.outlet1.length - 1];
-			$scope.currentDemand.outlet2 = $scope.seriesData.outlet2[$scope.seriesData.outlet2.length - 1];
-			$scope.currentDemand.outlet3 = $scope.seriesData.outlet3[$scope.seriesData.outlet3.length - 1];
-			
-			$scope.isHoliday = $scope.findHoliday($scope.usageEndTime.clearTime().getTime());
-			$scope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
-			console.log("isHoliday  ", $scope.isHoliday);
-			console.log("isWeekend  ", $scope.isWeekend);
-			var peakFilter = _.filter($scope.costBreakup, function(singleRow){ 
-				if(singleRow.peak == "TOU_OP")
-				{
-					return singleRow;
-				}
-			});
-			$scope.offPeakFactor = peakFilter[0].price;
-			
-			$scope.createGraph($scope.seriesData);
-			$interval(function() {
-				console.log('fetch data');
-				$scope.realtimeUsageData();
-			}, 1000);
-		});
-		
+		DataService.getOutletData(['outlet1.json','outlet2.json','outlet3.json']).then(
+				function(res) {
+					$scope.outlet1 = res[0];
+					$scope.outlet2 = res[1];
+					$scope.outlet3 = res[2];
+					
+					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+					$scope.currentDemand.outlet1 = $scope.seriesData.outlet1[$scope.seriesData.outlet1.length - 1];
+					$scope.currentDemand.outlet2 = $scope.seriesData.outlet2[$scope.seriesData.outlet2.length - 1];
+					$scope.currentDemand.outlet3 = $scope.seriesData.outlet3[$scope.seriesData.outlet3.length - 1];
+					
+					$scope.createGraph($scope.seriesData);
+					$interval(function() {
+						console.log('fetch data');
+						$scope.realtimeUsageData();
+					}, 1000);
+				},
+				function(error) {
+
+				});
 	};
 	
 	$scope.realtimeUsageData = function() {
@@ -272,4 +255,4 @@ myapp.controller('SmartMonitorController', function($scope, $interval, $http,$q)
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$scope.fetchInitialUsageData();
-});
+}]);

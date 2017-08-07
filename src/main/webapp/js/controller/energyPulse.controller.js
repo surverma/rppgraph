@@ -1,4 +1,4 @@
-myapp.controller('EnergyPulseController', function($scope, $interval, $http) {
+myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataService', function($scope, $interval, $http, DataService) {
 
 	$scope.object = null;
 	$scope.energyData = null;
@@ -37,28 +37,6 @@ myapp.controller('EnergyPulseController', function($scope, $interval, $http) {
 			onCost : on_peak
 		};
 
-	};
-	
-	$scope.findHoliday = function(time)
-	{
-		var isHoliday = false;
-		$.each($scope.holidayList, function(key,holiday) {
-			var gmtDate = new Date(holiday.holidayDate);
-			var estDate = gmtDate.addHours(gmtDate.getTimezoneOffset()/60);
-			if(Date.compare(new Date(time),estDate) == 0)
-			{
-				isHoliday = true;
-				return true;
-			}
-		});
-		return isHoliday;
-	};
-	
-	$scope.findWeekend = function(time)
-	{
-		var inputDay = new Date(time).getDay();
-		var isWeekend = (inputDay == 6) || (inputDay == 0); 
-		return isWeekend;
 	};
 	
 	$scope.peakFactorCalculator = function(costZone)
@@ -420,51 +398,25 @@ myapp.controller('EnergyPulseController', function($scope, $interval, $http) {
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
 		$scope.createGraph([], [], [], []);
-		$http.get('data/energyDataRandomInterval.json').then(function(res) {
-			$http({
-				method: 'GET',
-				url: 'https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/public/touSchedules'
-			})
-			.then(
-					function successCallback(res1) {
-						$http({
-							method: 'GET',
-							url: 'https://rppapi-dot-api-dot-lh-myaccount-dev.appspot.com/api/v1/cms/lhHolidays?year=2017'
-						})
-						.then(
-								function successCallback(res2) {
-									$scope.costBreakup = res1.data;
-									$scope.energyData = res.data;
-									$scope.usageEndTime.addSeconds(10);
-									$scope.holidayList = res2.data;
-									$scope.isHoliday = $scope.findHoliday($scope.usageEndTime.clearTime().getTime());
-									$scope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
-									console.log("isHoliday  ", $scope.isHoliday);
-									console.log("isWeekend  ", $scope.isWeekend);
-									var peakFilter = _.filter($scope.costBreakup, function(singleRow){ 
-										if(singleRow.peak == "TOU_OP")
-										{
-											return singleRow;
-										}
-									});
-									$scope.offPeakFactor = peakFilter[0].price;
-									$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
-									$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
-									$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
-								},
-								function errorCallback(response) {
+		DataService.getEnergyData('energyDataRandomInterval.json').then(
+				function(res) {
+					$scope.energyData = res;
+					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
+					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
+					$interval(function() {
+						console.log('fetch data');
+						$scope.realtimeUsageData();
+					}, 1000);
+				},
+				function(error) {
 
-								});
-					},
-					function errorCallback(response) {
-
-					});
-
+				});
 			
 			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
 
-		});
 	}
+	
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime.addMinutes(5);
 		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
@@ -478,11 +430,10 @@ myapp.controller('EnergyPulseController', function($scope, $interval, $http) {
 				$scope.seriesData.breakedUpCost);
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
-	$scope.usageEndTime = Date.today().setTimeToNow();
 	$scope.fetchInitialUsageData();
-	$interval(function() {
+	/*$interval(function() {
 		console.log('fetch data');
 		$scope.realtimeUsageData();
-	}, 1000);
+	}, 1000);*/
 	
-});
+}]);

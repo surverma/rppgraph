@@ -409,9 +409,9 @@ function SmartMonitorGraphOption() {
 		
 		
 		if((new Date().getHours() > 12 && new Date().getHours() < 15) || new Date().getHours() > 20)
-			position = -140;
+			position = -150;
 		else
-			position = 10;
+			position = 20;
 		xAxis.addPlotLine({
 			value : new Date().getTime(),
 			color : 'black',
