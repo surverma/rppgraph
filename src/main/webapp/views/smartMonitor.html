@@ -1,10 +1,10 @@
 <div class="col-xs-12">
 			<div id="smartMonitor_container" style="height: 400px; min-width: 310px"></div>
 			<div style="position: relative;top: -41px;float: right;left: -90px;">
-				<a title="Replay" href="javascript:void(0)" ng-click="redraw()" style="position: relative;left: -19px;top: 1px;" >
+				<!-- <a title="Replay" href="javascript:void(0)" ng-click="redraw()" style="position: relative;left: -19px;top: 1px;" >
 					<i class="fa fa-play-circle-o" aria-hidden="true"
 					style="font-size: 18px; color: #9f8383;"></i>
-				</a> 
+				</a>  -->
 				<a title="Online" href="javascript:void(0)"
 					style="position: relative; left: -10px;"> <span
 					style="font-weight: 600; color: #2eb82e;">Online</span> <i
@@ -23,35 +23,23 @@
 					<thead>
 						<tr>
 							<th></th>
-							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet One</th>
-							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet Two</th>
-							<th><i class="fa fa-plug" aria-hidden="true"></i> OutLet Three</th>
+							<th ng-repeat="o in outlet"><i class="fa fa-plug" aria-hidden="true"></i> {{o.name}}</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<th>Current Demand</th>
-							<td>{{ currentDemand.outlet1.y*1000 | number:2}} watts <i
-								ng-class="currentDemand.outlet1.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
-								class="fa" aria-hidden="true"></i></td>
-							<td>{{ currentDemand.outlet2.y*1000 | number:2}} watts <i
-								ng-class="currentDemand.outlet2.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
-								class="fa" aria-hidden="true"></i></td>
-							<td>{{ currentDemand.outlet3.y*1000 | number:2}} watts <i
-								ng-class="currentDemand.outlet3.z.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
+							<td ng-repeat="o in outlet">{{ o.currentDemand*1000 | number:2}} watts <i
+								ng-class="o.zOutlet.increasedDemand ? 'fa-arrow-up' : 'fa-arrow-down'"
 								class="fa" aria-hidden="true"></i></td>
 						</tr>
 						<tr>
 							<th>Today's Cost up to now</th>
-							<td>&cent; {{ currentDemand.outlet1.z.cost | number:2}}</td>
-							<td>&cent; {{ currentDemand.outlet2.z.cost | number:2}}</td>
-							<td>&cent; {{ currentDemand.outlet3.z.cost | number:2}}</td>
+							<td ng-repeat="o in outlet">&cent; {{ o.zOutlet.cost | number:2}}</td>
 						</tr>
 						<tr>
 							<th>Yesterday's Cost</th>
-							<td>&cent; 82.42</td>
-							<td>&cent; 65.55</td>
-							<td>&cent; 40.66</td>
+							<td ng-repeat="o in outlet">&cent; {{ o.yesterDayCost | number:2}}</td>
 						</tr>
 					</tbody>
 				</table>

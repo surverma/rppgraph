@@ -454,7 +454,8 @@ function SmartMonitorGraphOption() {
 					var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) + "<br>";
 					$.each(this.points, function(i, point) {
 						text = text + "<b>" + point.series.name;
-							text = text + " : </b> " + (point.y * 1000) + " watts<br>"; 
+						var data = (point.y!=0)?(" : </b> " + (point.y * 1000) + " watts<br>"):(" : </b> Not running<br>");
+						text = text + data; 
 					});
 					return text;
 				},
