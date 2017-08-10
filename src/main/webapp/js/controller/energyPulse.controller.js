@@ -196,7 +196,8 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		var chartOption = new EnergyPulseGraphOption();
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
 		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
-		var color = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(153, 153, 255)"];
+		var legendColor = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(160, 84, 3)"];
+		var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
 		var gradientSpace = {
 				x1 : 1,
 				y1 : 0,
@@ -238,19 +239,19 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		
 		var _zonesWithSolidColor = [ {
 			value : Date.today().addHours(7),
-			color : 'rgb(135, 181, 76)'
+			color : areaColor[0]
 		}, {
 			value : Date.today().addHours(11),
-			color : 'rgb(246, 208, 35)'
+			color : areaColor[1]
 		}, {
 			value : Date.today().addHours(17),
-			color : 'rgb(196, 84, 75)'
+			color : areaColor[2]
 		}, {
 			value : Date.today().addHours(19),
-			color : 'rgb(221, 183, 10)'
+			color : areaColor[3]
 		}, {
 			value : Date.today().addHours(24),
-			color : 'rgb(135, 180, 81)'
+			color : areaColor[4]
 		} ];
 		
 		var _zonesWithClass = [ {
@@ -275,23 +276,23 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		_series.push({
 			name : 'Energy',
 			lineWidth: 1,
-			color : color[0],
+			color : legendColor[0],
 			data : edata,
 			zoneAxis : 'x',
 			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
-			fillColor : (($scope.isHoliday || $scope.isWeekend)? 'rgb(135, 181, 76)':null),
+			fillColor : (($scope.isHoliday || $scope.isWeekend)? areaColor[0]:null),
 			fillOpacity: 0.7
 		});
 
 		_series.push({
 			name : 'Cost',
 			lineWidth: 1,
-			color : color[1],
+			color : legendColor[1],
 			data : pdata,
 			yAxis : 0,
 			zoneAxis : 'x',
 			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
-			fillColor : (($scope.isHoliday || $scope.isWeekend)? 'rgb(135, 181, 76)':null),
+			fillColor : (($scope.isHoliday || $scope.isWeekend)? areaColor[0]:null),
 			fillOpacity: 0.5
 		});
 
@@ -300,7 +301,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 			data : cdata,
 			type : 'line',
 			yAxis : 1,
-			color : '#a05403',
+			color : legendColor[2],
 			lineWidth : 1
 		});
 		
