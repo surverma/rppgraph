@@ -1,24 +1,27 @@
 <div class="col-xs-12">
 			<div id="smartMonitor_container" style="height: 400px; min-width: 310px"></div>
-			<div style="position: relative;top: -41px;float: right;left: -90px;">
-				<!-- <a title="Replay" href="javascript:void(0)" ng-click="redraw()" style="position: relative;left: -19px;top: 1px;" >
+	<div style="position: relative; top: -41px; float: right; left: -1%;">
+		<!-- <a title="Replay" href="javascript:void(0)" ng-click="redraw()" style="position: relative;left: -19px;top: 1px;" >
 					<i class="fa fa-play-circle-o" aria-hidden="true"
 					style="font-size: 18px; color: #9f8383;"></i>
 				</a>  -->
-				<a title="Online" href="javascript:void(0)"
-					style="position: relative; left: -10px;"> <span
-					style="font-weight: 600; color: #2eb82e;">Online</span> <i
-					class="fa fa-circle-o faa-burst animated fa-bold faa-fast"
-					style="color: #2eb82e; font-size: 18px;"></i>
-				</a> 
-				<a title="Online" href="javascript:void(0)"> <span
-					style="font-weight: 600; color: #ba0808;">Offline</span> <i
-					class="fa fa-stop-circle-o"
-					style="color: #ba0808; font-size: 18px;"></i>
+		<a title="Online" href="javascript:void(0)"
+			style="position: relative; left: -13%;"> <span
+			style="font-weight: 600; color: #2eb82e;">Online</span> <i
+			class="fa fa-circle-o faa-burst animated fa-bold faa-fast"
+			style="color: #2eb82e; font-size: 18px;"></i>
+		</a> <a title="Offline" href="javascript:void(0)"
+			style="position: relative; left: -10%;"> <span
+			style="font-weight: 600; color: #ba0808;">Offline</span> <i
+			class="fa fa-stop-circle-o" style="color: #ba0808; font-size: 18px;"></i>
 
-				</a>
-			</div>
-			<div class="col-md-offset-2 col-md-8 col-xs-12">
+		</a> <a title="Stacked View" href="javascript:void(0)"
+			style="position: relative; left: -10px;"><span
+			style="font-weight: 600; color: #205b93;"><input
+				type="checkbox" value="" ng-model="stacked"
+				ng-click="redraw(stacked)">Stacked View</span> </a>
+	</div>
+	<div class="col-md-offset-2 col-md-8 col-xs-12">
 				<table class="table table-bordered">
 					<thead>
 						<tr>

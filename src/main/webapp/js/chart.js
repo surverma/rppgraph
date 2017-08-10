@@ -454,7 +454,8 @@ function SmartMonitorGraphOption() {
 					var text = "<b>Time : </b>" + Highcharts.dateFormat('%I:%M %p', this.x) + "<br>";
 					$.each(this.points, function(i, point) {
 						text = text + "<b>" + point.series.name;
-						var data = (point.y!=0)?(" : </b> " + (point.y * 1000) + " watts<br>"):(" : </b> Not running<br>");
+						var yValue = ((point.y-point.point.z.yIncreased)*1000).toFixed(2);
+						var data = (yValue!=0)?(" : </b> " + yValue + " watts<br>"):(" : </b> Not running<br>");
 						text = text + data; 
 					});
 					return text;
@@ -524,15 +525,15 @@ function EnergyPulseGraphOption() {
 			tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
 				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
 				Date.today().addHours(20).getTime()],
-			plotBands : [{
-				color: 'orange', // Color value
-			from: Date.today().addHours(15).getTime(), // Start of the plot band
-			to: Date.today().addHours(16).getTime(),
-			label: { 
-			    text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
-			    align: 'center' // Positioning of the label. 
-			  }// End of the plot band
-			}]
+				plotBands : [{
+					color: 'orange', // Color value
+					from: Date.today().addHours(15).getTime(), // Start of the plot band
+					to: Date.today().addHours(16).getTime(),
+					label: { 
+						text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+						align: 'center' // Positioning of the label. 
+					}// End of the plot band
+				}]
 	};
 	
 	this.chart.events = { load: function() {

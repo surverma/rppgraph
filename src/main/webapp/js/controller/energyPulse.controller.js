@@ -196,7 +196,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		var chartOption = new EnergyPulseGraphOption();
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
 		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
-		
+		var color = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(153, 153, 255)"];
 		var gradientSpace = {
 				x1 : 1,
 				y1 : 0,
@@ -206,7 +206,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		
 		var _zonesWithColorGrad = [ {
 			value : Date.today().addHours(7),
-			fillColor : {
+			color : {
 				linearGradient : gradientSpace,
 				stops : [ [ 0, 'rgb(135, 181, 76)' ], [ 1, 'rgb(135, 181, 76)' ] ]
 			}
@@ -253,19 +253,40 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 			color : 'rgb(135, 180, 81)'
 		} ];
 		
+		var _zonesWithClass = [ {
+			value : Date.today().addHours(7),
+			className: 'zone-off-energy'
+		}, {
+			value : Date.today().addHours(11),
+			className: 'zone-mid-energy'
+		}, {
+			value : Date.today().addHours(17),
+			className: 'zone-on-energy'
+		}, {
+			value : Date.today().addHours(19),
+			className: 'zone-mid-energy'
+		}, {
+			value : Date.today().addHours(24),
+			className: 'zone-off-energy'
+		} ];
+		
+		
 		var _series = [];
 		_series.push({
 			name : 'Energy',
+			lineWidth: 1,
+			color : color[0],
 			data : edata,
 			zoneAxis : 'x',
 			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
 			fillColor : (($scope.isHoliday || $scope.isWeekend)? 'rgb(135, 181, 76)':null),
 			fillOpacity: 0.7
-			
 		});
 
 		_series.push({
 			name : 'Cost',
+			lineWidth: 1,
+			color : color[1],
 			data : pdata,
 			yAxis : 0,
 			zoneAxis : 'x',

@@ -1,13 +1,21 @@
 myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataService', function($scope, $interval, $http,DataService) {
 
 	$scope.container = $('#smartMonitor_container');
-	$scope.redraw = function() {
-		var data = $scope.dataTillNow();
+	
+	$scope.redraw = function(stacked) {
 		$scope.container.highcharts().destroy();
-		$scope.createGraph(data);
+		angular.forEach($scope.outlet, function(_outlet, key) {
+			_outlet.series = null;
+			_outlet.zOutlet = null;
+		});
+		
+		
+		$scope.dataTillNow(stacked);
+		$scope.calculateCurrentDemand();
+		$scope.createGraph();
 	};
 	
-	$scope.dataTillNow = function(_nowsec) {
+	$scope.dataTillNow = function(stacked) {
 		var _today = Date.today().getTime();
 		var _datadate = Date.today().clearTime().set({
 			year : 2017,
@@ -26,29 +34,34 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 			if(utime != 0)
 			{
 				var costZone = $scope.getEnergyCost(utime);
-
+				var energySum = 0;
 				angular.forEach($scope.outlet, function(_outlet, key) {
 					_outlet.zOutlet = {};
+					if(stacked)
+						energySum += _outlet.data[i][1]/1000;
 					if(outlet[key] == undefined) outlet[key] = [];
 					if(_outlet.series == undefined) _outlet.series = [];
 
 					if(i>0)
 					{
 						var prevUtime = 0;
+						var prevSeries = _outlet.series[i-1];
 						prevUtime = delta+$scope.outlet[0].data[i-1][0] * 1000;
 						_outlet.zOutlet.timeInterval =  (utime - prevUtime)/(1000*60); //minute
-						_outlet.zOutlet.cost =  _outlet.series[i-1].z.cost + ((_outlet.data[i][1]/1000) * costZone.price); //cent
-						_outlet.zOutlet.increasedDemand =  (_outlet.series[i-1].y > (_outlet.data[i][1]/1000))? false:true ;
+						_outlet.zOutlet.cost =  prevSeries.z.cost + ((_outlet.data[i][1]/1000) * costZone.price); //cent
+						_outlet.zOutlet.increasedDemand =  ((prevSeries.y-prevSeries.z.increasedDemand) > (_outlet.data[i][1]/1000))? false:true ;
+						_outlet.zOutlet.yIncreased =  (stacked)?(energySum - _outlet.data[i][1]/1000):0;
 					}
 					else
 					{
 						_outlet.zOutlet.timeInterval =  0; //minute
 						_outlet.zOutlet.cost =  0; //cent
 						_outlet.zOutlet.increasedDemand =  false;
+						_outlet.zOutlet.yIncreased = 0;
 					}
 					_outlet.series.push({
 						x : utime,
-						y : (_outlet.data[i][1]/1000),
+						y : (stacked)? energySum : (_outlet.data[i][1]/1000),
 						z : _outlet.zOutlet
 					});
 				});
@@ -65,15 +78,15 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		var color = ["rgb(255, 51, 51)","rgb(230, 184, 0)","rgb(153, 153, 255)"];
 		var _series = [];
 		
-		angular.forEach($scope.outlet, function(outletData, key) {
+		for(i=($scope.outlet.length-1);i>=0;i--)
+		{
 			_series.push({
-				name : outletData.name,
-				data : outletData.series,
-				fillColor : fillColor[key],
-				color : color[key]
+				name : $scope.outlet[i].name,
+				data : $scope.outlet[i].series,
+				fillColor : fillColor[i],
+				color : color[i]
 			});
-		});
-		
+		}
 		chartOption.series = _series;
 		$scope.chart = new Highcharts.chart(chartOption);
 
@@ -151,7 +164,8 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	$scope.calculateCurrentDemand = function()
 	{
 		angular.forEach($scope.outlet, function(outletData, key) {
-			outletData.currentDemand=outletData.series[outletData.series.length - 1].y;
+			var currentSeriesData = outletData.series[outletData.series.length - 1];
+			outletData.currentDemand=currentSeriesData.y - currentSeriesData.z.yIncreased;
 			outletData.yesterDayCost = "65.99";
 		});
 	}
@@ -164,6 +178,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
+		$scope.stacked = false;
 		$scope.currentDemand = {};
 	//	$scope.createGraph([]);
 		var outletSource = [];
@@ -175,7 +190,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		DataService.getOutletData(outletSource).then(
 				function(res) {
 					$scope.outlet = res;
-					$scope.dataTillNow($scope.usageEndTime.getTime());
+					$scope.dataTillNow(false);
 					
 					$scope.calculateCurrentDemand();
 					$scope.createGraph();
@@ -191,7 +206,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime.addMinutes(5);
-		$scope.dataTillNow($scope.usageEndTime.getTime());
+		$scope.dataTillNow($scope.stacked);
 		$scope.calculateCurrentDemand();
 		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]
