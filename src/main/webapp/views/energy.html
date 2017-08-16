@@ -1,15 +1,15 @@
-<div class="container">
-	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="javascript:void(0);#home">ENERGY
-				PULSE</a></li>
-		<li><a data-toggle="tab" href="javascript:void(0);#menu1">SMART MONITOR</a></li>
-	</ul>
-	<div class="tab-content">
-		<div id="home" class="tab-pane fade in active">
-			<div ui-view="energyPulse@energy"></div>
-		</div>
-		<div id="menu1" class="tab-pane fade">
-			<div ui-view="smartMonitor@energy"></div>
-		</div>
+
+<ul class="nav nav-tabs">
+	<li class="active"><a data-toggle="tab"
+		href="javascript:void(0);#home">ENERGY PULSE</a></li>
+	<li><a data-toggle="tab" href="javascript:void(0);#menu1">SMART
+			MONITOR</a></li>
+</ul>
+<div class="tab-content">
+	<div id="home" class="tab-pane fade in active">
+		<div ui-view="energyPulse@energy"></div>
+	</div>
+	<div id="menu1" class="tab-pane fade">
+		<div ui-view="smartMonitor@energy"></div>
 	</div>
 </div>

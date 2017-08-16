@@ -194,10 +194,10 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 					
 					$scope.calculateCurrentDemand();
 					$scope.createGraph();
-					$interval(function() {
+					/*$interval(function() {
 						console.log('fetch data');
 						$scope.realtimeUsageData();
-					}, 1000);
+					}, 1000);*/
 				},
 				function(error) {
 

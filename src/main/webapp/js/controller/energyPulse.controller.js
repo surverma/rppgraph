@@ -426,10 +426,10 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
-					$interval(function() {
+					/*$interval(function() {
 						console.log('fetch data');
 						$scope.realtimeUsageData();
-					}, 1000);
+					}, 1000);*/
 				},
 				function(error) {
 
