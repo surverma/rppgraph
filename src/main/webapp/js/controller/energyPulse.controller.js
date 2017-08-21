@@ -143,6 +143,9 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 			var _zObject = {};
 			_zObject.offPeakFactor = $scope.offPeakFactor;
 			var utime = delta+$scope.energyData[i][0] * 1000;
+			if(!$scope.loadFull && utime > _nowsec){
+				break;
+			}
 			var costZone = $scope.getEnergyCost(utime);
 			_zObject.peakFactor = costZone.peakFactor;
 			_zObject.price = costZone.price;
@@ -195,7 +198,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 	$scope.createGraph = function(edata, pdata, cdata, pieData) {
 		var chartOption = new EnergyPulseGraphOption();
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
-		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
+		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>";
 		var legendColor = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(160, 84, 3)"];
 		var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
 		var gradientSpace = {
@@ -332,10 +335,10 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 
 	};
 
-	$scope.createPieGraph = function(breakUpCost,totalCost) {
+	/*$scope.createPieGraph = function(breakUpCost,totalCost) {
 		var chartOption = new EnergyPulseMonitorOption();
 		var _series = [
-			/*{
+			{
 		        name: 'Critical',
 		        data: [{
 		            color: Highcharts.getOptions().colors[5],
@@ -343,7 +346,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		            innerRadius: '88%',
 		            y: 70
 		        }]
-		    },*/ 
+		    }, 
 			{
 				name: 'On-Peak',
 				data: [{
@@ -371,7 +374,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 					y: (breakUpCost.offCost*100/totalCost)
 				}]
 			}
-			/*,
+			,
 
 		    {
 		        name: 'Goal',
@@ -389,12 +392,13 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		            innerRadius: '38%',
 		            y: 50
 		        }]
-		    }*/];
+		    }];
 		chartOption.series = _series;
 		console.log("Pie chart options",chartOption);
 		pie_chart = new Highcharts.chart(chartOption);
 
-	};
+	};*/
+	
 	$scope.updateGraph = function(edata, pdata, cdata, pieData) {
 		var eseries = $scope.chart.series[0];
 		eseries.addPoint(edata, true);
@@ -408,7 +412,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		var pieseries = $scope.chart.series[3];
 		pieseries.setData(createPieChartdata(pieData));
 	};
-	$scope.updatePulseMeter= function(breakUpCost,totalCost) {
+	/*$scope.updatePulseMeter= function(breakUpCost,totalCost) {
 		if(pie_chart)
 		{
 			pie_chart.series[0].points[0].update((breakUpCost.onCost + breakUpCost.midCost + breakUpCost.offCost)*100/totalCost);
@@ -416,20 +420,33 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 			pie_chart.series[2].points[0].update(breakUpCost.offCost*100/totalCost);
 		}
 		console.log("Updating pulse graph",pie_chart);
-	};
+	};*/
 	$scope.fetchInitialUsageData = function() {
+		$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.createGraph([], [], [], []);
 		DataService.getEnergyData('energyDataRandomInterval.json').then(
 				function(res) {
 					$scope.energyData = res;
-					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime);
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
-					/*$interval(function() {
+					
+					var position = null,
+					plotLine,
+					newx,
+					d,
+					xAxis = $scope.chart.xAxis[0],
+					rend = $scope.chart.renderer,
+					pie = $scope.chart.series[3],
+					left = $scope.chart.plotLeft + pie.center[0],
+			        top = $scope.chart.plotTop + pie.center[1],
+			        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
+			        $scope.pieText = rend.text("¢<b>" + $scope.formatCost(totalCost.toFixed(2)) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+					$interval(function() {
 						console.log('fetch data');
 						$scope.realtimeUsageData();
-					}, 1000);*/
+					}, 1000);
 				},
 				function(error) {
 
@@ -440,8 +457,8 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 	}
 	
 	$scope.realtimeUsageData = function() {
-		$scope.usageEndTime.addMinutes(5);
-		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+		$scope.usageEndTime =  $scope.usageEndTime + 5*60*1000;
+		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime);
 		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]
 		}, 0);*/
@@ -450,12 +467,12 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 				$scope.seriesData.costData[$scope.seriesData.costData.length - 1],
 				$scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length - 1],
 				$scope.seriesData.breakedUpCost);
+		$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
+		$scope.chart.setTitle(null, { text: Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + 
+			"<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>" }); 
+		$scope.pieText.textSetter("<b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>")
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$scope.fetchInitialUsageData();
-	/*$interval(function() {
-		console.log('fetch data');
-		$scope.realtimeUsageData();
-	}, 1000);*/
 	
 }]);

@@ -1,8 +1,9 @@
 
-myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataService','$state', function($scope,$rootScope, $interval, $http,DataService,$state) {
+myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataService','$state','deviceDetector', function($scope,$rootScope, $interval, $http,DataService,$state,deviceDetector) {
 	
-	$scope.name = "Suman";
-	
+    $scope.vm = deviceDetector;
+    $scope.loadFull = true;
+    
 	$scope.findHoliday = function(time)
 	{
 		var isHoliday = false;
@@ -24,7 +25,6 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		var isWeekend = (inputDay == 6) || (inputDay == 0); 
 		return isWeekend;
 	};
-	
 	
 	$scope.init = function()
 	{
@@ -59,6 +59,19 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 				function(error) {
 
 				});
+	}
+	
+	$scope.reload = function()
+	{
+		$state.reload("energy.plot");
+	}
+	
+	$scope.formatCost = function(cost)
+	{
+		if(cost < 100)
+			return "¢ " + cost;
+		else
+			return "$" + (cost/100); 
 	}
 	
 	$scope.init();

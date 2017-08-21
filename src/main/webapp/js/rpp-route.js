@@ -1,5 +1,5 @@
-var myapp = angular.module('myapp', ["ui.router"])
-    myapp.config(function($stateProvider, $urlRouterProvider){
+var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector"])
+    myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider){
       // For any unmatched url, send to /route1
       $urlRouterProvider.otherwise("/energy/null/null");
       

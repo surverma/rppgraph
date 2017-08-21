@@ -10,12 +10,12 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		});
 		
 		
-		$scope.dataTillNow(stacked);
+		$scope.dataTillNow(stacked,Date.now());
 		$scope.calculateCurrentDemand();
 		$scope.createGraph();
 	};
 	
-	$scope.dataTillNow = function(stacked) {
+	$scope.dataTillNow = function(stacked,_nowsec) {
 		var _today = Date.today().getTime();
 		var _datadate = Date.today().clearTime().set({
 			year : 2017,
@@ -30,7 +30,9 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		for (i = 0; i < max; i++) {
 			var utime = 0;
 			utime = delta+$scope.outlet[0].data[i][0] * 1000;
-
+			if(!$scope.loadFull && utime > _nowsec){
+				break;
+			}
 			if(utime != 0)
 			{
 				var costZone = $scope.getEnergyCost(utime);
@@ -177,6 +179,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	};
 	
 	$scope.fetchInitialUsageData = function() {
+		$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.stacked = false;
 		$scope.currentDemand = {};
@@ -190,14 +193,14 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		DataService.getOutletData(outletSource).then(
 				function(res) {
 					$scope.outlet = res;
-					$scope.dataTillNow(false);
+					$scope.dataTillNow(false,$scope.usageEndTime);
 					
 					$scope.calculateCurrentDemand();
 					$scope.createGraph();
-					/*$interval(function() {
+					$interval(function() {
 						console.log('fetch data');
 						$scope.realtimeUsageData();
-					}, 1000);*/
+					}, 1000);
 				},
 				function(error) {
 
@@ -205,8 +208,9 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	};
 	
 	$scope.realtimeUsageData = function() {
-		$scope.usageEndTime.addMinutes(5);
-		$scope.dataTillNow($scope.stacked);
+		//$scope.usageEndTime.addMinutes(5);
+		$scope.usageEndTime =  $scope.usageEndTime + 5*60*1000;
+		$scope.dataTillNow($scope.stacked,$scope.usageEndTime);
 		$scope.calculateCurrentDemand();
 		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]

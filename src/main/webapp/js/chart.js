@@ -424,8 +424,7 @@ function SmartMonitorGraphOption() {
 				text : "<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>",
 				style : {
 					color : '#8c8888',
-					fontWeight : 'bold',
-					fontSize : '18'
+					fontSize : '12'
 				}
 			}
 		});
@@ -541,13 +540,7 @@ function EnergyPulseGraphOption() {
 		plotLine,
 		newx,
 		d,
-		xAxis = this.xAxis[0],
-		rend = this.renderer,
-		pie = this.series[3],
-		left = this.plotLeft + pie.center[0],
-        top = this.plotTop + pie.center[1],
-        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
-        text = rend.text("¢<b>" + totalCost.toFixed(2) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+		xAxis = this.xAxis[0];
 		
 		if((new Date().getHours() > 12 && new Date().getHours() < 15) || new Date().getHours() > 20)
 			position = -140;
@@ -565,8 +558,7 @@ function EnergyPulseGraphOption() {
 				text : "<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>",
 				style : {
 					color : '#8c8888',
-					fontWeight : 'bold',
-					fontSize : '18'
+					fontSize : '14'
 				}
 			}
 		});

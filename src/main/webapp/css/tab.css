@@ -1,0 +1,33 @@
+.nav-tabs {
+	background-color: #363843 !important;
+}
+
+.nav-tabs >li {
+	width : 50%;
+	border: 0px;
+	border-radius: 0px;
+}
+
+.nav-tabs > li > a  {
+	color: #fff !important;
+	font-size: 15px;
+	line-height: 17px;
+	font: bold 16px/18px 'Merriweather Sans', Arial, Helvetica, sans-serif;
+	border: 0px;
+	border-radius: 0px;
+	margin: 0;
+	padding: 14px 5px;
+	text-align: center;
+}
+
+.nav-tabs > li > a:hover, .nav-tabs > li.active > a , .nav-tabs > li.active > a:hover{
+    background: #68c6e5 !important;
+    color: #fff;
+    border: 0px;
+    border-radius: 0px;
+    cursor : default;
+}
+
+.tab-content{
+    padding-top: 4%;
+}
