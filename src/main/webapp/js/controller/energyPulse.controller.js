@@ -4,9 +4,10 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 	$scope.energyData = null;
 	$scope.container = $('#container');
 	$scope.redraw = function() {
-		var data = $scope.dataTillNow();
+		var data = $scope.dataTillNow(Date.now());
 		$scope.container.highcharts().destroy();
 		$scope.createGraph(data.energyData,data.costData,data.cumCostData,data.breakedUpCost);
+		$scope.setPieText();
 	};
 
 	$scope.breakTotalCost = function(costData)
@@ -198,7 +199,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 	$scope.createGraph = function(edata, pdata, cdata, pieData) {
 		var chartOption = new EnergyPulseGraphOption();
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
-		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>";
+		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + "<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost) + "</b>";
 		var legendColor = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(160, 84, 3)"];
 		var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
 		var gradientSpace = {
@@ -431,18 +432,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime);
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
-					
-					var position = null,
-					plotLine,
-					newx,
-					d,
-					xAxis = $scope.chart.xAxis[0],
-					rend = $scope.chart.renderer,
-					pie = $scope.chart.series[3],
-					left = $scope.chart.plotLeft + pie.center[0],
-			        top = $scope.chart.plotTop + pie.center[1],
-			        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
-			        $scope.pieText = rend.text("¢<b>" + $scope.formatCost(totalCost.toFixed(2)) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+					$scope.setPieText();
 					$interval(function() {
 						console.log('fetch data');
 						$scope.realtimeUsageData();
@@ -454,6 +444,21 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 			
 			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
 
+	}
+	
+	$scope.setPieText = function()
+	{
+		var position = null,
+		plotLine,
+		newx,
+		d,
+		xAxis = $scope.chart.xAxis[0],
+		rend = $scope.chart.renderer,
+		pie = $scope.chart.series[3],
+		left = $scope.chart.plotLeft + pie.center[0],
+        top = $scope.chart.plotTop + pie.center[1],
+        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
+        $scope.pieText = rend.text("¢<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 	}
 	
 	$scope.realtimeUsageData = function() {
@@ -469,8 +474,8 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 				$scope.seriesData.breakedUpCost);
 		$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 		$scope.chart.setTitle(null, { text: Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + 
-			"<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>" }); 
-		$scope.pieText.textSetter("<b>" + $scope.formatCost($scope.totalCost.toFixed(2)) + "</b>")
+			"<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost) + "</b>" }); 
+		$scope.pieText.textSetter("<b>" + $scope.formatCost($scope.totalCost) + "</b>")
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$scope.fetchInitialUsageData();

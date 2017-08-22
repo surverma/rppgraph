@@ -66,12 +66,12 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		$state.reload("energy.plot");
 	}
 	
-	$scope.formatCost = function(cost)
+	$scope.formatCost = function(centValue)
 	{
-		if(cost < 100)
-			return "¢ " + cost;
+		if(centValue < 100)
+			return "¢ " + centValue.toFixed(2);
 		else
-			return "$" + (cost/100); 
+			return "$ " + (centValue/100).toFixed(2); 
 	}
 	
 	$scope.init();
