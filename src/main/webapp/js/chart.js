@@ -2,7 +2,6 @@ Highcharts.setOptions(
 		{
 			colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263','#6AF9C4','#088DA5', '#DC143C']
 		});
-
 function UsageGraphOption() {
 	this.enableCost = false;
 	this.credits = {
@@ -524,7 +523,7 @@ function EnergyPulseGraphOption() {
 			tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
 				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
 				Date.today().addHours(20).getTime()],
-				plotBands : [{
+				/*plotBands : [{
 					color: 'orange', // Color value
 					from: Date.today().addHours(15).getTime(), // Start of the plot band
 					to: Date.today().addHours(16).getTime(),
@@ -532,7 +531,7 @@ function EnergyPulseGraphOption() {
 						text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
 						align: 'center' // Positioning of the label. 
 					}// End of the plot band
-				}]
+				}]*/
 	};
 	
 	this.chart.events = { load: function() {
@@ -618,3 +617,4 @@ function EnergyPulseGraphOption() {
 	}
 
 }
+

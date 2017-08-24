@@ -8,11 +8,11 @@
 				class="fa fa-play-circle-o" aria-hidden="true"
 				style="font-size: 18px; color: #9f8383;"></i>
 			</a> <a title="Online" href="javascript:void(0)"
-				style="position: relative; left: -10px;"> <span
+				style="position: relative; left: -10px;" ng-if="online"> <span
 				style="font-weight: 600; color: #2eb82e;">Online</span> <i
 				class="fa fa-circle-o faa-burst animated fa-bold faa-fast"
 				style="color: #2eb82e; font-size: 18px;"></i>
-			</a> <a title="Online" href="javascript:void(0)"> <span
+			</a> <a title="Online" href="javascript:void(0)" ng-if="!online"> <span
 				style="font-weight: 600; color: #ba0808;">Offline</span> <i
 				class="fa fa-stop-circle-o" style="color: #ba0808; font-size: 18px;"></i>
 

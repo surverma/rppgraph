@@ -112,7 +112,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 
 			});
 			finalZone = Object.create(costZone[0]);
-			if(inputHour == 15)	
+			if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + 60*60*1000))	
 			{
 				finalZone.peak = "TOU_CE";
 			}
@@ -208,6 +208,16 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 				x2 : 1,
 				y2 : 1
 		};
+		
+		var _plotBand = [{
+			color: 'orange', // Color value
+			from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
+			to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
+			label: { 
+				text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+				align: 'center' // Positioning of the label. 
+			}// End of the plot band
+		}];
 		
 		var _zonesWithColorGrad = [ {
 			value : Date.today().addHours(7),
@@ -332,6 +342,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		});
 		
 		chartOption.series = _series;
+		chartOption.xAxis.plotBands = _plotBand;
 		$scope.chart = new Highcharts.chart(chartOption);
 
 	};
@@ -423,20 +434,23 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		console.log("Updating pulse graph",pie_chart);
 	};*/
 	$scope.fetchInitialUsageData = function() {
-		$scope.usageEndTime= Date.now();
+		//$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.createGraph([], [], [], []);
 		DataService.getEnergyData('energyDataRandomInterval.json').then(
 				function(res) {
 					$scope.energyData = res;
-					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime);
+					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
 					$scope.setPieText();
-					$interval(function() {
-						console.log('fetch data');
-						$scope.realtimeUsageData();
-					}, 1000);
+					if($scope.online)
+					{
+						$interval(function() {
+							console.log('fetch data');
+							$scope.realtimeUsageData();
+						}, 1000);
+					}
 				},
 				function(error) {
 
@@ -462,8 +476,8 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 	}
 	
 	$scope.realtimeUsageData = function() {
-		$scope.usageEndTime =  $scope.usageEndTime + 5*60*1000;
-		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime);
+		$scope.usageEndTime = Date.today().setTimeToNow();
+		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]
 		}, 0);*/

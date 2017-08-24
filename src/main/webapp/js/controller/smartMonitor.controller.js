@@ -179,28 +179,31 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	};
 	
 	$scope.fetchInitialUsageData = function() {
-		$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.stacked = false;
 		$scope.currentDemand = {};
 	//	$scope.createGraph([]);
 		var outletSource = [];
 		$scope.outlet = [];
-		outletSource.push("outlet1.json");
-		outletSource.push("outlet2.json");
-		outletSource.push("outlet3.json");
+		for(var i = 0; i< $scope.deviceCount; i++)
+			outletSource.push("outlet" + (i+1) + ".json");
+		/*outletSource.push("outlet2.json");
+		outletSource.push("outlet3.json");*/
 		
 		DataService.getOutletData(outletSource).then(
 				function(res) {
 					$scope.outlet = res;
-					$scope.dataTillNow(false,$scope.usageEndTime);
+					$scope.dataTillNow(false,$scope.usageEndTime.getTime());
 					
 					$scope.calculateCurrentDemand();
 					$scope.createGraph();
-					$interval(function() {
-						console.log('fetch data');
-						$scope.realtimeUsageData();
-					}, 1000);
+					if($scope.online)
+					{
+						$interval(function() {
+							console.log('fetch data');
+							$scope.realtimeUsageData();
+						}, 1000);
+					}
 				},
 				function(error) {
 
@@ -208,9 +211,8 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	};
 	
 	$scope.realtimeUsageData = function() {
-		//$scope.usageEndTime.addMinutes(5);
-		$scope.usageEndTime =  $scope.usageEndTime + 5*60*1000;
-		$scope.dataTillNow($scope.stacked,$scope.usageEndTime);
+		$scope.usageEndTime = Date.today().setTimeToNow();
+		$scope.dataTillNow($scope.stacked,$scope.usageEndTime.getTime());
 		$scope.calculateCurrentDemand();
 		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 			return memo + num[1]
