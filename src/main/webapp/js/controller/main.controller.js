@@ -1,10 +1,14 @@
 
-myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataService','$state','deviceDetector', function($scope,$rootScope, $interval, $http,DataService,$state,deviceDetector) {
+myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataService','$state','deviceDetector','$interval', function($scope,$rootScope, $interval, $http,DataService,$state,deviceDetector,$interval) {
 	
     $scope.vm = deviceDetector;
     $scope.loadFull = true;
     $scope.online = true;
+    $scope.stacked = false;
     $scope.deviceCount = "3";
+    $scope.clientToken = '84845a8a-803c-4644-b8a8-3bfb64241cff';
+    $scope.criticalZone = false;
+    $scope.refreshRate = 30;
     
 	$scope.findHoliday = function(time)
 	{
@@ -30,6 +34,8 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 	
 	$scope.init = function()
 	{
+		$rootScope.startTime = Date.today().getTime()/1000;
+		$rootScope.nowTime = Math.floor(Date.now()/1000);
 		$rootScope.usageEndTime = Date.today().setTimeToNow();
 		$rootScope.usageEndTime.addSeconds(10);
 		$rootScope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
@@ -63,6 +69,7 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 								$state.go("energy.plot");
 							},
 							function(error) {
+								$scope.online = false;
 
 							});
 					$rootScope.costBreakup = res;
@@ -75,6 +82,7 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 					$rootScope.offPeakFactor = peakFilter[0].price;
 				},
 				function(error) {
+					$scope.online = false;
 
 				});
 				
@@ -82,15 +90,18 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 	
 	$scope.reload = function()
 	{
+		angular.forEach(intervals, function(interval) {
+		    $interval.cancel(interval);
+		});
 		$state.reload("energy.plot");
 	}
 	
 	$scope.formatCost = function(centValue)
 	{
-		if(centValue < 100)
-			return "¢ " + centValue.toFixed(2);
-		else
-			return "$ " + (centValue/100).toFixed(2); 
+		if(centValue < 100 && centValue > 0)
+			return "¢" + centValue.toFixed(2);
+		else if(centValue >= 100)
+			return "$" + (centValue/100).toFixed(2); 
 	}
 	
 	$scope.init();

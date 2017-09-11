@@ -1,18 +1,18 @@
-var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector"])
-    myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider){
+var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"])
+    myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider,$cookiesProvider){
       // For any unmatched url, send to /route1
-      $urlRouterProvider.otherwise("/energy/null/null");
+      $urlRouterProvider.otherwise("/energy");
       
       $stateProvider
       .state('energy', {
-    	  url: '/energy/{billingId}/{serviceId}',
+    	  url: '/energy',
     	  controller: 'MainCtrl',
     	  templateUrl: 'views/energy.html',
     	  onEnter : [ '$rootScope', '$stateParams', '$state',
     	  function($rootScope, $stateParams, $state) {
     	  //document.location = ApplConfig.myAccountUrl;
-    		  $rootScope.billingId = $stateParams.billingId;
-    		  $rootScope.serviceId = $stateParams.serviceId;
+    		 /* $rootScope.billingId = $stateParams.billingId;
+    		  $rootScope.serviceId = $stateParams.serviceId;*/
     	  } ]
       })
         .state('energy.plot', {

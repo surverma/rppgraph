@@ -43,9 +43,30 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 		return result.promise;
 	};
 
-	this.getEnergyData = function(meter) {
+	this.getDemoEnergyData = function(meter) {
 		//TODO Replace by actual service call
 		var energyResponse = $http.get(LHConfig.usageDataHost + "/" + meter);
+		var result = $q.defer();
+		$q.all([ energyResponse ]).then(function(responses) {
+			var energyData = responses[0].data;
+			result.resolve(energyData);
+		});
+		return result.promise;
+	};
+	
+	this.getEnergyData = function(startTime,endTime,interval,clientToken) {
+		//TODO Replace by actual service call
+		var req = {
+				method: 'GET',
+				url: "https://yo5cgvdqgc.execute-api.us-east-1.amazonaws.com/prod/usageapi?start="
+					+ startTime + "&end=" + endTime + "&interval=" + interval,
+					headers: {
+						'clientToken' : clientToken,
+						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWAf',
+						'Content-Type': 'application/json'
+					}
+		}
+		var energyResponse = $http(req);
 		var result = $q.defer();
 		$q.all([ energyResponse ]).then(function(responses) {
 			var energyData = responses[0].data;

@@ -112,11 +112,9 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 
 			});
 			finalZone = Object.create(costZone[0]);
-			if($scope.criticalZone){
-				if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + 60*60*1000))	
-				{
-					finalZone.peak = "TOU_CE";
-				}
+			if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + 60*60*1000))	
+			{
+				finalZone.peak = "TOU_CE";
 			}
 			$scope.peakFactorCalculator(finalZone);
 		}
@@ -131,31 +129,30 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		var _cumCost = 0;
 		var _intervalCost = 0;
 		
-		/*var _datadate = Date.today().clearTime().set({
+		var _datadate = Date.today().clearTime().set({
 			year : 2017,
 			month : 6,
 			day : 12
-		}).getTime();*/
-		//var delta = _today - _datadate + 4*3600*1000;
+		}).getTime();
+		var delta = _today - _datadate + 4*3600*1000;
 		var energyData = [], costData = [], cumCostData = [], breakedUpCost = {}, i = 0;
 		breakedUpCost.offPeak = 0;
 		breakedUpCost.midPeak = 0;
 		breakedUpCost.onPeak = 0;
-		breakedUpCost.criticalPeak = 0;
 		
 		for (i = 0; i < $scope.energyData.length; i++) {
 			var _zObject = {};
 			_zObject.offPeakFactor = $scope.offPeakFactor;
-			var utime = $scope.energyData[i].startDate; //millisecond
-			/*if(!$scope.loadFull && utime > _nowsec){
+			var utime = delta+$scope.energyData[i][0] * 1000;
+			if(!$scope.loadFull && utime > _nowsec){
 				break;
-			}*/
+			}
 			var costZone = $scope.getEnergyCost(utime);
 			_zObject.peakFactor = costZone.peakFactor;
 			_zObject.price = costZone.price;
 			if(i>0)
 			{
-				var prevUtime = $scope.energyData[i-1].startDate;//millisecond 
+				var prevUtime = delta+$scope.energyData[i-1][0] * 1000;
 				_zObject.timeInterval =  (utime - prevUtime)/(1000*60); //minute
 			}
 			else
@@ -163,35 +160,33 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 				_zObject.timeInterval = 0;
 			}
 			
-			_intervalCost = $scope.energyData[i].price * 100 //cent
+			_intervalCost = (($scope.energyData[i][1]/1000) * costZone.price);// (kwh * c/kwh * hour)
 			_cumCost += _intervalCost; 
 			
 			if(costZone.peak == "TOU_OP")
 				breakedUpCost.offPeak += _intervalCost;
 			else if(costZone.peak == "TOU_MP")
 				breakedUpCost.midPeak += _intervalCost;
-			else if(costZone.peak == "TOU_CE")
-				breakedUpCost.criticalPeak += _intervalCost;
 			else
 				breakedUpCost.onPeak += _intervalCost;
 
 			energyData.push({
-				x : utime, //millisec
-				y : ($scope.energyData[i].delivered * 1000), //wh
+				x : utime,
+				y : ($scope.energyData[i][1]/1000),
 				z : _zObject
-			}); 
+			}); //kwh
 
 			costData.push({
-				x : utime, //millisec
-				y : ($scope.energyData[i].price * 100 * costZone.peakFactor), //cent
+				x : utime,
+				y : ($scope.energyData[i][1]/1000) * (costZone.price / _zObject.offPeakFactor * costZone.peakFactor), // ()
 				z : _zObject
-			});
+			});//cent/kwh
 
 			cumCostData.push({
-				x : utime, //millisec
-				y : _cumCost,//cent
+				x : utime,
+				y : _cumCost,
 				z : _zObject
-			}); 
+			}); //cent
 		}
 		return {
 			energyData : energyData,
@@ -347,8 +342,7 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		});
 		
 		chartOption.series = _series;
-		if($scope.criticalZone)
-			chartOption.xAxis.plotBands = _plotBand;
+		chartOption.xAxis.plotBands = _plotBand;
 		$scope.chart = new Highcharts.chart(chartOption);
 
 	};
@@ -443,25 +437,23 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		//$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.createGraph([], [], [], []);
-		$scope.nowTime = Math.floor(Date.now()/1000);
-		DataService.getEnergyData($scope.startTime,$scope.nowTime,300,$scope.clientToken).then(
-		//DataService.getDemoEnergyData("apiData.json").then(
+		DataService.getEnergyData('energyDataRandomInterval.json').then(
 				function(res) {
 					$scope.energyData = res;
-					$scope.seriesData = $scope.dataTillNow($scope.nowTime);
+					$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
 					$scope.setPieText();
 					if($scope.online)
 					{
-						intervals.push($interval(function() {
+						$interval(function() {
 							console.log('fetch data');
 							$scope.realtimeUsageData();
-						}, $scope.refreshRate*1000));
+						}, 1000);
 					}
 				},
 				function(error) {
-					$scope.online = false;
+
 				});
 			
 			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
@@ -480,35 +472,24 @@ myapp.controller('EnergyPulseController',['$scope','$interval', '$http','DataSer
 		left = $scope.chart.plotLeft + pie.center[0],
         top = $scope.chart.plotTop + pie.center[1],
         totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
-        $scope.pieText = rend.text("<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+        $scope.pieText = rend.text("¢<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 	}
 	
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime = Date.today().setTimeToNow();
-		$scope.startTime = $scope.nowTime;
-		$scope.nowTime = Math.floor(Date.now()/1000);
-		DataService.getEnergyData($scope.startTime,$scope.nowTime,300,$scope.clientToken).then(
-				function(res) {
-					$scope.energyData = _.union($scope.energyData, res);
-					//$scope.energyData = res;
-					$scope.seriesData = $scope.dataTillNow($scope.nowTime);
-					/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
-						return memo + num[1]
-					}, 0);*/
-					//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
-					$scope.updateGraph($scope.seriesData.energyData[$scope.seriesData.energyData.length - 1],
-							$scope.seriesData.costData[$scope.seriesData.costData.length - 1],
-							$scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length - 1],
-							$scope.seriesData.breakedUpCost);
-					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
-					$scope.chart.setTitle(null, { text: Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + 
-						"<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost) + "</b>" }); 
-					$scope.pieText.textSetter("<b>" + $scope.formatCost($scope.totalCost) + "</b>")
-				},
-				function(error) {
-
-				});
-		
+		$scope.seriesData = $scope.dataTillNow($scope.usageEndTime.getTime());
+		/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
+			return memo + num[1]
+		}, 0);*/
+		//var breakUpCost = $scope.breakTotalCost($scope.seriesData.costData);
+		$scope.updateGraph($scope.seriesData.energyData[$scope.seriesData.energyData.length - 1],
+				$scope.seriesData.costData[$scope.seriesData.costData.length - 1],
+				$scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length - 1],
+				$scope.seriesData.breakedUpCost);
+		$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y;
+		$scope.chart.setTitle(null, { text: Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) + 
+			"<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost) + "</b>" }); 
+		$scope.pieText.textSetter("<b>" + $scope.formatCost($scope.totalCost) + "</b>")
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$scope.fetchInitialUsageData();

@@ -1,3 +1,4 @@
+var intervals = [];
 Highcharts.setOptions(
 		{
 			colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263','#6AF9C4','#088DA5', '#DC143C']
@@ -348,7 +349,12 @@ function createPieChartdata(pieData)
         name: 'On Peak',
         y: pieData.onPeak,
         color: 'rgb(196, 84, 75)'
-    }];
+    }, {
+        name: 'Critical Peak',
+        y: pieData.criticalPeak,
+        color: 'orange'
+    }
+    ];
 	
 	return data;
 }
@@ -562,17 +568,28 @@ function EnergyPulseGraphOption() {
 			}
 		});
 		setInterval(function() {
-			if(xAxis.plotLinesAndBands != undefined)
-			{
-			 plotLine = xAxis.plotLinesAndBands[1].svgElem;
-			 d = plotLine.d.split(' ');
-			 newx = xAxis.toPixels(new Date().getTime()) - d[4];
-			 xAxis.plotLinesAndBands[1].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
-			 plotLine.animate({
-	              translateX : newx
-	            }, 300);
+			if(xAxis.plotLinesAndBands != undefined){
+				if(xAxis.plotLinesAndBands[1] != undefined)
+				{
+					plotLine = xAxis.plotLinesAndBands[1].svgElem;
+					d = plotLine.d.split(' ');
+					newx = xAxis.toPixels(new Date().getTime()) - d[4];
+					xAxis.plotLinesAndBands[1].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
+					plotLine.animate({
+						translateX : newx
+					}, 300);
+				}
+				else{
+					plotLine = xAxis.plotLinesAndBands[0].svgElem;
+					d = plotLine.d.split(' ');
+					newx = xAxis.toPixels(new Date().getTime()) - d[4];
+					xAxis.plotLinesAndBands[0].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
+					plotLine.animate({
+						translateX : newx
+					}, 300);
+				}
 			}
-		  }, 1000);
+		}, 1000);
 		}
 	};
 	
@@ -596,7 +613,7 @@ function EnergyPulseGraphOption() {
 					$.each(this.points, function(i, point) {
 						text = text + "<b>" + point.series.name;
 						if(point.series.name == "Energy")
-							text = text + " : </b> " + (point.y * 1000) + " wh<br>"; 
+							text = text + " : </b> " + (point.y * 1000).toFixed(2) + " wh<br>"; 
 						if(point.series.name == "Cost")
 							text = text + " : </b> " + (((point.y * point.point.z.offPeakFactor)/ point.point.z.peakFactor)).toFixed(2) + "&cent;<br>";
 						if(point.series.name == "Cumulative cost")

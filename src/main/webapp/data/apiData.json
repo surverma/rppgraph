@@ -1,0 +1,2018 @@
+[
+  {
+    "startDate": 1504152000000,
+    "endDate": 1504152300000,
+    "delivered": 0.047999999999774445,
+    "recieved": 0,
+    "price": 0.37
+  },
+  {
+    "startDate": 1504152300000,
+    "endDate": 1504152600000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.362
+  },
+  {
+    "startDate": 1504152600000,
+    "endDate": 1504152900000,
+    "delivered": 0.04899999999997817,
+    "recieved": 0,
+    "price": 0.377
+  },
+  {
+    "startDate": 1504152900000,
+    "endDate": 1504153200000,
+    "delivered": 0.05999999999994543,
+    "recieved": 0,
+    "price": 0.462
+  },
+  {
+    "startDate": 1504153200000,
+    "endDate": 1504153500000,
+    "delivered": 0.0660000000002583,
+    "recieved": 0,
+    "price": 0.508
+  },
+  {
+    "startDate": 1504153500000,
+    "endDate": 1504153800000,
+    "delivered": 0.06700000000000728,
+    "recieved": 0,
+    "price": 0.516
+  },
+  {
+    "startDate": 1504153800000,
+    "endDate": 1504154100000,
+    "delivered": 0.06399999999985084,
+    "recieved": 0,
+    "price": 0.493
+  },
+  {
+    "startDate": 1504154100000,
+    "endDate": 1504154400000,
+    "delivered": 0.05499999999983629,
+    "recieved": 0,
+    "price": 0.423
+  },
+  {
+    "startDate": 1504154400000,
+    "endDate": 1504154700000,
+    "delivered": 0.051000000000385626,
+    "recieved": 0,
+    "price": 0.393
+  },
+  {
+    "startDate": 1504154700000,
+    "endDate": 1504155000000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.362
+  },
+  {
+    "startDate": 1504155000000,
+    "endDate": 1504155300000,
+    "delivered": 0.058999999999741704,
+    "recieved": 0,
+    "price": 0.454
+  },
+  {
+    "startDate": 1504155300000,
+    "endDate": 1504155600000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.454
+  },
+  {
+    "startDate": 1504155600000,
+    "endDate": 1504155900000,
+    "delivered": 0.057999999999992724,
+    "recieved": 0,
+    "price": 0.447
+  },
+  {
+    "startDate": 1504155900000,
+    "endDate": 1504156200000,
+    "delivered": 0.052999999999883585,
+    "recieved": 0,
+    "price": 0.408
+  },
+  {
+    "startDate": 1504156200000,
+    "endDate": 1504156495000,
+    "delivered": 0.04300000000012005,
+    "recieved": 0,
+    "price": 0.331
+  },
+  {
+    "startDate": 1504156500000,
+    "endDate": 1504156800000,
+    "delivered": 0.05099999999993088,
+    "recieved": 0,
+    "price": 0.393
+  },
+  {
+    "startDate": 1504156800000,
+    "endDate": 1504157100000,
+    "delivered": 0.04899999999997817,
+    "recieved": 0,
+    "price": 0.377
+  },
+  {
+    "startDate": 1504157100000,
+    "endDate": 1504157400000,
+    "delivered": 0.06100000000014916,
+    "recieved": 0,
+    "price": 0.47
+  },
+  {
+    "startDate": 1504157400000,
+    "endDate": 1504157700000,
+    "delivered": 0.06399999999985084,
+    "recieved": 0,
+    "price": 0.493
+  },
+  {
+    "startDate": 1504157700000,
+    "endDate": 1504158000000,
+    "delivered": 0.06700000000000728,
+    "recieved": 0,
+    "price": 0.516
+  },
+  {
+    "startDate": 1504158000000,
+    "endDate": 1504158300000,
+    "delivered": 0.06500000000005457,
+    "recieved": 0,
+    "price": 0.501
+  },
+  {
+    "startDate": 1504158300000,
+    "endDate": 1504158600000,
+    "delivered": 0.06199999999989814,
+    "recieved": 0,
+    "price": 0.477
+  },
+  {
+    "startDate": 1504158600000,
+    "endDate": 1504158900000,
+    "delivered": 0.06399999999985084,
+    "recieved": 0,
+    "price": 0.493
+  },
+  {
+    "startDate": 1504158900000,
+    "endDate": 1504159194000,
+    "delivered": 0.06300000000010186,
+    "recieved": 0,
+    "price": 0.485
+  },
+  {
+    "startDate": 1504159200000,
+    "endDate": 1504159500000,
+    "delivered": 0.07600000000002183,
+    "recieved": 0,
+    "price": 0.585
+  },
+  {
+    "startDate": 1504159500000,
+    "endDate": 1504159800000,
+    "delivered": 0.07200000000011642,
+    "recieved": 0,
+    "price": 0.554
+  },
+  {
+    "startDate": 1504159800000,
+    "endDate": 1504160100000,
+    "delivered": 0.06599999999980355,
+    "recieved": 0,
+    "price": 0.508
+  },
+  {
+    "startDate": 1504160100000,
+    "endDate": 1504160400000,
+    "delivered": 0.06300000000010186,
+    "recieved": 0,
+    "price": 0.485
+  },
+  {
+    "startDate": 1504160400000,
+    "endDate": 1504160700000,
+    "delivered": 0.05600000000004002,
+    "recieved": 0,
+    "price": 0.431
+  },
+  {
+    "startDate": 1504160700000,
+    "endDate": 1504161000000,
+    "delivered": 0.05499999999983629,
+    "recieved": 0,
+    "price": 0.423
+  },
+  {
+    "startDate": 1504161000000,
+    "endDate": 1504161295000,
+    "delivered": 0.05500000000029104,
+    "recieved": 0,
+    "price": 0.424
+  },
+  {
+    "startDate": 1504161300000,
+    "endDate": 1504161600000,
+    "delivered": 0.06999999999970896,
+    "recieved": 0,
+    "price": 0.539
+  },
+  {
+    "startDate": 1504161600000,
+    "endDate": 1504161900000,
+    "delivered": 0.06500000000005457,
+    "recieved": 0,
+    "price": 0.501
+  },
+  {
+    "startDate": 1504161900000,
+    "endDate": 1504162200000,
+    "delivered": 0.06100000000014916,
+    "recieved": 0,
+    "price": 0.47
+  },
+  {
+    "startDate": 1504162200000,
+    "endDate": 1504162500000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.362
+  },
+  {
+    "startDate": 1504162500000,
+    "endDate": 1504162800000,
+    "delivered": 0.03999999999996362,
+    "recieved": 0,
+    "price": 0.312
+  },
+  {
+    "startDate": 1504162800000,
+    "endDate": 1504163100000,
+    "delivered": 0.03899999999975989,
+    "recieved": 0,
+    "price": 0.441
+  },
+  {
+    "startDate": 1504163100000,
+    "endDate": 1504163400000,
+    "delivered": 0.04100000000016735,
+    "recieved": 0,
+    "price": 0.463
+  },
+  {
+    "startDate": 1504163400000,
+    "endDate": 1504163700000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504163700000,
+    "endDate": 1504164000000,
+    "delivered": 0.06599999999980355,
+    "recieved": 0,
+    "price": 0.746
+  },
+  {
+    "startDate": 1504164000000,
+    "endDate": 1504164300000,
+    "delivered": 0.06599999999980355,
+    "recieved": 0,
+    "price": 0.746
+  },
+  {
+    "startDate": 1504164300000,
+    "endDate": 1504164595000,
+    "delivered": 0.06100000000014916,
+    "recieved": 0,
+    "price": 0.689
+  },
+  {
+    "startDate": 1504164600000,
+    "endDate": 1504164900000,
+    "delivered": 0.05400000000008731,
+    "recieved": 0,
+    "price": 0.61
+  },
+  {
+    "startDate": 1504164900000,
+    "endDate": 1504165200000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.531
+  },
+  {
+    "startDate": 1504165200000,
+    "endDate": 1504165500000,
+    "delivered": 0.047999999999774445,
+    "recieved": 0,
+    "price": 0.542
+  },
+  {
+    "startDate": 1504165500000,
+    "endDate": 1504165800000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504165800000,
+    "endDate": 1504166100000,
+    "delivered": 0.057999999999992724,
+    "recieved": 0,
+    "price": 0.655
+  },
+  {
+    "startDate": 1504166100000,
+    "endDate": 1504166400000,
+    "delivered": 0.057999999999992724,
+    "recieved": 0,
+    "price": 0.655
+  },
+  {
+    "startDate": 1504166400000,
+    "endDate": 1504166700000,
+    "delivered": 0.052999999999883585,
+    "recieved": 0,
+    "price": 0.599
+  },
+  {
+    "startDate": 1504166700000,
+    "endDate": 1504167000000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.531
+  },
+  {
+    "startDate": 1504167000000,
+    "endDate": 1504167300000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.531
+  },
+  {
+    "startDate": 1504167300000,
+    "endDate": 1504167600000,
+    "delivered": 0.04800000000022919,
+    "recieved": 0,
+    "price": 0.542
+  },
+  {
+    "startDate": 1504167600000,
+    "endDate": 1504167900000,
+    "delivered": 0.058999999999741704,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504167900000,
+    "endDate": 1504168200000,
+    "delivered": 0.05499999999983629,
+    "recieved": 0,
+    "price": 0.621
+  },
+  {
+    "startDate": 1504168200000,
+    "endDate": 1504168500000,
+    "delivered": 0.06000000000040018,
+    "recieved": 0,
+    "price": 0.678
+  },
+  {
+    "startDate": 1504168500000,
+    "endDate": 1504168800000,
+    "delivered": 0.057999999999992724,
+    "recieved": 0,
+    "price": 0.655
+  },
+  {
+    "startDate": 1504168800000,
+    "endDate": 1504169100000,
+    "delivered": 0.057999999999992724,
+    "recieved": 0,
+    "price": 0.655
+  },
+  {
+    "startDate": 1504169100000,
+    "endDate": 1504169395000,
+    "delivered": 0.05600000000004002,
+    "recieved": 0,
+    "price": 0.633
+  },
+  {
+    "startDate": 1504169400000,
+    "endDate": 1504169700000,
+    "delivered": 0.06599999999980355,
+    "recieved": 0,
+    "price": 0.746
+  },
+  {
+    "startDate": 1504169700000,
+    "endDate": 1504170000000,
+    "delivered": 0.07600000000002183,
+    "recieved": 0,
+    "price": 0.859
+  },
+  {
+    "startDate": 1504170000000,
+    "endDate": 1504170300000,
+    "delivered": 0.06700000000000728,
+    "recieved": 0,
+    "price": 0.757
+  },
+  {
+    "startDate": 1504170300000,
+    "endDate": 1504170600000,
+    "delivered": 0.06700000000000728,
+    "recieved": 0,
+    "price": 0.757
+  },
+  {
+    "startDate": 1504170600000,
+    "endDate": 1504170900000,
+    "delivered": 0.05999999999994543,
+    "recieved": 0,
+    "price": 0.678
+  },
+  {
+    "startDate": 1504170900000,
+    "endDate": 1504171200000,
+    "delivered": 0.05600000000004002,
+    "recieved": 0,
+    "price": 0.633
+  },
+  {
+    "startDate": 1504171200000,
+    "endDate": 1504171500000,
+    "delivered": 0.05499999999983629,
+    "recieved": 0,
+    "price": 0.621
+  },
+  {
+    "startDate": 1504171500000,
+    "endDate": 1504171800000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504171800000,
+    "endDate": 1504172100000,
+    "delivered": 0.06799999999975626,
+    "recieved": 0,
+    "price": 0.768
+  },
+  {
+    "startDate": 1504172100000,
+    "endDate": 1504172400000,
+    "delivered": 0.06700000000000728,
+    "recieved": 0,
+    "price": 0.757
+  },
+  {
+    "startDate": 1504172400000,
+    "endDate": 1504172700000,
+    "delivered": 0.0660000000002583,
+    "recieved": 0,
+    "price": 0.746
+  },
+  {
+    "startDate": 1504172700000,
+    "endDate": 1504173000000,
+    "delivered": 0.058999999999741704,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504173000000,
+    "endDate": 1504173300000,
+    "delivered": 0.05500000000029104,
+    "recieved": 0,
+    "price": 0.622
+  },
+  {
+    "startDate": 1504173300000,
+    "endDate": 1504173600000,
+    "delivered": 0.047000000000025466,
+    "recieved": 0,
+    "price": 0.531
+  },
+  {
+    "startDate": 1504173600000,
+    "endDate": 1504173900000,
+    "delivered": 0.05199999999967986,
+    "recieved": 0,
+    "price": 0.588
+  },
+  {
+    "startDate": 1504173900000,
+    "endDate": 1504174195000,
+    "delivered": 0.06100000000014916,
+    "recieved": 0,
+    "price": 0.689
+  },
+  {
+    "startDate": 1504174200000,
+    "endDate": 1504174500000,
+    "delivered": 0.05999999999994543,
+    "recieved": 0,
+    "price": 0.678
+  },
+  {
+    "startDate": 1504174500000,
+    "endDate": 1504174800000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.667
+  },
+  {
+    "startDate": 1504174800000,
+    "endDate": 1504175100000,
+    "delivered": 0.04999999999972715,
+    "recieved": 0,
+    "price": 0.565
+  },
+  {
+    "startDate": 1504175100000,
+    "endDate": 1504175400000,
+    "delivered": 0.042000000000371074,
+    "recieved": 0,
+    "price": 0.475
+  },
+  {
+    "startDate": 1504175400000,
+    "endDate": 1504175700000,
+    "delivered": 0.04599999999982174,
+    "recieved": 0,
+    "price": 0.52
+  },
+  {
+    "startDate": 1504175700000,
+    "endDate": 1504176000000,
+    "delivered": 0.05099999999993088,
+    "recieved": 0,
+    "price": 0.576
+  },
+  {
+    "startDate": 1504176000000,
+    "endDate": 1504176300000,
+    "delivered": 0.057000000000243745,
+    "recieved": 0,
+    "price": 0.644
+  },
+  {
+    "startDate": 1504176300000,
+    "endDate": 1504176600000,
+    "delivered": 0.05599999999958527,
+    "recieved": 0,
+    "price": 0.633
+  },
+  {
+    "startDate": 1504176600000,
+    "endDate": 1504176900000,
+    "delivered": 0.05500000000029104,
+    "recieved": 0,
+    "price": 0.622
+  },
+  {
+    "startDate": 1504176900000,
+    "endDate": 1504177200000,
+    "delivered": 0.04599999999982174,
+    "recieved": 0,
+    "price": 0.524
+  },
+  {
+    "startDate": 1504177200000,
+    "endDate": 1504177495000,
+    "delivered": 0.04399999999986903,
+    "recieved": 0,
+    "price": 0.691
+  },
+  {
+    "startDate": 1504177500000,
+    "endDate": 1504177800000,
+    "delivered": 0.046000000000276486,
+    "recieved": 0,
+    "price": 0.722
+  },
+  {
+    "startDate": 1504177800000,
+    "endDate": 1504178100000,
+    "delivered": 0.052000000000134605,
+    "recieved": 0,
+    "price": 0.816
+  },
+  {
+    "startDate": 1504178100000,
+    "endDate": 1504178400000,
+    "delivered": 0.06499999999959982,
+    "recieved": 0,
+    "price": 1.02
+  },
+  {
+    "startDate": 1504178400000,
+    "endDate": 1504178700000,
+    "delivered": 0.07200000000011642,
+    "recieved": 0,
+    "price": 1.13
+  },
+  {
+    "startDate": 1504178700000,
+    "endDate": 1504178995000,
+    "delivered": 0.07099999999991269,
+    "recieved": 0,
+    "price": 1.115
+  },
+  {
+    "startDate": 1504179000000,
+    "endDate": 1504179300000,
+    "delivered": 0.08500000000003638,
+    "recieved": 0,
+    "price": 1.335
+  },
+  {
+    "startDate": 1504179300000,
+    "endDate": 1504179600000,
+    "delivered": 0.08800000000019281,
+    "recieved": 0,
+    "price": 1.382
+  },
+  {
+    "startDate": 1504179600000,
+    "endDate": 1504179900000,
+    "delivered": 0.15099999999983993,
+    "recieved": 0,
+    "price": 2.371
+  },
+  {
+    "startDate": 1504179900000,
+    "endDate": 1504180200000,
+    "delivered": 0.2090000000002874,
+    "recieved": 0,
+    "price": 3.281
+  },
+  {
+    "startDate": 1504180200000,
+    "endDate": 1504180500000,
+    "delivered": 0.06299999999964712,
+    "recieved": 0,
+    "price": 0.989
+  },
+  {
+    "startDate": 1504180500000,
+    "endDate": 1504180800000,
+    "delivered": 0.06000000000040018,
+    "recieved": 0,
+    "price": 0.942
+  },
+  {
+    "startDate": 1504180800000,
+    "endDate": 1504181100000,
+    "delivered": 0.056999999999789,
+    "recieved": 0,
+    "price": 0.895
+  },
+  {
+    "startDate": 1504181100000,
+    "endDate": 1504181400000,
+    "delivered": 0.05900000000019645,
+    "recieved": 0,
+    "price": 0.926
+  },
+  {
+    "startDate": 1504181400000,
+    "endDate": 1504181700000,
+    "delivered": 0.07899999999972351,
+    "recieved": 0,
+    "price": 1.24
+  },
+  {
+    "startDate": 1504181700000,
+    "endDate": 1504182000000,
+    "delivered": 0.07500000000027285,
+    "recieved": 0,
+    "price": 1.178
+  },
+  {
+    "startDate": 1504182000000,
+    "endDate": 1504182295000,
+    "delivered": 0.08299999999962893,
+    "recieved": 0,
+    "price": 1.303
+  },
+  {
+    "startDate": 1504182300000,
+    "endDate": 1504182600000,
+    "delivered": 0.11000000000012733,
+    "recieved": 0,
+    "price": 1.727
+  },
+  {
+    "startDate": 1504182600000,
+    "endDate": 1504182900000,
+    "delivered": 0.09200000000009823,
+    "recieved": 0,
+    "price": 1.444
+  },
+  {
+    "startDate": 1504182900000,
+    "endDate": 1504183200000,
+    "delivered": 0.09400000000005093,
+    "recieved": 0,
+    "price": 1.476
+  },
+  {
+    "startDate": 1504183200000,
+    "endDate": 1504183380000,
+    "delivered": 0.05499999999983629,
+    "recieved": 0,
+    "price": 0.863
+  },
+  {
+    "startDate": 1504183500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504183800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504184100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504184400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504184700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504185000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504185300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504185600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504185900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504186200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504186500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504186800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504187100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504187400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504187700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504188000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504188300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504188600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504188900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504189200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504189500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504189800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504190100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504190400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504190700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504191000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504191300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504191600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504191900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504192200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504192500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504192800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504193100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504193400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504193700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504194000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504194300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504194600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504194900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504195200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504195500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504195800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504196100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504196400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504196700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504197000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504197300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504197600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504197900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504198200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504198500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504198800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504199100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504199400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504199700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504200000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504200300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504200600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504200900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504201200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504201500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504201800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504202100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504202400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504202700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504203000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504203300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504203600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504203900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504204200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504204500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504204800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504205100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504205400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504205700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504206000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504206300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504206600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504206900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504207200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504207500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504207800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504208100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504208400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504208700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504209000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504209300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504209600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504209900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504210200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504210500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504210800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504211100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504211400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504211700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504212000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504212300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504212600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504212900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504213200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504213500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504213800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504214100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504214400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504214700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504215000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504215300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504215600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504215900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504216200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504216500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504216800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504217100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504217400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504217700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504218000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504218300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504218600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504218900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504219200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504219500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504219800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504220100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504220400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504220700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504221000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504221300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504221600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504221900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504222200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504222500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504222800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504223100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504223400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504223700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504224000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504224300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504224600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504224900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504225200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504225500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504225800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504226100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504226400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504226700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504227000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504227300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504227600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504227900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504228200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504228500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504228800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504229100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504229400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504229700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504230000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504230300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504230600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504230900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504231200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504231500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504231800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504232100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504232400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504232700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504233000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504233300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504233600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504233900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504234200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504234500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504234800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504235100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504235400000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504235700000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504236000000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504236300000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504236600000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504236900000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504237200000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504237500000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504237800000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  },
+  {
+    "startDate": 1504238100000,
+    "endDate": 1504183380000,
+    "delivered": 0.0019999999999527063,
+    "recieved": 0,
+    "price": 0.031
+  }
+]

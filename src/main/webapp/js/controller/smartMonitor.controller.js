@@ -2,7 +2,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 
 	$scope.container = $('#smartMonitor_container');
 	
-	$scope.redraw = function(stacked) {
+	/*$scope.redraw = function(stacked) {
 		$scope.container.highcharts().destroy();
 		angular.forEach($scope.outlet, function(_outlet, key) {
 			_outlet.series = null;
@@ -13,7 +13,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		$scope.dataTillNow(stacked,Date.now());
 		$scope.calculateCurrentDemand();
 		$scope.createGraph();
-	};
+	};*/
 	
 	$scope.dataTillNow = function(stacked,_nowsec) {
 		var _today = Date.today().getTime();
@@ -180,7 +180,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
-		$scope.stacked = false;
+		//$scope.stacked = false;
 		$scope.currentDemand = {};
 	//	$scope.createGraph([]);
 		var outletSource = [];
@@ -193,20 +193,20 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		DataService.getOutletData(outletSource).then(
 				function(res) {
 					$scope.outlet = res;
-					$scope.dataTillNow(false,$scope.usageEndTime.getTime());
+					$scope.dataTillNow($scope.stacked,$scope.usageEndTime.getTime());
 					
 					$scope.calculateCurrentDemand();
 					$scope.createGraph();
 					if($scope.online)
 					{
-						$interval(function() {
+						intervals.push($interval(function() {
 							console.log('fetch data');
 							$scope.realtimeUsageData();
-						}, 1000);
+						}, $scope.refreshRate*1000));
 					}
 				},
 				function(error) {
-
+					$scope.online = false;
 				});
 	};
 	
