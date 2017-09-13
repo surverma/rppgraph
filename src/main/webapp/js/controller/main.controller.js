@@ -6,9 +6,11 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
     $scope.online = true;
     $scope.stacked = false;
     $scope.deviceCount = "3";
-    $scope.clientToken = '84845a8a-803c-4644-b8a8-3bfb64241cff';
+    $scope.clientToken = '6fce7fee-9589-4820-8fa2-36bbfc43327b';
     $scope.criticalZone = false;
     $scope.refreshRate = 30;
+    var timerInterval;
+    $rootScope.lastRefreshData = {};
     
 	$scope.findHoliday = function(time)
 	{
@@ -23,6 +25,96 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 			}
 		});
 		return isHoliday;
+	};
+	
+	$scope.getSeasonName = function (schedules) {
+		var seasonname = '';
+		for(var sch = 0; sch < schedules.length; sch++) {
+			if(angular.uppercase(schedules[sch].season) != 'HOLIDAY' && angular.uppercase(schedules[sch].season) != 'WEEKEND') {
+				seasonname = schedules[sch].season;
+				break;
+			}				
+		}
+		return seasonname == '' ? schedules[0].season : seasonname;
+	};
+	
+	$scope.formatHour = function(hrMinSec) {
+		var hour = hrMinSec.substring(0, 2);
+		var min = hrMinSec.substring(3, 5);
+		var amPM = "AM";
+		if(hour > 12) {
+			hour = hour - 12;
+			amPM = "PM";
+		}
+		if(hour == 0)
+			hour = 12;
+		return hour + ":" + min + " " + amPM;
+	};
+	
+	$scope.setYear = function(schedules) {
+		var currentHolidayScheduleYear = [];
+		if(!schedules || schedules.length == 0)
+			currentHolidayScheduleYear[0] = new Date().getFullYear();
+
+		var effDateYear = new Date(schedules[0].effDate).getFullYear();
+		var endDateYear = new Date(schedules[0].endDate).getFullYear();
+		if(effDateYear == endDateYear)
+			currentHolidayScheduleYear[0] = effDateYear;
+		else {
+			currentHolidayScheduleYear[0] = effDateYear;
+			currentHolidayScheduleYear[1] = endDateYear;
+		}
+
+		$scope.currentHolidayScheduleYear = currentHolidayScheduleYear;
+	};
+	
+	$scope.convertToUTC = function(dt) {
+		if(dt != null){
+			var localDate = new Date(dt);
+			var localTime = localDate.getTime();
+			var localOffset = localDate.getTimezoneOffset() * 60000;
+			return new Date(localTime + localOffset);
+		}else{
+			return "";
+		}
+	};
+	
+	$scope.getOffPeak = function (item) {
+		return item.season.toUpperCase() != 'HOLIDAY' && item.season.toUpperCase() != 'WEEKEND' && item.peak == 'TOU_OP';
+	};
+
+	$scope.getMidPeak = function (item) {
+		return item.season.toUpperCase() != 'HOLIDAY' && item.season.toUpperCase() != 'WEEKEND' && item.peak == 'TOU_MP';
+	};
+
+	$scope.getPeak = function (item) {
+		return item.season.toUpperCase() != 'HOLIDAY' && item.season.toUpperCase() != 'WEEKEND' && item.peak == 'TOU_PK';
+	};
+
+	$scope.getWeekendHolidayPeak = function (item) {
+		return item.season.toUpperCase() == 'HOLIDAY' || item.season.toUpperCase() == 'WEEKEND';
+	};
+
+	$scope.filterTOUSchedules = function(touSchedules) {
+		if(!touSchedules || touSchedules.length == 0)
+			return;
+		var schedules = touSchedules;
+		schedules.sort(
+	    		function (a, b) {
+	    			 return a.effDate>b.effDate ? -1 : a.effDate<b.effDate ? 1 : 0; 
+	 			});
+		var result = new Array();
+		var effDate;
+		var index = -1;
+		for(var sch in schedules) {
+			if(effDate != schedules[sch].effDate) {
+				index++;
+				result[index] = [];
+				effDate = schedules[sch].effDate;
+			}
+			result[index].push(schedules[sch]);
+		}
+		$scope.chartTOUSchedules = result;	
 	};
 	
 	$scope.findWeekend = function(time)
@@ -60,6 +152,7 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		
 		DataService.getTouSchedules().then(
 				function(res) {
+					$scope.filterTOUSchedules(res);
 					DataService.getHoliday().then(
 							function(res) {
 								$rootScope.holidayList = res;
@@ -93,6 +186,7 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		angular.forEach(intervals, function(interval) {
 		    $interval.cancel(interval);
 		});
+		$scope.counter = $scope.refreshRate;
 		$state.reload("energy.plot");
 	}
 	
@@ -103,6 +197,19 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		else if(centValue >= 100)
 			return "$" + (centValue/100).toFixed(2); 
 	}
+	
+	$rootScope.$on('timer-start', function (event, data) {
+		$scope.counter = $scope.refreshRate;
+		timerInterval = ($interval(function() {
+			$scope.counter--;
+		}, 1000));
+		intervals.push(timerInterval);
+	});
+	
+	$rootScope.$on('timer-stop', function (event, data) {
+		$interval.cancel(timerInterval);
+		$scope.counter = $scope.refreshRate;
+	});
 	
 	$scope.init();
 	

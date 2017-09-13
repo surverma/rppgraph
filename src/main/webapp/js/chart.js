@@ -350,8 +350,8 @@ function createPieChartdata(pieData)
         y: pieData.onPeak,
         color: 'rgb(196, 84, 75)'
     }, {
-        name: 'Critical Peak',
-        y: pieData.criticalPeak,
+        name: 'Critical Event',
+        y: pieData.criticalEvent,
         color: 'orange'
     }
     ];
@@ -501,10 +501,14 @@ function EnergyPulseGraphOption() {
 	},
 	{
 		title : {
-			text : 'Cost'
+			text : 'Cost (¢)'
 		},
 		labels: {
-			format: '{value} ¢',
+			formatter: function () {
+                var cent = this.value/100;
+                return cent;
+            },
+			/*format: '{value}/100 ¢',*/
 			style: {
 				color: '#a05403'
 			}
@@ -613,11 +617,11 @@ function EnergyPulseGraphOption() {
 					$.each(this.points, function(i, point) {
 						text = text + "<b>" + point.series.name;
 						if(point.series.name == "Energy")
-							text = text + " : </b> " + (point.y * 1000).toFixed(2) + " wh<br>"; 
+							text = text + " : </b> " + (point.y).toFixed(0) + " wh<br>"; 
 						if(point.series.name == "Cost")
-							text = text + " : </b> " + (((point.y * point.point.z.offPeakFactor)/ point.point.z.peakFactor)).toFixed(2) + "&cent;<br>";
+							text = text + " : </b> " + (point.y/ (point.point.z.peakFactor *100)).toFixed(2) + "&cent;<br>";
 						if(point.series.name == "Cumulative cost")
-							text = text + " : </b> " + (point.y).toFixed(2) + "&cent;<br>";
+							text = text + " : </b> " + (point.y/100).toFixed(2) + "&cent;<br>";
 					});
 					return text;
 				}

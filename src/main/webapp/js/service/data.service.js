@@ -1,3 +1,8 @@
+function HttpResponse(code, msg) {
+	this.status = code;
+	this.statusText = msg;
+}
+
 'use strict';
 myapp.service('DataService', function($q, $http, $rootScope) {
 
@@ -62,7 +67,7 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 					+ startTime + "&end=" + endTime + "&interval=" + interval,
 					headers: {
 						'clientToken' : clientToken,
-						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWAf',
+						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWA',
 						'Content-Type': 'application/json'
 					}
 		}
@@ -71,6 +76,9 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 		$q.all([ energyResponse ]).then(function(responses) {
 			var energyData = responses[0].data;
 			result.resolve(energyData);
+		}, function(error) {
+			console.log('err ', error);
+			result.reject(new HttpResponse(error.status, error.statusText));
 		});
 		return result.promise;
 	};

@@ -15,15 +15,18 @@
 			</a> <a title="Online" href="javascript:void(0)" ng-if="!online"> <span
 				style="font-weight: 600; color: #ba0808;">Offline</span> <i
 				class="fa fa-stop-circle-o" style="color: #ba0808; font-size: 18px;"></i>
-
 			</a>
 		</div>
-		<!-- <div class="graff-links">
-			<a href="#" class="info overlay"
-				data-overlay="/features/charts/about-data">About This Data</a> <a
-				href="#" class="download overlay"
-				data-overlay="/features/charts/download-data">Download Energy
-				Use Data</a>
+		<div class="graff-main" >
+			<div class="graff-links">
+				<a href="#" class="info overlay"
+					data-overlay="/features/charts/about-data">About This Data</a> <a
+					href="#" class="download overlay"
+					data-overlay="/features/charts/download-data">Download Energy
+					Use Data</a>
+			</div>
+			<div ng-include="'views/notification-tab-common.html'">
+			</div>
 		</div>
-		<div data-ng-include data-src="views/notification-tab-common.html">
-		</div> -->
+	</div>
+</div>
