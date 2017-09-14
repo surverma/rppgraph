@@ -632,7 +632,8 @@ function EnergyPulseGraphOption() {
 	this.plotOptions = {
 			series : {
 				//color : '#0080ff',
-				lineWidth : 0
+				lineWidth : 0,
+				turboThreshold: 6000
 
 			}
 	}

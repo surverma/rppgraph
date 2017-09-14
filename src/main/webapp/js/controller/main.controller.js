@@ -6,11 +6,9 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
     $scope.online = true;
     $scope.stacked = false;
     $scope.deviceCount = "3";
-    $scope.clientToken = '6fce7fee-9589-4820-8fa2-36bbfc43327b';
+    $scope.clientToken = 'df2c0501-a7d0-4c02-bc92-81b6ad8a9731';
     $scope.criticalZone = false;
-    $scope.refreshRate = 30;
     var timerInterval;
-    $rootScope.lastRefreshData = {};
     
 	$scope.findHoliday = function(time)
 	{
@@ -197,19 +195,6 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		else if(centValue >= 100)
 			return "$" + (centValue/100).toFixed(2); 
 	}
-	
-	$rootScope.$on('timer-start', function (event, data) {
-		$scope.counter = $scope.refreshRate;
-		timerInterval = ($interval(function() {
-			$scope.counter--;
-		}, 1000));
-		intervals.push(timerInterval);
-	});
-	
-	$rootScope.$on('timer-stop', function (event, data) {
-		$interval.cancel(timerInterval);
-		$scope.counter = $scope.refreshRate;
-	});
 	
 	$scope.init();
 	

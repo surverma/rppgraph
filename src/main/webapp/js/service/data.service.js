@@ -67,7 +67,7 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 					+ startTime + "&end=" + endTime + "&interval=" + interval,
 					headers: {
 						'clientToken' : clientToken,
-						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWA',
+						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWAf',
 						'Content-Type': 'application/json'
 					}
 		}
@@ -78,7 +78,7 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 			result.resolve(energyData);
 		}, function(error) {
 			console.log('err ', error);
-			result.reject(new HttpResponse(error.status, error.statusText));
+			result.reject(new HttpResponse(error.status, error.message));
 		});
 		return result.promise;
 	};

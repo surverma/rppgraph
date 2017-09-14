@@ -28,5 +28,34 @@
 			<div ng-include="'views/notification-tab-common.html'">
 			</div>
 		</div>
+	<div style="background-color: burlywood; height: 150px">
+	<h4>Energy Pulse Test Area</h4>
+	<div>
+		<div class="col-xs-3">
+		Last Online Time : {{lastOnlineTime*1000 | date:"mediumTime"}}	
+		<br>
+		Refresh in <span style="font-weight: 700;">{{counter||0}} </span>Sec.
+			<br>
+			Refresh Rate <input type="text" style="width: 10%" value=""
+				ng-model="refreshRate" /> Sec. <input style="width: 20%"
+				type="button" value="Apply" ng-click="reload()"/>
+			<br>
+			<input type="checkbox" value="" ng-click="toggleToken()">
+					Make data unavailable
+		</div>
+		<div class="col-xs-3">
+			<span> Last refresh data</span><br>
+			<b>Time : </b>{{lastRefreshData.endDate | date : "mediumTime"}}<br>
+			<b>Energy : </b>{{lastRefreshData.delivered}} Kwh<br>
+			<b>Price : </b>{{lastRefreshData.price}} cent
+		</div>
+				<div class="col-xs-3">
+					<span>Data Unavailable At</span><br>
+					<p ng-repeat="data in apiFailure | orderBy : 'time' : true | limitTo : 4">
+						<b>Time : </b>{{(data.time*1000) | date : "mediumTime"}} <b>API
+							Status : </b>{{data.statusText}}<br>
+					</p>
+				</div>
+			</div>
 	</div>
 </div>
