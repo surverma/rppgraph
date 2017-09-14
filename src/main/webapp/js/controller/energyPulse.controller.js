@@ -6,6 +6,8 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.totalCost = 0;
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 30;
+	$scope.interval = 30;
+	$scope.clientToken = '80697759-6a9c-4afe-9116-71d503030cb6';
 	var token = $scope.clientToken;
 	$scope.redraw = function() {
 		$scope.seriesData = null;
@@ -15,6 +17,10 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.setPieText();
 	};
 	 $scope.apiFailure = [];
+	 $scope.criticalZone = false;
+	 $scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
+	 $scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
+			.addMinutes($scope.criticalStartTime.minutes).getTime();
 
 	$scope.breakTotalCost = function(costData)
 	{
@@ -456,12 +462,14 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		console.log("Updating pulse graph",pie_chart);
 	};*/
 	$scope.fetchInitialUsageData = function() {
+		$scope.stopAllIntervals();
 		//$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
 		$scope.createGraph([], [], [], []);
 		$scope.seriesData = null;
 		$scope.nowTime = Math.floor(Date.now()/1000);
-		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.refreshRate,$scope.clientToken).then(
+		$scope.queryString = "start="+ $scope.startTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
+		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
 		//DataService.getDemoEnergyData("apiData.json").then(
 				function(res) {
 					$scope.online = true;
@@ -513,7 +521,8 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.usageEndTime = Date.today().setTimeToNow();
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$rootScope.$broadcast('timer-stop');
-		DataService.getEnergyData($scope.lastOnlineTime,$scope.nowTime,$scope.refreshRate,$scope.clientToken).then(
+		$scope.queryString = "start="+ $scope.lastOnlineTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
+		DataService.getEnergyData($scope.lastOnlineTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
 				function(res) {
 					$scope.online = true;
 					$rootScope.$broadcast('timer-start');
@@ -566,4 +575,16 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	}
 	$scope.fetchInitialUsageData();
 	
+	$( document ).ready(function() {
+	    $('#timepicker1').timepicker({showMeridian: false});
+	    $('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
+	        console.log('The time is ' + e.time.value);
+	        console.log('The hour is ' + e.time.hours);
+	        console.log('The minute is ' + e.time.minutes);
+	        $scope.criticalStartTime = e.time;
+	        $scope.criticalStartTime.timeStamp = Date.today().addHours(e.time.hours)
+	        	.addMinutes(e.time.minutes).getTime();
+	        $scope.fetchInitialUsageData();
+	      });
+	});
 }]);

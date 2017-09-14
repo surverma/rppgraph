@@ -1,6 +1,10 @@
 myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataService', function($scope, $interval, $http,DataService) {
 
 	$scope.container = $('#smartMonitor_container');
+	$scope.deviceCount = "3";
+	$scope.loadFull = true;
+    $scope.online = true;
+    $scope.stacked = false;
 	
 	/*$scope.redraw = function(stacked) {
 		$scope.container.highcharts().destroy();
@@ -180,7 +184,6 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
-		//$scope.stacked = false;
 		$scope.currentDemand = {};
 	//	$scope.createGraph([]);
 		var outletSource = [];

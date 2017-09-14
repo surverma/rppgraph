@@ -1,13 +1,6 @@
-
 myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataService','$state','deviceDetector','$interval', function($scope,$rootScope, $interval, $http,DataService,$state,deviceDetector,$interval) {
 	
     $scope.vm = deviceDetector;
-    $scope.loadFull = true;
-    $scope.online = true;
-    $scope.stacked = false;
-    $scope.deviceCount = "3";
-    $scope.clientToken = 'df2c0501-a7d0-4c02-bc92-81b6ad8a9731';
-    $scope.criticalZone = false;
     var timerInterval;
     
 	$scope.findHoliday = function(time)
@@ -129,12 +122,9 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		$rootScope.usageEndTime = Date.today().setTimeToNow();
 		$rootScope.usageEndTime.addSeconds(10);
 		$rootScope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
-		$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
-		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
-			.addMinutes($scope.criticalStartTime.minutes).getTime();
 		console.log("isWeekend  ", $scope.isWeekend);
 		
-		$( document ).ready(function() {
+		$( document ).ready(function() {/*
 		    $('#timepicker1').timepicker({showMeridian: false});
 		    $('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
 		        console.log('The time is ' + e.time.value);
@@ -145,7 +135,7 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		        	.addMinutes(e.time.minutes).getTime();
 		        $scope.reload();
 		      });
-		});
+		*/});
 		
 		
 		DataService.getTouSchedules().then(
@@ -186,6 +176,12 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		});
 		$scope.counter = $scope.refreshRate;
 		$state.reload("energy.plot");
+	}
+	
+	$scope.stopAllIntervals = function(){
+		angular.forEach(intervals, function(interval) {
+		    $interval.cancel(interval);
+		});
 	}
 	
 	$scope.formatCost = function(centValue)
