@@ -65,12 +65,13 @@
 					Client Token<input style="width: 60%" type="text" value=""
 				ng-model="clientToken" /> <input style="width: 20%" type="button"
 				value="Apply(Replot)" ng-click="fetchInitialUsageData()" /><br>
-				<span>Critical Zone Start Time</span>
+				<span>CPP check</span>
 			<input type="checkbox" value="" ng-model="criticalZone"
-				ng-click="fetchInitialUsageData()">
-			<div class="input-group bootstrap-timepicker timepicker">
-				<input id="timepicker1" ng-model="criticalStartTime.value"
-					type="text" class="form-control input-small"> <span
+				ng-click="init()"><br>CPP Start Time<input
+						type="checkbox" value="" ng-disabled="!criticalZone" ng-model="cppTime" ng-click="init()">
+			<div class="col-xs-6 input-group bootstrap-timepicker timepicker">
+				<input id="timepicker1" ng-disabled="!criticalZone || !cppTime" ng-model="criticalStartTime.value"
+					type="text" ng-change="init()" class="form-control input-small"> <span
 					class="input-group-addon"><i
 					class="glyphicon glyphicon-time"></i></span>
 			</div>

@@ -1,4 +1,4 @@
-myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$http','DataService', function($scope, $rootScope, $interval, $http, DataService) {
+myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$http', '$timeout', 'DataService', function($scope, $rootScope, $interval, $http, $timeout, DataService) {
 
 	$scope.object = null;
 	$scope.energyData = null;
@@ -7,8 +7,15 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 30;
 	$scope.interval = 30;
-	$scope.clientToken = '80697759-6a9c-4afe-9116-71d503030cb6';
+	$scope.clientToken = 'c724636a-7135-4111-a60f-eaf63d6a3f10';
 	var token = $scope.clientToken;
+	$scope.apiFailure = [];
+	$scope.criticalZone = false;
+	$scope.cppTime = false;
+	$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
+	$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
+	.addMinutes($scope.criticalStartTime.minutes).getTime();
+	
 	$scope.redraw = function() {
 		$scope.seriesData = null;
 		var data = $scope.dataTillNow(Date.now());
@@ -16,12 +23,27 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.createGraph(data.energyData,data.costData,data.cumCostData,data.breakedUpCost);
 		$scope.setPieText();
 	};
-	 $scope.apiFailure = [];
-	 $scope.criticalZone = false;
-	 $scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
-	 $scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
-			.addMinutes($scope.criticalStartTime.minutes).getTime();
+	
+	$scope.addCriticalPeakToTOUSchedule = function(){
+		$scope.chartTOUSchedules[0] = _.without($scope.chartTOUSchedules[0], _.findWhere($scope.chartTOUSchedules[0], {
+			peak: "TOU_CP"
+			}));
+		var criticalTOUSchedule = {};
+		criticalTOUSchedule.peak = "TOU_CP";
+		if($scope.cppTime){
+			criticalTOUSchedule.effDate = Date.today().getTime();
+			criticalTOUSchedule.endDate = Date.today().getTime();
+			criticalTOUSchedule.effHour = $scope.criticalStartTime.value;
 
+			var res = $scope.criticalStartTime.value.split(":");
+			var criticalEndHour = (parseInt(res[0])+1) + ":" + res[1];
+			criticalTOUSchedule.endHour = criticalEndHour;
+		}
+		criticalTOUSchedule.price = 6.5;
+		criticalTOUSchedule.season = "Summer";
+		$scope.chartTOUSchedules[0].push(criticalTOUSchedule);
+	}
+	
 	$scope.breakTotalCost = function(costData)
 	{
 		var off_peak = null;
@@ -51,7 +73,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		};
 
 	};
-	
+
 	$scope.peakFactorCalculator = function(costZone)
 	{
 		if($scope.isWeekend || $scope.isHoliday || costZone.peak == "TOU_OP")
@@ -124,7 +146,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 
 			});
 			finalZone = Object.create(costZone[0]);
-			if($scope.criticalZone){
+			if($scope.criticalZone && $scope.cppTime){
 				if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + 60*60*1000))	
 				{
 					finalZone.peak = "TOU_CE";
@@ -132,7 +154,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			}
 			$scope.peakFactorCalculator(finalZone);
 		}
-		
+
 		return finalZone;
 	};
 
@@ -142,7 +164,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		var _today = Date.today().getTime();
 		var _cumCost = $scope.seriesData?($scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y):0;
 		var _intervalCost = 0;
-		
+
 		/*var _datadate = Date.today().clearTime().set({
 			year : 2017,
 			month : 6,
@@ -154,7 +176,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		breakedUpCost.midPeak = 0;
 		breakedUpCost.onPeak = 0;
 		breakedUpCost.criticalEvent = 0;
-		
+
 		for (i = 0; i < $scope.energyData.length; i++) {
 			var _zObject = {};
 			_zObject.offPeakFactor = $scope.offPeakFactor;
@@ -174,10 +196,10 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			{
 				_zObject.timeInterval = 0;
 			}
-			
+
 			_intervalCost = $scope.energyData[i].price * 100 //$ * 100
 			_cumCost += _intervalCost; 
-			
+
 			if(costZone.peak == "TOU_OP")
 				breakedUpCost.offPeak += _intervalCost/100;
 			else if(costZone.peak == "TOU_MP")
@@ -226,17 +248,18 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 				x2 : 1,
 				y2 : 1
 		};
-		
-		var _plotBand = [{
-			color: 'orange', // Color value
-			from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
-			to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
-			label: { 
-				text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
-				align: 'center' // Positioning of the label. 
-			}// End of the plot band
-		}];
-		
+
+		if($scope.cppTime)
+			var _plotBand = [{
+				color: 'orange', // Color value
+				from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
+				to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
+				label: { 
+					text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+					align: 'center' // Positioning of the label. 
+				}// End of the plot band
+			}];
+
 		var _zonesWithColorGrad = [ {
 			value : Date.today().addHours(7),
 			color : {
@@ -268,7 +291,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 				stops : [ [ 0, 'rgb(135, 180, 81)' ], [ 1, 'rgb(194, 217, 166)' ] ]
 			}
 		} ];
-		
+
 		var _zonesWithSolidColor = [ {
 			value : Date.today().addHours(7),
 			color : areaColor[0]
@@ -285,7 +308,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			value : Date.today().addHours(24),
 			color : areaColor[4]
 		} ];
-		
+
 		var _zonesWithClass = [ {
 			value : Date.today().addHours(7),
 			className: 'zone-off-energy'
@@ -302,8 +325,8 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			value : Date.today().addHours(24),
 			className: 'zone-off-energy'
 		} ];
-		
-		
+
+
 		var _series = [];
 		_series.push({
 			name : 'Energy',
@@ -336,31 +359,31 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			color : legendColor[2],
 			lineWidth : 1
 		});
-		
+
 		_series.push({
 			type: 'pie',
-	        name: 'Total cost',
-	        tooltip : {
-	    			borderWidth : 0,
-	    			useHTML : true,
-	    			style : {
-	    				padding : 0,
-	    			},
-	    			pointFormat: '{series.name}: <b>{point.y}</b><br/>',
-	    			shared : true
-	    	},
-	        data: createPieChartdata(pieData),
-	        innerSize: '60%',
-	        center: [30, -30],
-	        size: 100,
-	        showInLegend: false,
-	        dataLabels: {
-	            enabled: false
-	        }
+			name: 'Total cost',
+			tooltip : {
+				borderWidth : 0,
+				useHTML : true,
+				style : {
+					padding : 0,
+				},
+				pointFormat: '{series.name}: <b>{point.y}</b><br/>',
+				shared : true
+			},
+			data: createPieChartdata(pieData),
+			innerSize: '60%',
+			center: [30, -30],
+			size: 100,
+			showInLegend: false,
+			dataLabels: {
+				enabled: false
+			}
 		});
-		
+
 		chartOption.series = _series;
-		if($scope.criticalZone)
+		if($scope.criticalZone && $scope.cppTime)
 			chartOption.xAxis.plotBands = _plotBand;
 		$scope.chart = new Highcharts.chart(chartOption);
 
@@ -429,7 +452,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		pie_chart = new Highcharts.chart(chartOption);
 
 	};*/
-	
+
 	$scope.updateGraph = function(edatas, pdatas, cdatas, pieDatas) {
 		var eseries = $scope.chart.series[0];
 		$.each(edatas, function(index, edata) {
@@ -445,12 +468,12 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$.each(cdatas, function(index, cdata) {
 			cseries.addPoint(cdata, true);
 		});
-		
+
 		var pieseries = $scope.chart.series[3];
 		$.each(pieDatas, function(index, pieData) {
 			pieseries.setData(createPieChartdata(pieData));
 		});
-		
+
 	};
 	/*$scope.updatePulseMeter= function(breakUpCost,totalCost) {
 		if(pie_chart)
@@ -470,7 +493,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$scope.queryString = "start="+ $scope.startTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
 		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
-		//DataService.getDemoEnergyData("apiData.json").then(
+				//DataService.getDemoEnergyData("apiData.json").then(
 				function(res) {
 					$scope.online = true;
 					$rootScope.$broadcast('timer-start');
@@ -490,18 +513,18 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 				},
 				function(error) {
 					$scope.online = false;
-					$scope.fetchInitialUsageData();
 					$scope.lastOnlineTime = $scope.startTime;
 					var failure = {};
 					failure.time = $scope.nowTime;
 					failure.status = error;
 					$scope.apiFailure.push(failure);
+					$timeout($scope.fetchInitialUsageData, $scope.refreshRate*1000);
 				});
-			
-			//$scope.createPieGraph(breakUpCost,$scope.totalCost);
+
+		//$scope.createPieGraph(breakUpCost,$scope.totalCost);
 
 	}
-	
+
 	$scope.setPieText = function()
 	{
 		var position = null,
@@ -512,11 +535,11 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		rend = $scope.chart.renderer,
 		pie = $scope.chart.series[3],
 		left = $scope.chart.plotLeft + pie.center[0],
-        top = $scope.chart.plotTop + pie.center[1],
-        totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
-        $scope.pieText = rend.text("<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+		top = $scope.chart.plotTop + pie.center[1],
+		totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
+		$scope.pieText = rend.text("<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 	}
-	
+
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime = Date.today().setTimeToNow();
 		$scope.nowTime = Math.floor(Date.now()/1000);
@@ -551,7 +574,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 					failure.status = error;
 					$scope.apiFailure.push(failure);
 				});
-		
+
 		//$scope.updatePulseMeter(breakUpCost,$scope.totalCost);
 	}
 	$rootScope.$on('timer-start', function (event, data) {
@@ -561,30 +584,38 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		}, 1000));
 		intervals.push(timerInterval);
 	});
-	
+
 	$rootScope.$on('timer-stop', function (event, data) {
 		$interval.cancel(timerInterval);
 		$scope.counter = $scope.refreshRate;
 	});
-	
+
 	$scope.toggleToken = function(){
 		if($scope.clientToken == "XYZ")
 			$scope.clientToken = token;
 		else
 			$scope.clientToken = "XYZ";
 	}
-	$scope.fetchInitialUsageData();
+	
+	
+	$scope.init = function(){
+		if($scope.criticalZone)
+			$scope.addCriticalPeakToTOUSchedule();
+		$scope.fetchInitialUsageData();
+	}
+	
+	$scope.init();
 	
 	$( document ).ready(function() {
-	    $('#timepicker1').timepicker({showMeridian: false});
-	    $('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
-	        console.log('The time is ' + e.time.value);
-	        console.log('The hour is ' + e.time.hours);
-	        console.log('The minute is ' + e.time.minutes);
-	        $scope.criticalStartTime = e.time;
-	        $scope.criticalStartTime.timeStamp = Date.today().addHours(e.time.hours)
-	        	.addMinutes(e.time.minutes).getTime();
-	        $scope.fetchInitialUsageData();
-	      });
+		$('#timepicker1').timepicker({showMeridian: false});
+		$('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
+			console.log('The time is ' + e.time.value);
+			console.log('The hour is ' + e.time.hours);
+			console.log('The minute is ' + e.time.minutes);
+			$scope.criticalStartTime = e.time;
+			$scope.criticalStartTime.timeStamp = Date.today().addHours(e.time.hours)
+			.addMinutes(e.time.minutes).getTime();
+			$scope.fetchInitialUsageData();
+		});
 	});
 }]);

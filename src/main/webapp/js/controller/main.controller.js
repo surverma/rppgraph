@@ -30,16 +30,24 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 	};
 	
 	$scope.formatHour = function(hrMinSec) {
-		var hour = hrMinSec.substring(0, 2);
-		var min = hrMinSec.substring(3, 5);
-		var amPM = "AM";
-		if(hour > 12) {
-			hour = hour - 12;
-			amPM = "PM";
+		if(typeof hrMinSec != "undefined")
+		{
+			var hour = hrMinSec.substring(0, 2);
+			var min = hrMinSec.substring(3, 5);
+			if(hour.includes(":")){
+				hour = hour.replace(":","");
+				min =  hrMinSec.substring(2, 4);
+			}
+
+			var amPM = "AM";
+			if(hour > 12) {
+				hour = hour - 12;
+				amPM = "PM";
+			}
+			if(hour == 0)
+				hour = 12;
+			return hour + ":" + min + " " + amPM;
 		}
-		if(hour == 0)
-			hour = 12;
-		return hour + ":" + min + " " + amPM;
 	};
 	
 	$scope.setYear = function(schedules) {
@@ -76,6 +84,10 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 
 	$scope.getMidPeak = function (item) {
 		return item.season.toUpperCase() != 'HOLIDAY' && item.season.toUpperCase() != 'WEEKEND' && item.peak == 'TOU_MP';
+	};
+	
+	$scope.getCriticalPeak = function (item) {
+		return item.peak == 'TOU_CP';
 	};
 
 	$scope.getPeak = function (item) {
@@ -123,20 +135,6 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		$rootScope.usageEndTime.addSeconds(10);
 		$rootScope.isWeekend = $scope.findWeekend($scope.usageEndTime.clearTime().getTime());
 		console.log("isWeekend  ", $scope.isWeekend);
-		
-		$( document ).ready(function() {/*
-		    $('#timepicker1').timepicker({showMeridian: false});
-		    $('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
-		        console.log('The time is ' + e.time.value);
-		        console.log('The hour is ' + e.time.hours);
-		        console.log('The minute is ' + e.time.minutes);
-		        $scope.criticalStartTime = e.time;
-		        $scope.criticalStartTime.timeStamp = Date.today().addHours(e.time.hours)
-		        	.addMinutes(e.time.minutes).getTime();
-		        $scope.reload();
-		      });
-		*/});
-		
 		
 		DataService.getTouSchedules().then(
 				function(res) {
@@ -190,6 +188,8 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 			return "¢" + centValue.toFixed(2);
 		else if(centValue >= 100)
 			return "$" + (centValue/100).toFixed(2); 
+		else 
+			return " ";
 	}
 	
 	$scope.init();
