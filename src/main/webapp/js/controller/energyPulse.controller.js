@@ -28,16 +28,15 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	};
 	
 	$scope.getZoneColor = function(time){
-		var hour = time.getHours();
-		if(hour <= 7)
+		if(time <= Date.today().addHours(7))
 			return areaColor[0];
-		if(hour > 7 && hour <= 11)
+		if(time > Date.today().addHours(7) && time <= Date.today().addHours(11))
 			return areaColor[1];
-		if(hour > 11 && hour <= 17)
+		if(time > Date.today().addHours(11) && time <= Date.today().addHours(17))
 			return areaColor[2];
-		if(hour > 17 && hour <= 19)
+		if(time > Date.today().addHours(17) && time <= Date.today().addHours(19))
 			return areaColor[3];
-		if(hour > 19 && hour <= 24)
+		if(time > Date.today().addHours(19) && time <= Date.today().addHours(24))
 			return areaColor[4];
 	}
 	
@@ -594,6 +593,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		DataService.getEnergyData($scope.lastOnlineTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
 				function(res) {
 					$scope.online = true;
+					$scope.timeGap = $scope.lastOnlineTime - (res[0].startDate/1000);
 					$rootScope.$broadcast('timer-start');
 					$scope.energyData = res;
 					//$scope.energyData = _.union($scope.energyData, res);
@@ -645,6 +645,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	
 	
 	$scope.init = function(){
+		$scope.timeGap = 0;
 		if($scope.criticalZone)
 			$scope.addCriticalPeakToTOUSchedule();
 		$scope.fetchInitialUsageData();
