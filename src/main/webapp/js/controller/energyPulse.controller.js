@@ -5,9 +5,9 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.container = $('#container');
 	$scope.totalCost = 0;
 	$scope.lastRefreshData = null;
-	$scope.refreshRate = 30;
-	$scope.interval = 30;
-	$scope.clientToken = 'c724636a-7135-4111-a60f-eaf63d6a3f10';
+	$scope.refreshRate = 120;
+	$scope.interval = 120;
+	$scope.clientToken = '27d0b868-add1-48a5-bf02-44f854e487d3';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
@@ -15,6 +15,9 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
 	$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
 	.addMinutes($scope.criticalStartTime.minutes).getTime();
+	$scope.mySeries = "option1";
+	var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
+	
 	
 	$scope.redraw = function() {
 		$scope.seriesData = null;
@@ -23,6 +26,20 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.createGraph(data.energyData,data.costData,data.cumCostData,data.breakedUpCost);
 		$scope.setPieText();
 	};
+	
+	$scope.getZoneColor = function(time){
+		var hour = time.getHours();
+		if(hour <= 7)
+			return areaColor[0];
+		if(hour > 7 && hour <= 11)
+			return areaColor[1];
+		if(hour > 11 && hour <= 17)
+			return areaColor[2];
+		if(hour > 17 && hour <= 19)
+			return areaColor[3];
+		if(hour > 19 && hour <= 24)
+			return areaColor[4];
+	}
 	
 	$scope.addCriticalPeakToTOUSchedule = function(){
 		$scope.chartTOUSchedules[0] = _.without($scope.chartTOUSchedules[0], _.findWhere($scope.chartTOUSchedules[0], {
@@ -180,7 +197,8 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		for (i = 0; i < $scope.energyData.length; i++) {
 			var _zObject = {};
 			_zObject.offPeakFactor = $scope.offPeakFactor;
-			var utime = $scope.energyData[i].endDate; //millisecond
+			//var utime = $scope.energyData[i].endDate; //millisecond
+			var utime = $scope.energyData[i].endDate + ($scope.timeGap*1000); //wrong data temporary fix
 			/*if(!$scope.loadFull && utime > _nowsec){
 				break;
 			}*/
@@ -189,7 +207,8 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			_zObject.price = costZone.price;
 			if($scope.lastRefreshData != null)
 			{
-				var prevUtime = $scope.lastRefreshData.endDate; //millisecond 
+			//	var prevUtime = $scope.lastRefreshData.endDate; //millisecond 
+				var prevUtime = $scope.lastRefreshData.endDate  + ($scope.timeGap*1000); //wrong data temporary fix
 				_zObject.timeInterval =  (utime - prevUtime)/(1000*60); //minute
 			}
 			else
@@ -241,24 +260,13 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
 		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d, %Y', Date.today()) + "<br>Today's Energy Cost : <b>" + $scope.formatCost($scope.totalCost) + "</b>";
 		var legendColor = ["rgb(0, 102, 153)","rgb(102, 102, 51)","rgb(160, 84, 3)"];
-		var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
+		//var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
 		var gradientSpace = {
 				x1 : 1,
 				y1 : 0,
 				x2 : 1,
 				y2 : 1
 		};
-
-		if($scope.cppTime)
-			var _plotBand = [{
-				color: 'orange', // Color value
-				from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
-				to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
-				label: { 
-					text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
-					align: 'center' // Positioning of the label. 
-				}// End of the plot band
-			}];
 
 		var _zonesWithColorGrad = [ {
 			value : Date.today().addHours(7),
@@ -294,20 +302,50 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 
 		var _zonesWithSolidColor = [ {
 			value : Date.today().addHours(7),
-			color : areaColor[0]
+			color : $scope.getZoneColor(Date.today().addHours(7))
 		}, {
 			value : Date.today().addHours(11),
-			color : areaColor[1]
+			color : $scope.getZoneColor(Date.today().addHours(11))
 		}, {
 			value : Date.today().addHours(17),
-			color : areaColor[2]
+			color : $scope.getZoneColor(Date.today().addHours(17))
 		}, {
 			value : Date.today().addHours(19),
-			color : areaColor[3]
+			color : $scope.getZoneColor(Date.today().addHours(19))
 		}, {
 			value : Date.today().addHours(24),
-			color : areaColor[4]
+			color : $scope.getZoneColor(Date.today().addHours(24))
 		} ];
+		
+		if($scope.cppTime)
+		{
+			var _plotBand = [{
+				color: '#ffe0b3', // Color value
+				from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
+				to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
+				label: { 
+					text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+					align: 'center' // Positioning of the label. 
+				}// End of the plot band
+			}];
+			
+			var cppZone = 
+				[{
+					value : Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes),
+					color : 'orange'
+				},
+				{
+					value : Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes),
+					color : $scope.getZoneColor(Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes))
+				}
+				];
+			
+			_zonesWithSolidColor = _.union(_zonesWithSolidColor, cppZone);
+			_zonesWithSolidColor = _.sortBy(_zonesWithSolidColor, function(o) { return o.value; });
+			console.log("zone", _zonesWithSolidColor);
+		}
+		
+		
 
 		var _zonesWithClass = [ {
 			value : Date.today().addHours(7),
@@ -338,18 +376,19 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			fillColor : (($scope.isHoliday || $scope.isWeekend)? areaColor[0]:null),
 			fillOpacity: 0.7
 		});
-
-		_series.push({
-			name : 'Cost',
-			lineWidth: 1,
-			color : legendColor[1],
-			data : pdata,
-			yAxis : 0,
-			zoneAxis : 'x',
-			zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
-			fillColor : (($scope.isHoliday || $scope.isWeekend)? areaColor[0]:null),
-			fillOpacity: 0.5
-		});
+		
+		if($scope.mySeries == "option2")
+			_series.push({
+				name : 'Cost',
+				lineWidth: 1,
+				color : legendColor[1],
+				data : pdata,
+				yAxis : 0,
+				zoneAxis : 'x',
+				zones : (($scope.isHoliday || $scope.isWeekend)? null:_zonesWithSolidColor),
+				fillColor : (($scope.isHoliday || $scope.isWeekend)? areaColor[0]:null),
+				fillOpacity: 0.5
+			});
 
 		_series.push({
 			name : 'Cumulative cost',
@@ -454,22 +493,28 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	};*/
 
 	$scope.updateGraph = function(edatas, pdatas, cdatas, pieDatas) {
-		var eseries = $scope.chart.series[0];
+		var series = _.filter($scope.chart.series, function(s){ return s.name == "Energy" });
+		var eseries = series[0];
 		$.each(edatas, function(index, edata) {
 			eseries.addPoint(edata, true);
 		});
 
-		var pseries = $scope.chart.series[1];
-		$.each(pdatas, function(index, pdata) {
-			pseries.addPoint(pdata, true);
-		});
+		if($scope.mySeries == "option2"){
+			series = _.filter($scope.chart.series, function(s){ return s.name == "Cost" });
+			var pseries = series[0];
+			$.each(pdatas, function(index, pdata) {
+				pseries.addPoint(pdata, true);
+			});
+		}
 
-		var cseries = $scope.chart.series[2];
+		series = _.filter($scope.chart.series, function(s){ return s.name == "Cumulative cost" });
+		var cseries = series[0];
 		$.each(cdatas, function(index, cdata) {
 			cseries.addPoint(cdata, true);
 		});
 
-		var pieseries = $scope.chart.series[3];
+		series = _.filter($scope.chart.series, function(s){ return s.name == "Total cost" });
+		var pieseries = series[0];
 		$.each(pieDatas, function(index, pieData) {
 			pieseries.setData(createPieChartdata(pieData));
 		});
@@ -493,11 +538,12 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$scope.queryString = "start="+ $scope.startTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
 		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
-				//DataService.getDemoEnergyData("apiData.json").then(
 				function(res) {
 					$scope.online = true;
 					$rootScope.$broadcast('timer-start');
 					$scope.energyData = res;
+					$scope.timeGap = $scope.startTime - ($scope.energyData[0].startDate/1000);
+					$scope.message = "Latest data not available. Manipulating data to plot graph";
 					$scope.seriesData = $scope.dataTillNow($scope.nowTime);
 					$scope.totalCost = $scope.seriesData.cumCostData[$scope.seriesData.cumCostData.length-1].y/100; // divided by 100 (unit - cent)
 					$scope.createGraph($scope.seriesData.energyData, $scope.seriesData.costData, $scope.seriesData.cumCostData,$scope.seriesData.breakedUpCost);
@@ -527,16 +573,16 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 
 	$scope.setPieText = function()
 	{
+		var pie = _.filter($scope.chart.series, function(s){ return s.name == "Total cost" });
 		var position = null,
 		plotLine,
 		newx,
 		d,
 		xAxis = $scope.chart.xAxis[0],
 		rend = $scope.chart.renderer,
-		pie = $scope.chart.series[3],
-		left = $scope.chart.plotLeft + pie.center[0],
-		top = $scope.chart.plotTop + pie.center[1],
-		totalCost = pie.yData[0] + pie.yData[1] + pie.yData[2];
+		left = $scope.chart.plotLeft + pie[0].center[0],
+		top = $scope.chart.plotTop + pie[0].center[1],
+		totalCost = pie[0].yData[0] + pie[0].yData[1] + pie[0].yData[2];
 		$scope.pieText = rend.text("<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 	}
 

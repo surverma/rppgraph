@@ -9,7 +9,7 @@
 		<div class="text-right"><strong>Effective: </strong>{{convertToUTC(schedules[0].effDate) | date: "mediumDate"}} - {{convertToUTC(schedules[0].endDate) | date: "mediumDate"}}</div>
 	</div>
 	<div class="boxes2">
-		<div ng-class="criticalZone? 'col-md-3' : 'col-md-4'" class="no-padding">
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
 			<div class="title">
 				<h3>OFF PEAK</h3>
 				<span class="alt-text">LOWEST COST {{(schedules | filter:{peak: 'TOU_OP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
@@ -20,7 +20,7 @@
 				<p>Weekends and Holidays: <span data-ng-repeat="schedule in schedules | filter:getWeekendHolidayPeak"><span data-ng-show="$last">{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span></span><br />(<a href="#" data-overlay="/features/charts/holiday-schedule" data-ng-click="setYear(schedules)">Holiday Schedule</a>)</p>
 			</div>
 		</div>
-		<div ng-class="criticalZone? 'col-md-3' : 'col-md-4'" class="no-padding">
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
 			<div class="title yellow">
 				<h3>MID PEAK</h3>
 				<span class="alt-text">MID COST {{(schedules | filter:{peak: 'TOU_MP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
@@ -30,7 +30,7 @@
 				<p>Weekdays: <span data-ng-repeat="schedule in schedules | filter:getMidPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
 			</div>
 		</div>
-		<div ng-class="criticalZone? 'col-md-3' : 'col-md-4'" class="no-padding">
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
 			<div class="title red">
 				<h3>ON PEAK</h3>
 				<span class="alt-text">HIGHEST COST {{(schedules | filter:{peak: 'TOU_PK'}:true | orderBy: 'price')[0].price}}c/kWh</span>
@@ -40,7 +40,7 @@
 				<p>Weekdays: <span data-ng-repeat="schedule in schedules | filter:getPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
 			</div>
 		</div>
-		<div ng-if="criticalZone" ng-class="col-md-3" class="no-padding">
+		<div ng-if="criticalZone" ng-class="col-sm-3" class="no-padding">
 			<div class="title orange">
 				<h3>CRITICAL PEAK</h3>
 				<span class="alt-text">CRITICAL COST {{(schedules | filter:{peak: 'TOU_CP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
