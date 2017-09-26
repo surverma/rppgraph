@@ -18,6 +18,12 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.mySeries = "option1";
 	var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
 	$scope.online = true;
+	$scope.cppDropdown = [
+		{name : "7 AM", value : "07"},{name : "8 AM", value : "08"},{name : "9 AM", value : "09"},
+		{name : "10 AM", value : "10"},{name : "11 AM", value : "11"},{name : "12 PM", value : "12"},{name : "1 PM", value : "13"},{name : "2 PM", value : "14"},
+	    {name : "3 PM", value : "15"},{name : "4 PM", value : "16"},{name : "5 PM", value : "17"},{name : "6 PM", value : "18"},{name : "7 PM", value : "19"},
+	    {name : "8 PM", value : "20"},{name : "9 PM", value : "21"},{name : "10 PM", value : "22"}
+	];
 	
 	
 	$scope.redraw = function() {
@@ -418,24 +424,20 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		_series.push({
 			type: 'pie',
 			name: 'Total cost',
+			tooltip: {enabled: false},
 			plotOptions: {
-				series: {
-					tooltip: {
-						backgroundColor: 'black',
-						borderWidth: 0,
-						shadow: false,
-						useHTML: true,
-						padding: 0,
-						pointFormat: '<span class="f32"><span class="flag {point.flag}">' +
-						'</span></span> {point.name}<br>' +
-						'<span style="font-size:30px">{point.value}/km²</span>',
-						positioner: function () {
-							return { x: 0, y: 250 };
-						},
-						formatter : function() {
-							var x= 1 ;
+				pie:{
+					allowPointSelect: true,
+					borderWidth: 0,
+					cursor: 'pointer',
+					innerSize: 130,
+					dataLabels: {enabled: false},
+					events: {
+						click:function(event) {
+							var x = 1;			
 						}
-					}
+					},
+					shadow: false
 				}
 			},
 			data: createPieChartdata(pieData),
@@ -688,7 +690,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	
 	$scope.init();
 	
-	$(document).on('click', '.number-spinner button', function () {    
+	/*$(document).on('click', '.number-spinner button', function () {    
 		var oldValue = $scope.criticalStartTime.hours,
 		newVal = 0,
 		btn = $(this);
@@ -707,5 +709,5 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.criticalStartTime.value = ($scope.criticalStartTime.hours<10)?("0"+$scope.criticalStartTime.hours) + ":" + "00":($scope.criticalStartTime.hours) + ":" + "00";
 		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
 		console.log("CPP", $scope.criticalStartTime);
-	});
+	});*/
 }]);

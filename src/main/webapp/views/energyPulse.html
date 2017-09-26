@@ -70,11 +70,11 @@
 							 <input type="checkbox" value="" ng-model="criticalZone"
 							ng-click="init()"><span>CPP	check</span>)<br>
 						<div class="col-sm-8">
-						<input
+							<input
 							type="checkbox" value="" ng-disabled="!criticalZone"
 							ng-model="cppTime" ng-click="init()"> CPP Start Time (hour)
 							<div class="input-group number-spinner">
-								<span class="input-group-btn">
+							<!--  <span class="input-group-btn">
 									<button class="btn btn-default" data-dir="dwn" ng-disabled="!criticalZone || !cppTime">
 										<span class="glyphicon glyphicon-minus"></span>
 									</button>
@@ -84,7 +84,10 @@
 										<span class="glyphicon glyphicon-plus"></span>
 									</button>
 								</span>
-							</div>
+							</div> -->
+							<select ng-model="criticalStartTime.hours" ng-change="changeCppTime()" ng-disabled="!criticalZone || !cppTime">
+								<option ng-repeat="x in cppDropdown" value="{{x.value}}">{{x.name}}</option>
+							</select>
 						</div>
 						<div class="col-sm-4"> Duration (hour)<input type="text" class="form-control text-center" ng-model="cppDuration" ng-disabled="!criticalZone || !cppTime"></div>
 						<br>

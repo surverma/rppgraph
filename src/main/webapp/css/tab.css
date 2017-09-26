@@ -40,3 +40,9 @@
     background: linear-gradient(to bottom, #f8f8f8 0%,#e9e9e9 2%,#e3e3e3 70%,#dcdcdc 100%);
     padding: 17px 23px 14px;
 }
+
+.tooltip {
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px; 
+} 

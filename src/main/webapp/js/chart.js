@@ -614,6 +614,7 @@ function EnergyPulseGraphOption() {
 						if(point.series.name == "Cumulative cost")
 							text = text + " : </b> " + (point.y/100).toFixed(2) + "&cent;<br>";
 					});
+					var div = '<div style="background-color: #e6e6e6" class="tooltip">' + text +  '</div>';
 					return text;
 				}
 			},
@@ -623,6 +624,38 @@ function EnergyPulseGraphOption() {
 	this.plotOptions = {
 			series : {
 				//color : '#0080ff',
+				allowPointSelect: true,
+				borderWidth: 0,
+				cursor: 'pointer',
+				innerSize: 130,
+				dataLabels: {enabled: false},
+				events: {
+					click:function(event) {/*
+						if(this.name == 'Total cost'){
+							var point = event.point.options;
+							var percent = event.point.percentage;
+	                        var chart = this.chart;
+	                        if (!chart.lbl) {
+	                            chart.lbl = chart.renderer.label('')
+	                                .attr({
+	                                    padding: 10,
+	                                    r: 20,
+	                                    fill: Highcharts.getOptions().colors[1]
+	                                })
+	                                .css({
+	                                    color: '#FFFFFF'
+	                                })
+	                                .add();
+	                        }
+	                        chart.lbl
+	                            .show()
+	                            .attr({
+	                                text: point.name + ', y: ' + point.y + ', percentage: ' + percent
+	                            });
+						}
+					*/}
+				},
+				shadow: false,
 				lineWidth : 0,
 				turboThreshold: 6000
 
