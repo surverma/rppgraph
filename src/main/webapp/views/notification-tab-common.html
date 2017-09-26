@@ -42,8 +42,8 @@
 		</div>
 		<div ng-if="criticalZone" ng-class="col-sm-3" class="no-padding">
 			<div class="title orange">
-				<h3>CRITICAL PEAK</h3>
-				<span class="alt-text">CRITICAL COST {{(schedules | filter:{peak: 'TOU_CP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
+				<h3>CRITICAL EVENT</h3>
+				<span class="alt-text">COST {{(schedules | filter:{peak: 'TOU_CP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
 			</div>
 			<div class="entry">
 				<p><strong>When demand for electricity is critical</strong></p>

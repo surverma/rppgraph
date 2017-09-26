@@ -7,16 +7,17 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 120;
 	$scope.interval = 120;
-	$scope.clientToken = '27d0b868-add1-48a5-bf02-44f854e487d3';
+	$scope.clientToken = '021bbbb7-4a8b-4564-bafd-cda58fa57504';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
 	$scope.cppTime = false;
-	$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0, meridian: undefined};
-	$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours)
-	.addMinutes($scope.criticalStartTime.minutes).getTime();
+	$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0};
+	$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
+	$scope.cppDuration = 1;
 	$scope.mySeries = "option1";
 	var areaColor = ["rgb(135, 181, 76)","rgb(246, 208, 35)","rgb(196, 84, 75)","rgb(221, 183, 10)","rgb(135, 180, 81)"];
+	$scope.online = true;
 	
 	
 	$scope.redraw = function() {
@@ -52,10 +53,10 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			criticalTOUSchedule.effHour = $scope.criticalStartTime.value;
 
 			var res = $scope.criticalStartTime.value.split(":");
-			var criticalEndHour = (parseInt(res[0])+1) + ":" + res[1];
+			var criticalEndHour = (parseInt(res[0])+parseInt($scope.cppDuration)) + ":" + res[1];
 			criticalTOUSchedule.endHour = criticalEndHour;
 		}
-		criticalTOUSchedule.price = 6.5;
+		criticalTOUSchedule.price = 49.8;
 		criticalTOUSchedule.season = "Summer";
 		$scope.chartTOUSchedules[0].push(criticalTOUSchedule);
 	}
@@ -101,6 +102,22 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		else
 			costZone.peakFactor = 3;
 	}
+	
+	$scope.energyDownloadOption = {
+			fileName : 'energydata.csv',
+			mode : 'csv',
+			header : true,
+			columns : [ {
+				name : 'startDate',
+				label : 'Time'
+			}, {
+				name : 'delivered',
+				label : 'Usage(kWh)'
+			}, {
+				name : 'price',
+				label : 'Cost(cent)'
+			} ]
+		};
 
 
 	$scope.getEnergyCost = function(time) {
@@ -163,7 +180,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 			});
 			finalZone = Object.create(costZone[0]);
 			if($scope.criticalZone && $scope.cppTime){
-				if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + 60*60*1000))	
+				if(time >= $scope.criticalStartTime.timeStamp && time <= ($scope.criticalStartTime.timeStamp + $scope.cppDuration*60*60*1000))	
 				{
 					finalZone.peak = "TOU_CE";
 				}
@@ -320,25 +337,25 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		{
 			var _plotBand = [{
 				color: '#ffe0b3', // Color value
-				from: Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
-				to: Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes).getTime(),
+				from: Date.today().addHours(parseInt($scope.criticalStartTime.hours)).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
+				to: Date.today().addHours(parseInt($scope.criticalStartTime.hours)+parseInt($scope.cppDuration)).addMinutes($scope.criticalStartTime.minutes).getTime(),
 				label: { 
 					text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
 					align: 'center' // Positioning of the label. 
 				}// End of the plot band
 			}];
-			
+			console.log("Plot Band", _plotBand);
 			var cppZone = 
 				[{
-					value : Date.today().addHours($scope.criticalStartTime.hours+1).addMinutes($scope.criticalStartTime.minutes),
-					color : 'orange'
-				},
-				{
 					value : Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes),
 					color : $scope.getZoneColor(Date.today().addHours($scope.criticalStartTime.hours).addMinutes($scope.criticalStartTime.minutes))
-				}
-				];
+				},
+				{
+					value : Date.today().addHours(parseInt($scope.criticalStartTime.hours)+parseInt($scope.cppDuration)).addMinutes($scope.criticalStartTime.minutes),
+					color : 'orange'
+				}];
 			
+			_zonesWithSolidColor = _.reject(_zonesWithSolidColor, function(o){ return (o.value >= cppZone[0].value) && (o.value <= cppZone[1].value) });
 			_zonesWithSolidColor = _.union(_zonesWithSolidColor, cppZone);
 			_zonesWithSolidColor = _.sortBy(_zonesWithSolidColor, function(o) { return o.value; });
 			console.log("zone", _zonesWithSolidColor);
@@ -401,14 +418,25 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		_series.push({
 			type: 'pie',
 			name: 'Total cost',
-			tooltip : {
-				borderWidth : 0,
-				useHTML : true,
-				style : {
-					padding : 0,
-				},
-				pointFormat: '{series.name}: <b>{point.y}</b><br/>',
-				shared : true
+			plotOptions: {
+				series: {
+					tooltip: {
+						backgroundColor: 'black',
+						borderWidth: 0,
+						shadow: false,
+						useHTML: true,
+						padding: 0,
+						pointFormat: '<span class="f32"><span class="flag {point.flag}">' +
+						'</span></span> {point.name}<br>' +
+						'<span style="font-size:30px">{point.value}/km²</span>',
+						positioner: function () {
+							return { x: 0, y: 250 };
+						},
+						formatter : function() {
+							var x= 1 ;
+						}
+					}
+				}
 			},
 			data: createPieChartdata(pieData),
 			innerSize: '60%',
@@ -582,7 +610,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		left = $scope.chart.plotLeft + pie[0].center[0],
 		top = $scope.chart.plotTop + pie[0].center[1],
 		totalCost = pie[0].yData[0] + pie[0].yData[1] + pie[0].yData[2];
-		$scope.pieText = rend.text("<b>" + $scope.formatCost(totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
+		$scope.pieText = rend.text("<b>" + $scope.formatCost($scope.totalCost) + "</b>", left,  top).attr({ 'text-anchor': 'middle'}).add();
 	}
 
 	$scope.realtimeUsageData = function() {
@@ -646,23 +674,38 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	
 	$scope.init = function(){
 		$scope.timeGap = 0;
+		$scope.online = true;
 		if($scope.criticalZone)
 			$scope.addCriticalPeakToTOUSchedule();
 		$scope.fetchInitialUsageData();
 	}
 	
+	$scope.changeCppTime = function(){
+		$scope.criticalStartTime.value = ($scope.criticalStartTime.hours.length<2)?("0"+$scope.criticalStartTime.hours) + ":" + "00":($scope.criticalStartTime.hours) + ":" + "00";
+		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
+		console.log("CPP", $scope.criticalStartTime);
+	}
+	
 	$scope.init();
 	
-	$( document ).ready(function() {
-		$('#timepicker1').timepicker({showMeridian: false});
-		$('#timepicker1').timepicker().on('changeTime.timepicker', function(e) {
-			console.log('The time is ' + e.time.value);
-			console.log('The hour is ' + e.time.hours);
-			console.log('The minute is ' + e.time.minutes);
-			$scope.criticalStartTime = e.time;
-			$scope.criticalStartTime.timeStamp = Date.today().addHours(e.time.hours)
-			.addMinutes(e.time.minutes).getTime();
-			$scope.fetchInitialUsageData();
-		});
+	$(document).on('click', '.number-spinner button', function () {    
+		var oldValue = $scope.criticalStartTime.hours,
+		newVal = 0,
+		btn = $(this);
+		
+		
+		if (btn.attr('data-dir') == 'up') {
+			newVal = ((parseInt(oldValue)+1)%24);
+		} else {
+			if (oldValue > 0) {
+				newVal = parseInt(oldValue) - 1;
+			} else {
+				newVal = 0;
+			}
+		}
+		$scope.criticalStartTime.hours = newVal;
+		$scope.criticalStartTime.value = ($scope.criticalStartTime.hours<10)?("0"+$scope.criticalStartTime.hours) + ":" + "00":($scope.criticalStartTime.hours) + ":" + "00";
+		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
+		console.log("CPP", $scope.criticalStartTime);
 	});
 }]);

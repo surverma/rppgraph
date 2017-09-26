@@ -532,16 +532,7 @@ function EnergyPulseGraphOption() {
 			tickInterval : 5 * 60 * 60 * 1000,
 			tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
 				Date.today().addHours(12).getTime(), Date.today().addHours(16).getTime(),
-				Date.today().addHours(20).getTime()],
-				/*plotBands : [{
-					color: 'orange', // Color value
-					from: Date.today().addHours(15).getTime(), // Start of the plot band
-					to: Date.today().addHours(16).getTime(),
-					label: { 
-						text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
-						align: 'center' // Positioning of the label. 
-					}// End of the plot band
-				}]*/
+				Date.today().addHours(20).getTime()]
 	};
 	
 	this.chart.events = { load: function() {
