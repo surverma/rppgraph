@@ -222,6 +222,92 @@ function EnergyPulseMonitorOption() {
 }
 
 
+function EnergyPieOption() {
+	$.extend(true, this, new UsageGraphOption());
+
+	this.chart.type = 'pie';
+	this.chart.renderTo = 'pie_container';
+	this.chart.legend = {enabled: false};
+	this.chart.margin =  [0, 0, 0, 0];
+	this.chart.width = 500;
+	this.chart.height = 216;
+	
+	this.tooltip = {
+			backgroundColor: 'none',
+			borderWidth: 0,
+			shadow: false,
+			useHTML: true,
+			padding: 0,
+			/* pointFormat: '<span class="f32"></span> {point.name}<br>' +
+            '<span style="font-size:30px">{point.y}%</span>',*/
+			formatter : function() {
+				//var text = "<b>" + this.key + " Cost</b><br>" + this.y.toFixed(2) + "&cent; (" + Math.round(this.percentage) + "%)";
+				var text = "<b>" + Math.round(this.percentage) + "<b/>% (<b>&cent;" + this.y.toFixed(2) + "</b>) of your <br> energy cost accounts for <br> <b>" + Math.round(this.point.options.z) + "<b/>%" +  
+				" of your energy use";
+				return text;
+			},
+			positioner: function () {
+				return { x: 310, y: 90 };
+			}
+	};
+
+	/*this.title.text = "Daily Energy Monitor";
+	this.subtitle.text = Date.today().toString('MMM dd, yyyy');*/
+
+	/*this.yAxis = {
+			min: 0,
+			max: 100,
+			lineWidth: 0,
+			tickPositions: []
+	},*/
+	/*this.xAxis = {
+		min : Date.today().set({
+			hour : 0,
+			minute : 0
+		}),
+		max : Date.today().set({
+			hour : 23,
+			minute : 59
+		}),
+		labels : {
+			formatter : timeSlabFormatter
+		},
+		endOnTick : true,
+		tickInterval : 5 * 60 * 60 * 1000,
+		tickPositions : [ Date.today().getTime(), Date.today().addHours(6).getTime(),
+				Date.today().addHours(12).getTime(), Date.today().addHours(18).getTime(),
+				Date.today().addHours(24).getTime() ]
+	};*/
+	
+	this.series =[{
+			name: 'Total cost',
+			tooltip: {enabled: false},
+			plotOptions: {
+				pie:{
+					allowPointSelect: true,
+					borderWidth: 0,
+					cursor: 'pointer',
+					innerSize: 130,
+					dataLabels: {enabled: false},
+					events: {
+						click:function(event) {
+							var x = 1;			
+						}
+					},
+					shadow: false
+				}
+			},
+			innerSize: '60%',
+			/*center: [30, -30],*/
+			size: 100,
+			showInLegend: false,
+			dataLabels: {
+				enabled: false
+			}
+	}]
+
+}
+
 function EnergyUsageGraph(idata) {
 	$.extend(true, this, new UsageGraph());
 	this.data = idata;
@@ -335,23 +421,27 @@ function getCostZone(time)
 	}
 }
 
-function createPieChartdata(pieData)
+function createPieChartdata(pieData,totalEnergy)
 {
 	var data =  [{
         name: 'Off Peak',
-        y: pieData.offPeak,
+        y: pieData.offPeak.cost,
+        z: (pieData.offPeak.energy*100/totalEnergy),
         color: 'rgb(135, 181, 76)'
     }, {
         name: 'Mid Peak',
-        y: pieData.midPeak,
+        y: pieData.midPeak.cost,
+        z: (pieData.midPeak.energy*100/totalEnergy),
         color: 'rgb(246, 208, 35)'
     }, {
         name: 'On Peak',
-        y: pieData.onPeak,
+        y: pieData.onPeak.cost,
+        z: (pieData.onPeak.energy*100/totalEnergy),
         color: 'rgb(196, 84, 75)'
     }, {
         name: 'Critical Event',
-        y: pieData.criticalEvent,
+        y: pieData.criticalEvent.cost,
+        z: (pieData.criticalEvent.energy*100/totalEnergy),
         color: 'orange'
     }
     ];
@@ -595,7 +685,7 @@ function EnergyPulseGraphOption() {
 				padding : 0,
 			},
 			formatter : function() {
-				if(this.series != undefined && this.series.name == 'Total cost')
+				if(this.series != undefined && this.series.name == 'Breakdown cost')
 				{
 					var text = "<b>" + this.key + " Cost</b><br>" + this.y.toFixed(2) + "&cent; (" + Math.round(this.percentage) + "%)";
 					return text;
@@ -611,7 +701,7 @@ function EnergyPulseGraphOption() {
 							text = text + " : </b> " + (point.y).toFixed(0) + " wh<br>"; 
 						if(point.series.name == "Cost")
 							text = text + " : </b> " + (point.y/ (point.point.z.peakFactor *100)).toFixed(2) + "&cent;<br>";
-						if(point.series.name == "Cumulative cost")
+						if(point.series.name == "Total cost")
 							text = text + " : </b> " + (point.y/100).toFixed(2) + "&cent;<br>";
 					});
 					var div = '<div style="background-color: #e6e6e6" class="tooltip">' + text +  '</div>';
