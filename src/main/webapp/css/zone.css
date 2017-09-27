@@ -1,0 +1,38 @@
+/* @import 'https://code.highcharts.com/css/highcharts.css'; */
+:root {
+	--off-peak-color: '#87b54c';
+  	--mid-peak-color: 'rgb(246, 208, 35)';
+  	--on-peak-color: 'rgb(196, 84, 75)';
+  	--energy-stroke : 'rgb(0, 102, 153)';
+  	--cost-stroke : 'rgb(102, 102, 51)';
+}
+
+.highcharts-graph.zone-off-energy {
+	stroke: var(--energy-stroke);
+}
+.highcharts-area.zone-off-energy {
+	fill: var(--off-peak-color);
+}
+.highcharts-point.zone-off-energy {
+	fill: var(--off-peak-color);
+}
+
+.highcharts-graph.zone-mid-energy {
+	stroke: var(--energy-stroke);
+}
+.highcharts-area.zone-mid-energy {
+	fill: var(--off-peak-color);
+}
+.highcharts-point.zone-mid-energy {
+	fill: var(--off-peak-color);
+}
+
+.highcharts-graph.zone-on-energy {
+	stroke: var(--energy-stroke);
+}
+.highcharts-area.zone-on-energy {
+	fill: var(--off-peak-color);
+}
+.highcharts-point.zone-on-energy {
+	fill: var(--off-peak-color);
+}

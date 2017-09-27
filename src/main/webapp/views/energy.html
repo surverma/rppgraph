@@ -1,0 +1,31 @@
+<div ng-if="vm.isMobile()" class="info-bar">
+	<div class="col-xs-6">
+		<span style="font-weight: bold; font-size: x-large;">Download
+			Mobile App for Pilot Program </span>
+	</div>
+	<div class="col-xs-6">
+		<div class="col-xs-3">
+			<img style="max-width: 200%" src="/img/google-play-badge.png" />
+		</div>
+		<div class="col-xs-3 col-xs-offset-4">
+			<img style="max-width: 172%" src="/img/IOS_App_Store_Badge_(En).png" />
+		</div>
+	</div>
+</div>
+
+<div>
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab"
+			href="javascript:void(0);#home">ENERGY PULSE</a></li>
+		<li><a data-toggle="tab" href="javascript:void(0);#menu1">SMART
+				MONITOR</a></li>
+	</ul>
+</div>
+<div class="tab-content">
+	<div id="home" class="tab-pane fade in active">
+		<div ui-view="energyPulse@energy"></div>
+	</div>
+	<div id="menu1" class="tab-pane fade">
+		<div ui-view="smartMonitor@energy"></div>
+	</div>
+</div>
