@@ -1,0 +1,54 @@
+<div class="entry-text" data-ng-repeat="schedules in chartTOUSchedules">
+	<div class="legend" data-ng-show="$index == 0">
+		<strong class="text">Legend</strong>
+		<!-- <img data-ng-src="{{imageBaseUrl}}/myaccount/energyuse/img5.png" class="image" alt="image description" width="22" height="22" /> -->
+		<!-- <a href="#" class="info overlay" data-overlay="/features/charts/estimated-usage">Estimated Usage</a> -->
+	</div>
+	<div class="graff-date">
+		<div class="text"><strong>Time-Of-Use Schedule: </strong>{{getSeasonName(schedules) | uppercase}} {{schedules[0].effDate | date: "yyyy"}}</div>
+		<div class="text-right"><strong>Effective: </strong>{{convertToUTC(schedules[0].effDate) | date: "mediumDate"}} - {{convertToUTC(schedules[0].endDate) | date: "mediumDate"}}</div>
+	</div>
+	<div class="boxes2">
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
+			<div class="title">
+				<h3>OFF PEAK</h3>
+				<span class="alt-text">LOWEST COST {{(schedules | filter:{peak: 'TOU_OP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
+			</div>
+			<div class="entry">
+				<p><strong>When demand for electricity is lowest</strong></p>
+				<p>Weekdays: <span data-ng-repeat="schedule in schedules | filter:getOffPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
+				<p>Weekends and Holidays: <span data-ng-repeat="schedule in schedules | filter:getWeekendHolidayPeak"><span data-ng-show="$last">{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span></span><br />(<a href="#" data-overlay="/features/charts/holiday-schedule" data-ng-click="setYear(schedules)">Holiday Schedule</a>)</p>
+			</div>
+		</div>
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
+			<div class="title yellow">
+				<h3>MID PEAK</h3>
+				<span class="alt-text">MID COST {{(schedules | filter:{peak: 'TOU_MP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
+			</div>
+			<div class="entry">
+				<p><strong>When demand for electricity is moderate</strong></p>
+				<p>Weekdays: <span data-ng-repeat="schedule in schedules | filter:getMidPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
+			</div>
+		</div>
+		<div ng-class="criticalZone? 'col-sm-3' : 'col-sm-4'" class="no-padding">
+			<div class="title red">
+				<h3>ON PEAK</h3>
+				<span class="alt-text">HIGHEST COST {{(schedules | filter:{peak: 'TOU_PK'}:true | orderBy: 'price')[0].price}}c/kWh</span>
+			</div>
+			<div class="entry">
+				<p><strong>When demand for electricity is highest</strong></p>
+				<p>Weekdays: <span data-ng-repeat="schedule in schedules | filter:getPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
+			</div>
+		</div>
+		<div ng-if="criticalZone" ng-class="col-sm-3" class="no-padding">
+			<div class="title orange">
+				<h3>CRITICAL EVENT</h3>
+				<span class="alt-text">COST {{(schedules | filter:{peak: 'TOU_CP'}:true | orderBy: 'price')[0].price}}c/kWh</span>
+			</div>
+			<div class="entry">
+				<p><strong>When demand for electricity is critical</strong></p>
+				<p ng-if="cppTime">Today: <span data-ng-repeat="schedule in schedules | filter:getCriticalPeak"><span>{{formatHour(schedule.effHour)}} - {{formatHour(schedule.endHour)}}</span><span data-ng-show="!$last">, </span></span></p>
+			</div>
+		</div>
+	</div>
+</div>
