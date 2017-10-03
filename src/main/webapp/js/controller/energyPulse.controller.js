@@ -1,13 +1,13 @@
-myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$http', '$timeout', 'DataService', function($scope, $rootScope, $interval, $http, $timeout, DataService) {
+myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$http', '$timeout','$cookies', 'DataService', function($scope, $rootScope, $interval, $http, $timeout,$cookies, DataService) {
 
 	$scope.object = null;
 	$scope.energyData = null;
 	$scope.container = $('#container');
 	$scope.totalCost = 0;
 	$scope.lastRefreshData = null;
-	$scope.refreshRate = 30;
+	$scope.refreshRate = 120;
 	$scope.interval = 120;
-	$scope.clientToken = '021bbbb7-4a8b-4564-bafd-cda58fa57504';
+	$scope.clientToken = 'cb997408-d718-494b-a30c-183f76c5396b';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
@@ -586,7 +586,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.seriesData = null;
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$scope.queryString = "start="+ $scope.startTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
-		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
+		DataService.getEnergyData($scope.startTime,$scope.nowTime,$scope.interval).then(
 				function(res) {
 					$scope.online = true;
 					$rootScope.$broadcast('timer-start');
@@ -657,7 +657,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$rootScope.$broadcast('timer-stop');
 		$scope.queryString = "start="+ $scope.lastOnlineTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
-		DataService.getEnergyData($scope.lastOnlineTime,$scope.nowTime,$scope.interval,$scope.clientToken).then(
+		DataService.getEnergyData($scope.lastOnlineTime,$scope.nowTime,$scope.interval).then(
 				function(res) {
 					$scope.online = true;
 					$scope.timeGap = $scope.lastOnlineTime - (res[0].startDate/1000);
@@ -713,6 +713,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	
 	
 	$scope.init = function(){
+		$scope.mockSetCookie();
 		$scope.timeGap = 0;
 		$scope.totalEnergy = 0;
 		$scope.online = true;
@@ -726,7 +727,14 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
 		console.log("CPP", $scope.criticalStartTime);
 	}
-	
+	$scope.mockSetCookie = function() {
+		console.log("Set cookie..."+$scope.clientToken);
+		$cookies.put('RPP_KEY',$scope.clientToken);
+	}
+	$scope.mockUpdateToken = function() {		
+		$scope.mockSetCookie();	
+		$scope.fetchInitialUsageData();
+	}
 	$scope.init();
 	
 	/*$(document).on('click', '.number-spinner button', function () {    

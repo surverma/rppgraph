@@ -4,7 +4,7 @@ function HttpResponse(code, msg) {
 }
 
 'use strict';
-myapp.service('DataService', function($q, $http, $rootScope) {
+myapp.service('DataService', function($q, $http, $rootScope,$cookies) {
 
 
 	this.getHoliday = function() {
@@ -59,8 +59,9 @@ myapp.service('DataService', function($q, $http, $rootScope) {
 		return result.promise;
 	};
 	
-	this.getEnergyData = function(startTime,endTime,interval,clientToken) {
+	this.getEnergyData = function(startTime,endTime,interval) {
 		//TODO Replace by actual service call
+		var clientToken=$cookies.get('RPP_KEY');
 		var req = {
 				method: 'GET',
 				url: "https://yo5cgvdqgc.execute-api.us-east-1.amazonaws.com/prod/usageapi?start="
