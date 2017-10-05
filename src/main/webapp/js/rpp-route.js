@@ -1,7 +1,7 @@
 var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"])
     myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider,$cookiesProvider){
       // For any unmatched url, send to /route1
-      $urlRouterProvider.otherwise("/energy/null");
+      $urlRouterProvider.otherwise("/energy/E377269");
       
       $stateProvider
       .state('energy', {

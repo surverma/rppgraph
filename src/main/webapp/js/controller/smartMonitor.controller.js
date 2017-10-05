@@ -80,8 +80,10 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 		//chartOption.subtitle.text = Date.today().toLongDateString() + "<br>Today's Energy Cost : <b>¢" + $scope.totalCost.toFixed(2) + "</b>";
 		chartOption.subtitle.text = Highcharts.dateFormat('%A, %B %d,%Y', Date.today()) ;
 		
-		var fillColor = ["rgba(255, 51, 51, 0.7)","rgba(230, 184, 0, 0.7)","rgba(153, 153, 255, 0.7)"];
-		var color = ["rgb(255, 51, 51)","rgb(230, 184, 0)","rgb(153, 153, 255)"];
+		var fillColor = ["rgba(255, 51, 51, 0.7)","rgba(230, 184, 0, 0.7)","rgba(153, 153, 255, 0.7)","rgba(153, 102, 51,0.7)",
+			"rgba(0, 102, 204,0.7)","rgba(204, 102, 153,0.7)"];
+		var color = ["rgb(255, 51, 51)","rgb(230, 184, 0)","rgb(153, 153, 255)","rgb(153, 102, 51)","rgb(0, 102, 204)",
+			"rgb(204, 102, 153)"];
 		var _series = [];
 		
 		for(i=($scope.outlet.length-1);i>=0;i--)
@@ -185,33 +187,39 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;
 		$scope.currentDemand = {};
-	//	$scope.createGraph([]);
+		//	$scope.createGraph([]);
 		var outletSource = [];
 		$scope.outlet = [];
 		for(var i = 0; i< $scope.deviceCount; i++)
 			outletSource.push("outlet" + (i+1) + ".json");
 		/*outletSource.push("outlet2.json");
 		outletSource.push("outlet3.json");*/
-		
-		DataService.getOutletData(outletSource).then(
+		DataService.getHubStatus($scope.meterId).then(
 				function(res) {
-					$scope.outlet = res;
-					$scope.dataTillNow($scope.stacked,$scope.usageEndTime.getTime());
-					
-					$scope.calculateCurrentDemand();
-					$scope.createGraph();
-					if($scope.online)
-					{
-						intervals.push($interval(function() {
-							console.log('fetch data');
-							$scope.realtimeUsageData();
-						}, $scope.refreshRate*1000));
-					}
+					$scope.hubList = res;
+					DataService.getOutletData($scope.hubList).then(
+							function(res) {
+								$scope.outlet = res;
+								$scope.dataTillNow($scope.stacked,$scope.usageEndTime.getTime());
+
+								$scope.calculateCurrentDemand();
+								$scope.createGraph();
+								if($scope.online)
+								{
+									intervals.push($interval(function() {
+										console.log('fetch data');
+										$scope.realtimeUsageData();
+									}, $scope.refreshRate*1000));
+								}
+							},
+							function(error) {
+								$scope.online = false;
+							});
 				},
 				function(error) {
 					$scope.online = false;
 				});
-	};
+	}
 	
 	$scope.realtimeUsageData = function() {
 		$scope.usageEndTime = Date.today().setTimeToNow();

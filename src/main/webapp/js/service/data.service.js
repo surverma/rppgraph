@@ -34,14 +34,14 @@ myapp.service('DataService', function($q, $http, $rootScope,$cookies) {
 		//TODO Replace by actual service call
 		var outletResponses = [];
 		angular.forEach(outlets, function(value, key) {
-			outletResponses.push($http.get(LHConfig.usageDataHost + "/" + value))
+			outletResponses.push($http.get(LHConfig.usageDataHost + "/" + key + ".json"))
 		});
 		
 		var result = $q.defer();
 		$q.all(outletResponses).then(function(responses) {
-			var outletData = [];
+			var outletData = outlets;
 			angular.forEach(responses, function(value, key) {
-				outletData.push(value.data)
+				outletData[key].data = value.data;
 			});
 			result.resolve(outletData);
 		});
@@ -77,6 +77,30 @@ myapp.service('DataService', function($q, $http, $rootScope,$cookies) {
 		$q.all([ energyResponse ]).then(function(responses) {
 			var energyData = responses[0].data;
 			result.resolve(energyData);
+		}, function(error) {
+			console.log('err ', error);
+			result.reject(new HttpResponse(error.status, error.message));
+		});
+		return result.promise;
+	};
+	
+	this.getHubStatus = function(meterId) {
+		//TODO Replace by actual service call
+		var clientToken=$cookies.get('RPP_KEY');
+		var req = {
+				method: 'GET',
+				url: "https://yo5cgvdqgc.execute-api.us-east-1.amazonaws.com/prod/hub/E377269/statuses",
+					headers: {
+						'clientToken' : clientToken,
+						'x-api-key' : 'lxaiz8A8kA6XlSN8CSpbYaFmt9INwuA99D7TeWAf',
+						'Content-Type': 'application/json'
+					}
+		}
+		var energyResponse = $http(req);
+		var result = $q.defer();
+		$q.all([ energyResponse ]).then(function(responses) {
+			var hubStatusData = responses[0].data;
+			result.resolve(hubStatusData);
 		}, function(error) {
 			console.log('err ', error);
 			result.reject(new HttpResponse(error.status, error.message));
