@@ -1,18 +1,18 @@
 var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"])
     myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider,$cookiesProvider){
       // For any unmatched url, send to /route1
-      $urlRouterProvider.otherwise("/energy");
+      $urlRouterProvider.otherwise("/energy/null");
       
       $stateProvider
       .state('energy', {
-    	  url: '/energy',
+    	  url: '/energy/:meter',
     	  controller: 'MainCtrl',
     	  templateUrl: 'views/energy.html',
     	  onEnter : [ '$rootScope', '$stateParams', '$state',
     	  function($rootScope, $stateParams, $state) {
     	  //document.location = ApplConfig.myAccountUrl;
-    		 /* $rootScope.billingId = $stateParams.billingId;
-    		  $rootScope.serviceId = $stateParams.serviceId;*/
+    		  $rootScope.meterId = $stateParams.meter;
+    		  $rootScope.meterId = 'E377269';
     	  } ]
       })
         .state('energy.plot', {
@@ -31,7 +31,6 @@ var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"
 				}
 			},
             onEnter: function(){
-              console.log("enter contacts");
             }
         })
     })
@@ -68,8 +67,11 @@ var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"
 								if(opt.label == "Time"){
 									csvString +=$filter('date')((record[opt.name]), "yyyy-MM-dd HH:mm");
 								}
-								else{
-									csvString += record[opt.name];
+								else if(opt.label.indexOf("Cost")>=0){
+									csvString += record[opt.name].toFixed(2);
+								}
+								else if(opt.label.indexOf("Usage")>=0){
+									csvString += record[opt.name].toFixed(3);
 								}
 								/*if (angular.isArray(opt.format) && opt.format.length == 2) {
 									//This portion is checking whether date is present in record then formatting is done otherwise instead of showing null - is shown

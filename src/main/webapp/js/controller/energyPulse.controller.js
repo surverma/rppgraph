@@ -7,7 +7,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 120;
 	$scope.interval = 120;
-	$scope.clientToken = 'cb997408-d718-494b-a30c-183f76c5396b';
+	$scope.clientToken = '9d0180a0-f9af-4d61-a9b0-85d42ce7bebb';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
@@ -24,7 +24,6 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	    {name : "3 PM", value : "15"},{name : "4 PM", value : "16"},{name : "5 PM", value : "17"},{name : "6 PM", value : "18"},{name : "7 PM", value : "19"},
 	    {name : "8 PM", value : "20"},{name : "9 PM", value : "21"},{name : "10 PM", value : "22"}
 	];
-	
 	
 	$scope.redraw = function() {
 		$scope.seriesData = null;
@@ -473,6 +472,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.chart = new Highcharts.chart(chartOption);
 		console.log("Pie option",donutOption);
 		$scope.donutChart = new Highcharts.chart(donutOption);
+		$scope.$emit('chartLoaded');
 
 	};
 
@@ -591,6 +591,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 					$scope.online = true;
 					$rootScope.$broadcast('timer-start');
 					$scope.energyData = res;
+					$scope.totalEnergyData = res;
 					$scope.timeGap = $scope.startTime - ($scope.energyData[0].startDate/1000);
 					$scope.message = "Latest data not available. Manipulating data to plot graph";
 					$scope.seriesData = $scope.dataTillNow($scope.nowTime);
@@ -618,7 +619,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 				});
 
 		//$scope.createPieGraph(breakUpCost,$scope.totalCost);
-
+		$scope.$emit('chartLoaded');
 	}
 
 	$scope.setDonutText = function()
@@ -663,7 +664,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 					$scope.timeGap = $scope.lastOnlineTime - (res[0].startDate/1000);
 					$rootScope.$broadcast('timer-start');
 					$scope.energyData = res;
-					//$scope.energyData = _.union($scope.energyData, res);
+					$scope.totalEnergyData = _.union($scope.totalEnergyData, res);
 					$scope.seriesData = $scope.dataTillNow($scope.nowTime);
 					/*$scope.totalCost = _.reduce($scope.seriesData.costData, function(memo, num) {
 						return memo + num[1]

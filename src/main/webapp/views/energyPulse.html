@@ -23,8 +23,8 @@
 				<a href="#" class="info overlay"
 					data-overlay="/features/charts/about-data">About This Data</a> <a
 					class="download overlay" href="javascript:void(0);" data-download
-					data-download-option="energyDownloadOption"
-					data-ng-model="energyData">Download Energy Use Data</a>
+					data-download-option="energyDownloadOption" data-ng-disabled="!totalEnergyData"
+					data-ng-model="totalEnergyData">Download Energy Use Data</a>
 			</div>
 			<div id="pie_container" style="height: 216px; min-width: 500px"></div>
 			<div ng-include="'views/notification-tab-common.html'"></div>

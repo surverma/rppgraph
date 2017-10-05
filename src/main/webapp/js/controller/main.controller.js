@@ -127,6 +127,26 @@ myapp.controller('MainCtrl',['$scope','$rootScope', '$interval', '$http','DataSe
 		return isWeekend;
 	};
 	
+	$scope.respondToSizingMessage = function(e) { 
+		$scope.$on('chartLoaded', function(event, data) {
+		    console.log( "ready!" );
+		    if(e.origin == LHConfig.myLhOrigin) { 
+				// e.data is the string sent by the origin with postMessage. 
+				if(e.data == 'sizing?') {
+					var message = {
+							type:'redraw',
+							height: document.body.scrollHeight
+					};
+					e.source.postMessage(message, e.origin);
+				} 
+			} 
+		});
+		
+	} 
+	
+	// we have to listen for 'message' 
+	window.addEventListener('message', $scope.respondToSizingMessage, false); 
+	
 	$scope.init = function()
 	{
 		$rootScope.startTime = Date.today().getTime()/1000;
