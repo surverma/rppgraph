@@ -423,25 +423,34 @@ function getCostZone(time)
 
 function createPieChartdata(pieData,totalEnergy)
 {
+	if(typeof(pieData.offPeak) == "undefined")
+		pieData.offPeak = {};
+	if(typeof(pieData.midPeak) == "undefined")
+		pieData.midPeak = {};
+	if(typeof(pieData.onPeak) == "undefined")
+		pieData.onPeak = {};
+	if(typeof(pieData.criticalEvent) == "undefined")
+		pieData.criticalEvent = {};
+	
 	var data =  [{
         name: 'Off Peak',
-        y: pieData.offPeak.cost,
-        z: (pieData.offPeak.energy*100/totalEnergy),
+        y: pieData.offPeak.cost || 0,
+        z: (pieData.offPeak.energy*100/totalEnergy) || 0,
         color: 'rgb(135, 181, 76)'
     }, {
         name: 'Mid Peak',
-        y: pieData.midPeak.cost,
-        z: (pieData.midPeak.energy*100/totalEnergy),
+        y: pieData.midPeak.cost || 0,
+        z: (pieData.midPeak.energy*100/totalEnergy) || 0,
         color: 'rgb(246, 208, 35)'
     }, {
         name: 'On Peak',
-        y: pieData.onPeak.cost,
-        z: (pieData.onPeak.energy*100/totalEnergy),
+        y: pieData.onPeak.cost || 0,
+        z: (pieData.onPeak.energy*100/totalEnergy) || 0,
         color: 'rgb(196, 84, 75)'
     }, {
         name: 'Critical Event',
-        y: pieData.criticalEvent.cost,
-        z: (pieData.criticalEvent.energy*100/totalEnergy),
+        y: pieData.criticalEvent.cost || 0,
+        z: (pieData.criticalEvent.energy*100/totalEnergy) || 0,
         color: 'orange'
     }
     ];
@@ -480,11 +489,11 @@ function SmartMonitorGraphOption() {
 			min : Date.today().set({
 				hour : 0,
 				minute : 0
-			}),
+			}).getTime(),
 			max : Date.today().set({
 				hour : 23,
 				minute : 59
-			}),
+			}).getTime(),
 			labels : {
 				formatter : timeSlabFormatter
 			},
@@ -524,12 +533,13 @@ function SmartMonitorGraphOption() {
 			}
 		});
 		setInterval(function() {
-			if(xAxis.plotLinesAndBands != undefined)
+			var plotLineAndBands = xAxis.plotLinesAndBands;
+			if(plotLineAndBands != undefined)
 			{
-			 plotLine = xAxis.plotLinesAndBands[0].svgElem;
+			 plotLine = plotLineAndBands[plotLineAndBands.length-1].svgElem;
 			 d = plotLine.d.split(' ');
 			 newx = xAxis.toPixels(new Date().getTime()) - d[4];
-			 xAxis.plotLinesAndBands[0].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
+			 plotLineAndBands[plotLineAndBands.length-1].label.textSetter("<div><b>(" + Highcharts.dateFormat('%I:%M:%S %p', new Date().getTime()) + ")</b></div>");
 			 plotLine.animate({
 	              translateX : newx
 	            }, 300);
@@ -576,7 +586,7 @@ function SmartMonitorGraphOption() {
 function EnergyPulseGraphOption() {
 	$.extend(true, this, new UsageGraphOption());
 
-	this.chart.type = 'areaspline';
+	this.chart.type = 'area';
 	this.chart.renderTo = 'container';
 
 	this.title.text = "Today's Energy Usage and Cost";
@@ -611,11 +621,11 @@ function EnergyPulseGraphOption() {
 			min : Date.today().set({
 				hour : 0,
 				minute : 0
-			}),
+			}).getTime(),
 			max : Date.today().set({
 				hour : 23,
 				minute : 59
-			}),
+			}).getTime(),
 			labels : {
 				formatter : timeSlabFormatter
 			},

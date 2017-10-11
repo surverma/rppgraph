@@ -5,6 +5,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 	$scope.loadFull = true;
     $scope.online = true;
     $scope.stacked = false;
+    var areaColor = ["rgba(135, 181, 76,0.5)","rgba(246, 208, 35,0.5)","rgba(196, 84, 75,0.5)","rgba(221, 183, 10,0.5)","rgba(135, 180, 81,0.5)"];
 	
 	/*$scope.redraw = function(stacked) {
 		$scope.container.highcharts().destroy();
@@ -84,6 +85,33 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 			"rgba(0, 102, 204,0.7)","rgba(204, 102, 153,0.7)"];
 		var color = ["rgb(255, 51, 51)","rgb(230, 184, 0)","rgb(153, 153, 255)","rgb(153, 102, 51)","rgb(0, 102, 204)",
 			"rgb(204, 102, 153)"];
+		
+		var _plotBand = [{
+			color: areaColor[0], // Color value
+			from: Date.today().addHours(0).getTime(), // Start of the plot band
+			to: Date.today().addHours(7).getTime(),
+		},
+		{
+			color: areaColor[1], // Color value
+			from: Date.today().addHours(7).getTime(), // Start of the plot band
+			to: Date.today().addHours(11).getTime(),
+		},
+		{
+			color: areaColor[2], // Color value
+			from: Date.today().addHours(11).getTime(), // Start of the plot band
+			to: Date.today().addHours(17).getTime()
+		},
+		{
+			color: areaColor[3], // Color value
+			from: Date.today().addHours(17).getTime(), // Start of the plot band
+			to: Date.today().addHours(19).getTime()
+		},
+		{
+			color: areaColor[4], // Color value
+			from: Date.today().addHours(19).getTime(), // Start of the plot band
+			to: Date.today().addHours(24).getTime()
+		}];
+		
 		var _series = [];
 		
 		for(i=($scope.outlet.length-1);i>=0;i--)
@@ -96,6 +124,7 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 			});
 		}
 		chartOption.series = _series;
+		chartOption.xAxis.plotBands = _plotBand;
 		$scope.chart = new Highcharts.chart(chartOption);
 
 	};

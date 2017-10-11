@@ -1,3 +1,18 @@
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    'use strict';
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+
 var myapp = angular.module('myapp', ["ui.router","ng.deviceDetector","ngCookies"])
     myapp.config(function($stateProvider, $urlRouterProvider,deviceDetectorProvider,$cookiesProvider){
       // For any unmatched url, send to /route1

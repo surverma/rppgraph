@@ -7,7 +7,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 120;
 	$scope.interval = 120;
-	$scope.clientToken = '736cb213-d67a-413e-b7e3-b07c2babe990';
+	$scope.clientToken = '998719bd-3957-48a7-8182-736044cb2f92';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
@@ -582,7 +582,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 		$scope.stopAllIntervals();
 		//$scope.usageEndTime= Date.now();
 		$scope.totalCost = 0;
-		//$scope.createGraph([], [], [], []);
+		$scope.createGraph([], [], [], {});
 		$scope.seriesData = null;
 		$scope.nowTime = Math.floor(Date.now()/1000);
 		$scope.queryString = "start="+ $scope.startTime + "&end=" + $scope.nowTime + "&interval=" + $scope.interval;
@@ -706,10 +706,15 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	});
 
 	$scope.toggleToken = function(){
-		if($scope.clientToken == "XYZ")
+		if($scope.clientToken == "XYZ"){
 			$scope.clientToken = token;
+			$cookies.put('RPP_KEY',$scope.clientToken);
+		}
 		else
+		{
 			$scope.clientToken = "XYZ";
+			$cookies.put('RPP_KEY',$scope.clientToken);
+		}
 	}
 	
 	
