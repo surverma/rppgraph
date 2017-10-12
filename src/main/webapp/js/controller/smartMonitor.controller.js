@@ -6,6 +6,17 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
     $scope.online = true;
     $scope.stacked = false;
     var areaColor = ["rgba(135, 181, 76,0.5)","rgba(246, 208, 35,0.5)","rgba(196, 84, 75,0.5)","rgba(221, 183, 10,0.5)","rgba(135, 180, 81,0.5)"];
+    $scope.criticalZone = false;
+	$scope.cppTime = false;
+	$scope.criticalStartTime = {value: "15:00", hours: 15, minutes: 0, seconds: 0};
+	$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
+	$scope.cppDuration = 1;
+	$scope.cppDropdown = [
+		{name : "7 AM", value : "07"},{name : "8 AM", value : "08"},{name : "9 AM", value : "09"},
+		{name : "10 AM", value : "10"},{name : "11 AM", value : "11"},{name : "12 PM", value : "12"},{name : "1 PM", value : "13"},{name : "2 PM", value : "14"},
+	    {name : "3 PM", value : "15"},{name : "4 PM", value : "16"},{name : "5 PM", value : "17"},{name : "6 PM", value : "18"},{name : "7 PM", value : "19"},
+	    {name : "8 PM", value : "20"},{name : "9 PM", value : "21"},{name : "10 PM", value : "22"}
+	];
 	
 	/*$scope.redraw = function(stacked) {
 		$scope.container.highcharts().destroy();
@@ -112,6 +123,21 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 			to: Date.today().addHours(24).getTime()
 		}];
 		
+		if($scope.cppTime)
+		{
+			var _criticalBand = {
+				color: '#ffe0b3', // Color value
+				from: Date.today().addHours(parseInt($scope.criticalStartTime.hours)).addMinutes($scope.criticalStartTime.minutes).getTime(), // Start of the plot band
+				to: Date.today().addHours(parseInt($scope.criticalStartTime.hours)+parseInt($scope.cppDuration)).addMinutes($scope.criticalStartTime.minutes).getTime(),
+				label: { 
+					text: '<b>Critical</b><br> <b>Event</b>', // Content of the label. 
+					align: 'center' // Positioning of the label. 
+				}// End of the plot band
+			};
+			_plotBand.push(_criticalBand);
+			console.log("Plot Band", _plotBand);
+		}
+		
 		var _series = [];
 		
 		for(i=($scope.outlet.length-1);i>=0;i--)
@@ -212,6 +238,12 @@ myapp.controller('SmartMonitorController', ['$scope','$interval', '$http','DataS
 			$scope.chart.series[key].addPoint(outletData.series[outletData.series.length - 1]);
 		});
 	};
+	
+	$scope.changeCppTime = function(){
+		$scope.criticalStartTime.value = ($scope.criticalStartTime.hours.length<2)?("0"+$scope.criticalStartTime.hours) + ":" + "00":($scope.criticalStartTime.hours) + ":" + "00";
+		$scope.criticalStartTime.timeStamp = Date.today().addHours($scope.criticalStartTime.hours).getTime();
+		console.log("CPP", $scope.criticalStartTime);
+	}
 	
 	$scope.fetchInitialUsageData = function() {
 		$scope.totalCost = 0;

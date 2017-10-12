@@ -75,17 +75,6 @@
 						ng-model="cppTime" ng-click="init()"> CPP Start Time
 					(hour)
 					<div class="input-group number-spinner">
-						<!--  <span class="input-group-btn">
-									<button class="btn btn-default" data-dir="dwn" ng-disabled="!criticalZone || !cppTime">
-										<span class="glyphicon glyphicon-minus"></span>
-									</button>
-								</span> <input type="text" class="form-control text-center" ng-change="changeCppTime()" ng-model="criticalStartTime.hours" ng-disabled="!criticalZone || !cppTime">
-								<span class="input-group-btn">
-									<button class="btn btn-default" data-dir="up" ng-disabled="!criticalZone || !cppTime">
-										<span class="glyphicon glyphicon-plus"></span>
-									</button>
-								</span>
-							</div> -->
 						<select ng-model="criticalStartTime.hours"
 							ng-change="changeCppTime()"
 							ng-disabled="!criticalZone || !cppTime">

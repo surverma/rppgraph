@@ -73,25 +73,43 @@
 					Online</span> </a> 
 		</div>
 		<div class="col-xs-3">
-			
-		</div>
-
-		<div class="col-xs-2">
 			<!-- <span>Smart Monitor Device Selector</span> <select name="device"
 				ng-model="deviceCount" ng-change="fetchInitialUsageData()">
 				<option value="3" selected>3</option>
 				<option value="4">4</option>
 				<option value="5">5</option>
 			</select><br> -->
+		</div>
+
+		<div class="col-xs-2">
+		
+			<input type="checkbox" value="" ng-model="criticalZone"
+					ng-click="init()"><span>CPP check</span>
+			<input type="checkbox" value="" ng-disabled="!criticalZone"
+						ng-model="cppTime" ng-click="fetchInitialUsageData()"> CPP Start Time(hour)
+			<div>
+			<div class="input-group number-spinner col-xs-6">
+						<select ng-model="criticalStartTime.hours"
+							ng-change="changeCppTime()"
+							ng-disabled="!criticalZone || !cppTime">
+							<option ng-repeat="x in cppDropdown" value="{{x.value}}">{{x.name}}</option>
+						</select>
+			</div>
+			<div class="col-xs-6">
+			Duration (hour)<input type="text" class="form-control text-center"
+							ng-model="cppDuration" ng-disabled="!criticalZone || !cppTime">
+					<input style="width: 50%" type="button"
+						value="Apply(Replot)" ng-click="fetchInitialUsageData()" />
+					</div>
+		</div>
+		</div>
+
+		<div class="col-xs-3">
 			<a title="Stacked View" href="javascript:void(0)"
 				style="position: relative; left: -10px;"><span
 				style="font-weight: 600; color: #205b93;"><input
 					type="checkbox" value="" ng-model="stacked" ng-click="fetchInitialUsageData()">Stacked
 					View</span> </a>
-		</div>
-
-		<div class="col-xs-3">
-			
 		</div>
 	</div>
 </div>

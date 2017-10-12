@@ -7,7 +7,7 @@ myapp.controller('EnergyPulseController',['$scope','$rootScope','$interval', '$h
 	$scope.lastRefreshData = null;
 	$scope.refreshRate = 120;
 	$scope.interval = 120;
-	$scope.clientToken = '998719bd-3957-48a7-8182-736044cb2f92';
+	$scope.clientToken = 'f30bde0b-f0d5-4f4b-ba2f-7fb56b1dccce';
 	var token = $scope.clientToken;
 	$scope.apiFailure = [];
 	$scope.criticalZone = false;
